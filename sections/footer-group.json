@@ -1,0 +1,121 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "newsletter-footer": {
+      "type": "newsletter-footer",
+      "disabled": true,
+      "settings": {
+        "enable_newletter_footer": false,
+        "animation": "",
+        "setwidth": "container",
+        "bgsection": "#000000",
+        "newletter_color": "#000000",
+        "colorborder": "#e9e9e9",
+        "e_size": "cover",
+        "e_repeat": "no-repeat",
+        "title_top": "",
+        "title": "Subscrible & Get <span class=\"text-theme\">10% </span> Discount",
+        "des": "",
+        "html_left": false,
+        "html_left_block": "",
+        "paddingsection": "60px 0px 0px 0px",
+        "paddingmobile": "30px 0px 30px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "a28fc3cc-c984-485b-af97-07168b85bea3": {
+          "type": "menu",
+          "settings": {
+            "link_list": "footer",
+            "width": "25%"
+          }
+        },
+        "menu_GnFUNz": {
+          "type": "menu",
+          "settings": {
+            "link_list": "links",
+            "width": "25%"
+          }
+        },
+        "contact_G8tMeP": {
+          "type": "contact",
+          "settings": {
+            "title": "",
+            "contact_des": "",
+            "contact_addess": "",
+            "contact_phone": "",
+            "contact_mail": "",
+            "contact_web": ""
+          }
+        },
+        "ec49d85b-17bb-4b65-a49f-3086aa5430cd": {
+          "type": "newsletter",
+          "settings": {
+            "bg_new": "rgba(0,0,0,0)",
+            "border_new": "#fafafa",
+            "btn_bg_new": "#ffffff",
+            "btn_cl_new": "{{ shop.brand.colors.primary[0].background }}",
+            "btn_cl_new_hover": "{{ shop.brand.colors.primary[0].foreground }}",
+            "title": "Newsletter Signup",
+            "subheading": "<p>Subscribe now to receive exclusive access to special offers and promotions!</p>",
+            "enablesocial": false,
+            "width": "25%"
+          }
+        }
+      },
+      "block_order": [
+        "a28fc3cc-c984-485b-af97-07168b85bea3",
+        "menu_GnFUNz",
+        "contact_G8tMeP",
+        "ec49d85b-17bb-4b65-a49f-3086aa5430cd"
+      ],
+      "settings": {
+        "setwidth": "container-fluid",
+        "background": "{{ shop.brand.colors.primary[0].background }}",
+        "border_headfooter": "rgba(0,0,0,0)",
+        "border-copryright": "#e9e9e9",
+        "text": "{{ shop.brand.colors.primary[0].foreground }}",
+        "text_hover": "{{ shop.brand.colors.primary[0].foreground }}",
+        "title": "{{ shop.brand.colors.primary[0].foreground }}",
+        "footer_align_title": "left",
+        "enable_border": false,
+        "footer_font_family": "--g-font-1",
+        "footer_font_size_title": 15,
+        "footer_font_weight": "600",
+        "footer_spacing": 0,
+        "footer_typetext": "uppercase",
+        "acc_mobile": true,
+        "e_ft_currency": true,
+        "enable_image": true,
+        "enable_name": true,
+        "enable_language_selector": true,
+        "payment_info": "svg",
+        "link_list_bottom": "",
+        "copyright": true,
+        "customcopyright": "All rights reserved.",
+        "padding_top": 64,
+        "padding_bottom": 32,
+        "m_padding_top": 32,
+        "m_padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "newsletter-footer",
+    "footer"
+  ]
+}

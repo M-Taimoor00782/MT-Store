@@ -1,0 +1,131 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "custom_css": [
+        ".text-body {text-transform: uppercase;}"
+      ],
+      "settings": {
+        "enable": true,
+        "animation": "fade",
+        "setwidth": "container-fluid",
+        "background": "{{ shop.brand.colors.primary[0].background }}",
+        "gradient_bg": "",
+        "text_color": "{{ shop.brand.colors.primary[0].foreground }}",
+        "font_size_topbar": 15,
+        "enable_image": true,
+        "enable_name": false,
+        "enable_money_topbar": true,
+        "enable_language_topbar": true,
+        "enable_social_topbar": true,
+        "enable_login_topbar": false,
+        "text_topbar": "Free shipping on orders over $50",
+        "buttonall_topbar": "",
+        "buttonall_link_topbar": ""
+      }
+    },
+    "announcement-bar-slide": {
+      "type": "announcement-bar-slide",
+      "disabled": true,
+      "settings": {
+        "enable": true,
+        "animation": "fade",
+        "size_text": "small",
+        "announ_type": "carousel",
+        "scroll_dot": "dot",
+        "size_icon": 24,
+        "speed": 10,
+        "scroll_type": "from-right",
+        "background": "#f5f2ea",
+        "gradient_bg": "",
+        "text": "#243f48"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "{{ shop.brand.logo }}",
+        "logo_white": "{{ shop.brand.logo }}",
+        "logo_max_width": 100,
+        "enable_transparent": false,
+        "hover_transparent": false,
+        "enable_white": true,
+        "setwidth": "container-fluid",
+        "layout_header": "logo-left-navigation-center",
+        "type_sticky": "sticky",
+        "height_header": "normal",
+        "background": "#ffffff",
+        "textcolor": "#000000",
+        "linkcolor": "#000000",
+        "linkhover": "{{ shop.brand.colors.primary[0].background }}",
+        "color_indicator": "{{ shop.brand.colors.primary[0].background }}",
+        "menutext": "#000000",
+        "menutexthover": "{{ shop.brand.colors.primary[0].background }}",
+        "menudroptexttitle": "{{ shop.brand.colors.primary[0].background }}",
+        "menudroptext": "#000000",
+        "menudropbg": "#ffffff",
+        "menudropborder": "#f1f1f1",
+        "main_linklist": "main-menu",
+        "font_family_menu": "--g-font-2",
+        "font_sizemenu": "16px",
+        "font_weight": "500",
+        "menu_spacing": 0,
+        "menu_space": 1,
+        "type_menu": "uppercase",
+        "menu_active": "thin-line",
+        "menu_label_text": "#ffffff",
+        "menu_label_new": "#34bf49",
+        "menu_label_hot": "#d24418",
+        "menu_label_sale": "#ffa800",
+        "menu_label_other": "#848484",
+        "enable_menu_vertical": false,
+        "sl_menu_vertical": "click-menu",
+        "main_linklist_vertical": "",
+        "link_list_search": "",
+        "sidebar_search": true,
+        "e_hd_currency": false,
+        "enable_image": false,
+        "enable_name": false,
+        "enable_language_selector": false,
+        "icon_cart": "icon",
+        "svg_cart": "cart-5",
+        "icon_wishlist": "icon",
+        "icon_login": "icon",
+        "e_link_login": "link",
+        "icon_search": "icon"
+      }
+    },
+    "store-messages": {
+      "type": "store-messages",
+      "disabled": true,
+      "settings": {
+        "enable": false,
+        "enable_homepage": false,
+        "background": "#000000",
+        "gradient_bg": "",
+        "text": "#ffffff",
+        "paddingsection": "8px 0px 8px 0px",
+        "paddingmobile": "8px 0px 8px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "announcement-bar-slide",
+    "header",
+    "store-messages"
+  ]
+}

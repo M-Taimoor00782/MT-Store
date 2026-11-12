@@ -1,0 +1,639 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "6246d7cd-b4a1-4a9a-8ac4-1e523b009616": {
+      "type": "scrolling-text",
+      "blocks": {
+        "template--18385545593139__6246d7cd-b4a1-4a9a-8ac4-1e523b009616-16792108611f6fdcd9-0": {
+          "type": "item",
+          "settings": {
+            "code": "SEPTEMBER 15 - OKTOBER 15: LAUNCH SALE"
+          }
+        },
+        "0f6b15df-cdde-4584-ba09-ce5700146804": {
+          "type": "item",
+          "settings": {
+            "code": "20% OFF SITEWIDE"
+          }
+        }
+      },
+      "block_order": [
+        "template--18385545593139__6246d7cd-b4a1-4a9a-8ac4-1e523b009616-16792108611f6fdcd9-0",
+        "0f6b15df-cdde-4584-ba09-ce5700146804"
+      ],
+      "settings": {
+        "animation": "fade-up",
+        "size_text": "p",
+        "text_style": "solid",
+        "size_icon": 40,
+        "speed": 10,
+        "scroll_type": "from-right",
+        "background": "{{ shop.brand.colors.primary[0].background }}",
+        "gradient_bg": "",
+        "text": "{{ shop.brand.colors.primary[0].foreground }}",
+        "paddingsection": "8px 0px 8px 0px",
+        "paddingmobile": "8px 0px 8px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "36fa167d-bfb9-43c1-bc77-97cd1b353c26": {
+      "type": "rich-text",
+      "settings": {
+        "animation": "",
+        "setwidth": "container",
+        "bgsection": "#ffffff",
+        "gradient_bg": "",
+        "title_color": "rgba(0,0,0,0)",
+        "title_top": "",
+        "title": "Our Mission",
+        "text": "<p>HAY has always believed that good design is everyone’s right. That’s why, from the very beginning, co-founders and Creative Directors Mette and Rolf Hay committed to working with their generation’s best designers from all over the world to create high-quality products that would be available to a wide audience.</p>",
+        "align-heading": "center",
+        "align-content": "center",
+        "paddingsection": "50px 0px 50px 0px",
+        "paddingmobile": "40px 0px 40px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "featured_collections_5_rjcWz4": {
+      "type": "featured-collections-5",
+      "blocks": {
+        "collection_i3m3tH": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "color": "#ffffff",
+            "enable_gradient": false,
+            "bg_overlay": "#222222",
+            "opacity_overlay": 0.2
+          }
+        },
+        "collection_tEf4PW": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "color": "#ffffff",
+            "enable_gradient": false,
+            "bg_overlay": "#222222",
+            "opacity_overlay": 0.2
+          }
+        },
+        "collection_xQAfzz": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "color": "#ffffff",
+            "enable_gradient": false,
+            "bg_overlay": "#222222",
+            "opacity_overlay": 0.2
+          }
+        },
+        "collection_ff6nE3": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "color": "#ffffff",
+            "enable_gradient": false,
+            "bg_overlay": "#222222",
+            "opacity_overlay": 0.2
+          }
+        }
+      },
+      "block_order": [
+        "collection_i3m3tH",
+        "collection_tEf4PW",
+        "collection_xQAfzz",
+        "collection_ff6nE3"
+      ],
+      "settings": {
+        "animation": "",
+        "setwidth": "container-fluid",
+        "bgsection": "#ffffff",
+        "title_top": "",
+        "title": "Shop by Category",
+        "des": "",
+        "align-heading": "center",
+        "layout": "grid",
+        "col": "col-lg-3",
+        "enable_padding": true,
+        "gutter_padding": 10,
+        "show_overlay": true,
+        "size_image_col": "square",
+        "size_title": "h4",
+        "paddingsection": "0px 0px 40px 0px",
+        "paddingmobile": "0px 0px 40px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "46879304-b905-4023-b279-2bf6d71497b1": {
+      "type": "parallax-banner",
+      "blocks": {
+        "template--18385545593139__46879304-b905-4023-b279-2bf6d71497b1-16791668150450dda2-0": {
+          "type": "sub_title",
+          "settings": {
+            "subtitle": "Get inspired"
+          }
+        },
+        "template--18385545593139__46879304-b905-4023-b279-2bf6d71497b1-16791668150450dda2-1": {
+          "type": "heading",
+          "settings": {
+            "title": "Elevate your style with comfort.",
+            "size_text": "h2"
+          }
+        },
+        "template--18385545593139__46879304-b905-4023-b279-2bf6d71497b1-16791668150450dda2-2": {
+          "type": "paragraph",
+          "disabled": true,
+          "settings": {
+            "subtext": ""
+          }
+        },
+        "914b5569-9ca3-4a0c-8573-8fc42e6ab184": {
+          "type": "button",
+          "settings": {
+            "button": "Shop now",
+            "link": "shopify://collections/all",
+            "style_btn": "btn-theme btn-white"
+          }
+        }
+      },
+      "block_order": [
+        "template--18385545593139__46879304-b905-4023-b279-2bf6d71497b1-16791668150450dda2-0",
+        "template--18385545593139__46879304-b905-4023-b279-2bf6d71497b1-16791668150450dda2-1",
+        "template--18385545593139__46879304-b905-4023-b279-2bf6d71497b1-16791668150450dda2-2",
+        "914b5569-9ca3-4a0c-8573-8fc42e6ab184"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "settings": {
+        "animation": "zoom-out",
+        "setwidth": "full",
+        "bgsection": "#ffffff",
+        "parrallax_enable": false,
+        "height_section": "650",
+        "height_section_mobile": "450",
+        "align": "left",
+        "position_text": "bot-left",
+        "bg_box": "#ffffff",
+        "opacity_bgbox": 0,
+        "title_color": "#ffffff",
+        "bg_overlay": "#000000",
+        "gradient_bg": "",
+        "opacity_bg_overlay": 0.2,
+        "paddingsection": "0px 0px 0px 0px",
+        "marginsection": "0px 0px 0px 0px"
+      }
+    },
+    "advanced_content_pKfPWp": {
+      "type": "advanced-content",
+      "blocks": {
+        "promo_WDtc39": {
+          "type": "promo",
+          "settings": {
+            "width": "100%",
+            "align": "center",
+            "sub_title_block": "",
+            "title_block": "",
+            "promo_banner_height": 650,
+            "promo_banner_height_mobile": 400,
+            "promo_subheading": "Introducing",
+            "promo_heading": "Collection",
+            "promo_size_title": "h3",
+            "promo_paragraph": "",
+            "promo_btn": "",
+            "promo_link": "shopify://collections/all",
+            "style_btn": "btn-underline btn-underline-white",
+            "promo_color": "#ffffff",
+            "promo_overlay": "#000000",
+            "promo_opacity": 42,
+            "promo_position": "bot-left",
+            "padding-left": false,
+            "padding-right": false
+          }
+        },
+        "promo_CKGBM4": {
+          "type": "promo",
+          "settings": {
+            "width": "50%",
+            "align": "center",
+            "sub_title_block": "",
+            "title_block": "",
+            "promo_banner_height": 650,
+            "promo_banner_height_mobile": 400,
+            "promo_subheading": "Introducing",
+            "promo_heading": "Collection",
+            "promo_size_title": "h3",
+            "promo_paragraph": "",
+            "promo_btn": "",
+            "promo_link": "shopify://collections/all",
+            "style_btn": "btn-underline btn-underline-white",
+            "promo_color": "#ffffff",
+            "promo_overlay": "#000000",
+            "promo_opacity": 42,
+            "promo_position": "bot-left",
+            "padding-left": false,
+            "padding-right": false
+          }
+        },
+        "promo_QQN8Ke": {
+          "type": "promo",
+          "settings": {
+            "width": "50%",
+            "align": "center",
+            "sub_title_block": "",
+            "title_block": "",
+            "promo_banner_height": 650,
+            "promo_banner_height_mobile": 400,
+            "promo_subheading": "Introducing",
+            "promo_heading": "Collection",
+            "promo_size_title": "h3",
+            "promo_paragraph": "",
+            "promo_btn": "",
+            "promo_link": "shopify://collections/all",
+            "style_btn": "btn-underline btn-underline-white",
+            "promo_color": "#ffffff",
+            "promo_overlay": "#000000",
+            "promo_opacity": 42,
+            "promo_position": "bot-left",
+            "padding-left": false,
+            "padding-right": false
+          }
+        }
+      },
+      "block_order": [
+        "promo_WDtc39",
+        "promo_CKGBM4",
+        "promo_QQN8Ke"
+      ],
+      "name": "Advanced Content",
+      "settings": {
+        "animation": "",
+        "setwidth": "full",
+        "text_color": "rgba(0,0,0,0)",
+        "bgsection": "#ffffff",
+        "rangebg": 0,
+        "bgbefore": "rgba(0,0,0,0)",
+        "e_size": "auto",
+        "e_repeat": "no-repeat",
+        "e_position": "center center",
+        "zindex": "0",
+        "title_top": "",
+        "title": "",
+        "des": "",
+        "align-heading": "center",
+        "padding": false,
+        "gutter_padding": 0,
+        "col_center": false,
+        "paddingsection": "0px 0px 0px 0px",
+        "paddingmobile": "40px 0px 40px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "c20bda0e-c7e5-4ef0-8109-64aa279a8458": {
+      "type": "product-tab",
+      "blocks": {
+        "template--19108015112520__c20bda0e-c7e5-4ef0-8109-64aa279a8458-collection-2": {
+          "type": "collection",
+          "settings": {
+            "title": "{{ block.settings.collection.title }}",
+            "collection": ""
+          }
+        },
+        "collection_YRHyiK": {
+          "type": "collection",
+          "settings": {
+            "title": "{{ block.settings.collection.title }}",
+            "collection": ""
+          }
+        },
+        "collection_4UdBhb": {
+          "type": "collection",
+          "settings": {
+            "title": "{{ block.settings.collection.title }}",
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--19108015112520__c20bda0e-c7e5-4ef0-8109-64aa279a8458-collection-2",
+        "collection_YRHyiK",
+        "collection_4UdBhb"
+      ],
+      "settings": {
+        "animation": "fade-up",
+        "setwidth": "container-fluid",
+        "bgsection": "#ffffff",
+        "title_top": "Premium choice",
+        "title": "Our Best Sellers",
+        "des": "",
+        "align-heading": "center",
+        "style_tab": "line",
+        "enable_carousel": true,
+        "arrows": true,
+        "draggable": true,
+        "dots": true,
+        "infinite": true,
+        "rows": "1",
+        "spaceBetween": 30,
+        "limit": 8,
+        "show": 4,
+        "buttonall": "",
+        "buttonall_link": "",
+        "style_btn": "btn-theme",
+        "paddingsection": "40px 0px 40px 0px",
+        "paddingmobile": "40px 0px 40px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "image_content_jbR9NX": {
+      "type": "image-content",
+      "blocks": {
+        "image_block_yahAmE": {
+          "type": "image_block",
+          "settings": {}
+        },
+        "text_block_86qf7G": {
+          "type": "text_block",
+          "settings": {
+            "width": "100%",
+            "bgtext": "#ffffff",
+            "title_color": "rgba(0,0,0,0)",
+            "subtitle": "About",
+            "title": "Store name",
+            "size_text": "h2",
+            "text": "",
+            "answer_content": "<p>Contrasting colors make it fun. Designed by Clara von Zweigbergk, the paper bin combines contrasting colors with a slanted folding technique to create a playful and colorful wastepaper bin that will brighten up any room.</p>",
+            "style_btn": "btn-theme",
+            "button": "Read more about us",
+            "link": "shopify://pages/about-us",
+            "enable_padding": true,
+            "align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "image_block_yahAmE",
+        "text_block_86qf7G"
+      ],
+      "name": "Image with text",
+      "settings": {
+        "animation": "",
+        "setwidth": "container-fluid",
+        "bgsection": "#ffffff",
+        "rangebg": 0,
+        "bgbefore": "rgba(0,0,0,0)",
+        "bg_pos": "left",
+        "enable_padding": true,
+        "align_center": true,
+        "paddingsection": "40px 0px 40px 0px",
+        "paddingmobile": "40px 0px 40px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "16485444103c52f5e9": {
+      "type": "service",
+      "blocks": {
+        "16485444103c52f5e9-0": {
+          "type": "service",
+          "settings": {
+            "bgblock": "rgba(0,0,0,0)",
+            "title": "Free shipping",
+            "description": "Get free shipping on orders of $50 or more",
+            "icon_type": "svg",
+            "icon": "<svg aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" class=\"icon icon-truck\" viewbox=\"0 0 82 82\"><path d=\"M7.238 68.717H1.867V2.12H58.4v16.736h3.886c9.755 0 17.663 7.908 17.663 17.663v32.199h-5.917M55.781 68.717H25.487\"></path><path d=\"M58.334 42.124h15.068v-4.27c0-6.82-5.53-12.35-12.351-12.35h-2.718v16.62M73.909 70.236a9.125 9.125 0 1 0-18.013-2.931 9.125 9.125 0 0 0 18.013 2.93ZM25.367 70.235a9.125 9.125 0 1 0-18.012-2.931 9.125 9.125 0 0 0 7.54 10.471 9.125 9.125 0 0 0 10.472-7.54Z\"></path><path d=\"M13.723 77.507c-3.966.658-7.937 1.51-11.857 2.593M60.373 76.736c-10.512-1.212-24.298-1.969-38.645-.451M79.768 80.121s-4.96-1.222-12.975-2.395\"></path></svg>",
+            "icon_size": 0
+          }
+        },
+        "8fb6874d-8c42-405c-9da3-134f7a8a0c73": {
+          "type": "service",
+          "settings": {
+            "bgblock": "rgba(0,0,0,0)",
+            "title": "Customer Support",
+            "description": "A question? Please contact us <a href=\"/pages/contact\">here!</a>",
+            "icon_type": "svg",
+            "icon": "<svg aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" class=\"icon icon-plant-based\" viewbox=\"0 0 82 82\"><path d=\"M41 20.701V80M56.735 26.294c0 8.703-7.045 15.758-15.735 15.758s-15.735-7.055-15.735-15.758C25.265 14.719 41 2 41 2s15.735 12.719 15.735 24.294ZM30.479 46.972c6.145 6.154 6.145 16.132 0 22.285-6.145 6.154-16.107 6.154-22.252 0C.054 61.072 2.2 40.936 2.2 40.936s20.106-2.149 28.279 6.036Z\"></path><path d=\"M41 77.861S27.525 60.403 10.092 50.177M51.412 46.972c-6.145 6.154-6.145 16.132 0 22.285 6.145 6.153 16.107 6.154 22.252 0 8.173-8.185 6.027-28.321 6.027-28.321s-20.106-2.149-28.279 6.036Z\"></path><path d=\"M40.891 77.861s13.475-17.458 30.908-27.684\"></path></svg>",
+            "icon_size": 0
+          }
+        },
+        "16485444103c52f5e9-2": {
+          "type": "service",
+          "settings": {
+            "bgblock": "rgba(0,0,0,0)",
+            "title": "Secure payment",
+            "description": "Your payment information is processed securely",
+            "icon_type": "svg",
+            "icon": "<svg aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" class=\"icon icon-shield\" viewbox=\"0 0 64 64\"><defs></defs><path d=\"M21.18 31.69L28.54 39l15.91-15.88\"></path><path d=\"M53 12.54v15.24a31.41 31.41 0 0 1-3.7 14.95A25.46 25.46 0 0 1 32 56a25.46 25.46 0 0 1-17.3-13.27A31.41 31.41 0 0 1 11 27.78V12.54C24.88 13.67 32 8 32 8s7.12 5.67 21 4.54z\"></path></svg>",
+            "icon_size": 0
+          }
+        },
+        "service_TzfX8W": {
+          "type": "service",
+          "settings": {
+            "bgblock": "rgba(0,0,0,0)",
+            "title": "Quality Checked",
+            "description": "Every order carefully packed & verified",
+            "icon_type": "svg",
+            "icon": "<svg aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" class=\"icon icon-shield\" viewbox=\"0 0 64 64\"><defs></defs><path d=\"M21.18 31.69L28.54 39l15.91-15.88\"></path><path d=\"M53 12.54v15.24a31.41 31.41 0 0 1-3.7 14.95A25.46 25.46 0 0 1 32 56a25.46 25.46 0 0 1-17.3-13.27A31.41 31.41 0 0 1 11 27.78V12.54C24.88 13.67 32 8 32 8s7.12 5.67 21 4.54z\"></path></svg>",
+            "icon_size": 0
+          }
+        }
+      },
+      "block_order": [
+        "16485444103c52f5e9-0",
+        "8fb6874d-8c42-405c-9da3-134f7a8a0c73",
+        "16485444103c52f5e9-2",
+        "service_TzfX8W"
+      ],
+      "custom_css": [
+        ".iconx8 .icon {stroke-width: 3px;}"
+      ],
+      "settings": {
+        "animation": "fade-up",
+        "setwidth": "container-fluid",
+        "bgsection": "#f4efe9",
+        "title_top": "",
+        "title": "",
+        "des": "",
+        "align-heading": "center",
+        "paddingbox": "0px 0px 0px 0px",
+        "iconcolor": "#000000",
+        "titlecolor": "#203b59",
+        "subcolor": "#516c8a",
+        "size": 32,
+        "service_heading": "h6",
+        "layout": "style-2",
+        "enable_carousel": true,
+        "arrows": false,
+        "draggable": true,
+        "dots": true,
+        "infinite": true,
+        "paddingsection": "40px 0px 40px 0px",
+        "paddingmobile": "40px 0px 40px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "c856ae2c-206a-4746-87e4-9fe9154c3cee": {
+      "type": "quotes-square",
+      "blocks": {
+        "template--17460606959934__c856ae2c-206a-4746-87e4-9fe9154c3cee-1672909189f3760dd8-0": {
+          "type": "quote",
+          "settings": {
+            "author": "JK. Stone",
+            "info": "Los Angeles, CA",
+            "rate": 5,
+            "quote": "Excellent customer service. I love their products and their style."
+          }
+        },
+        "template--17460606959934__c856ae2c-206a-4746-87e4-9fe9154c3cee-1672909189f3760dd8-1": {
+          "type": "quote",
+          "settings": {
+            "author": "Linda",
+            "info": "12 day ago",
+            "rate": 5,
+            "quote": "As a hiker and traveler, their bags are the perfect combo."
+          }
+        },
+        "template--17460606959934__c856ae2c-206a-4746-87e4-9fe9154c3cee-1672909189f3760dd8-2": {
+          "type": "quote",
+          "settings": {
+            "author": "Lopez",
+            "info": "Happy",
+            "rate": 5,
+            "quote": "Been buying their products for years and they're all top notch."
+          }
+        },
+        "bddddf2b-e3c1-40fd-8cc5-e31fe22253b1": {
+          "type": "quote",
+          "settings": {
+            "author": "Samdy Moa",
+            "info": "Manager",
+            "rate": 5,
+            "quote": "The Traveler Roller was a gamechanger for my work trips."
+          }
+        },
+        "ed71bdf0-1415-4c00-b091-f276cad155ac": {
+          "type": "quote",
+          "settings": {
+            "author": "Layzo San",
+            "info": "Customer",
+            "rate": 5,
+            "quote": "Quality products with a unique design. I can't recommend enough."
+          }
+        }
+      },
+      "block_order": [
+        "template--17460606959934__c856ae2c-206a-4746-87e4-9fe9154c3cee-1672909189f3760dd8-0",
+        "template--17460606959934__c856ae2c-206a-4746-87e4-9fe9154c3cee-1672909189f3760dd8-1",
+        "template--17460606959934__c856ae2c-206a-4746-87e4-9fe9154c3cee-1672909189f3760dd8-2",
+        "bddddf2b-e3c1-40fd-8cc5-e31fe22253b1",
+        "ed71bdf0-1415-4c00-b091-f276cad155ac"
+      ],
+      "settings": {
+        "animation": "fade-up",
+        "setwidth": "container-fluid",
+        "bgsection": "#fafafa",
+        "title_top": "",
+        "title": "What Our Customers Say",
+        "des": "",
+        "align-heading": "center",
+        "f_title": "Hear why people keep coming back to us.",
+        "f_des": "4.98 average<br>50+ reviews",
+        "f_bg": "{{ shop.brand.colors.primary[0].background }}",
+        "f_color": "#ffffff",
+        "bg_item": "#e3f1ed",
+        "border_item": "#e3f1ed",
+        "color_item": "#203b59",
+        "color_rate": "#f1f1f1",
+        "color_rated": "#203b59",
+        "aligntext": "text-left",
+        "size_text": "txt-body",
+        "show": 4,
+        "arrows": true,
+        "draggable": true,
+        "dots": false,
+        "infinite": false,
+        "paddingsection": "80px 0px 80px 0px",
+        "paddingmobile": "40px 0px 40px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "e0b98c61-1153-4901-a5e9-2ab9e38346a5": {
+      "type": "line",
+      "settings": {
+        "animation": "",
+        "paddingsection": "0px 0px 0px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "bgsection": "#ffffff",
+        "setwidth": "full",
+        "bgborder": "#e2e3e4",
+        "wborder": "1px"
+      }
+    },
+    "16609007639672b3d5": {
+      "type": "newsletter",
+      "settings": {
+        "animation": "fade-up",
+        "setwidth": "container",
+        "bgsection": "#ffffff",
+        "bg_overlay": "#f7ecec",
+        "opacity_bg_overlay": 0,
+        "newletter_color": "{{ shop.brand.colors.secondary[1].background }}",
+        "colorborder": "{{ shop.brand.colors.secondary[1].background }}",
+        "e_size": "cover",
+        "e_repeat": "no-repeat",
+        "e_position": "center center",
+        "bg_inner": false,
+        "title_top": "",
+        "title": "Sign up to the newsletter.",
+        "des": "Subscribe now to receive exclusive access to special offers and promotions!",
+        "html_left": false,
+        "html_left_block": "<h4>Subscribe & Get 10%  Discount</h4>\n<p class=\"mb-4 mb-lg-0\">Subscribe & Get 10%  Discount</p>",
+        "paddingsection": "58px 0px 58px 0px",
+        "paddingmobile": "32px 0px 32px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "line_dPtwfH": {
+      "type": "line",
+      "settings": {
+        "animation": "",
+        "paddingsection": "0px 0px 0px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "bgsection": "#ffffff",
+        "setwidth": "full",
+        "bgborder": "#e2e3e4",
+        "wborder": "1px"
+      }
+    }
+  },
+  "order": [
+    "6246d7cd-b4a1-4a9a-8ac4-1e523b009616",
+    "36fa167d-bfb9-43c1-bc77-97cd1b353c26",
+    "featured_collections_5_rjcWz4",
+    "46879304-b905-4023-b279-2bf6d71497b1",
+    "advanced_content_pKfPWp",
+    "c20bda0e-c7e5-4ef0-8109-64aa279a8458",
+    "image_content_jbR9NX",
+    "16485444103c52f5e9",
+    "c856ae2c-206a-4746-87e4-9fe9154c3cee",
+    "e0b98c61-1153-4901-a5e9-2ab9e38346a5",
+    "16609007639672b3d5",
+    "line_dPtwfH"
+  ]
+}
