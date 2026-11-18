@@ -58,7 +58,7 @@
         "logo": "{{ shop.brand.logo }}",
         "logo_white": "{{ shop.brand.logo }}",
         "logo_max_width": 100,
-        "enable_transparent": false,
+        "enable_transparent": true,
         "hover_transparent": false,
         "enable_white": true,
         "setwidth": "container-fluid",
