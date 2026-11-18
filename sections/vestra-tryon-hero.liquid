@@ -1,0 +1,680 @@
+{%- liquid
+  assign scope = '#shopify-section-' | append: section.id | append: ' .vestra-hero-root'
+  assign origin = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/'
+  assign proxy = 'https://images.higgs.ai/?default=1&output=webp&url='
+  assign base_url = origin | append: 'hf_20261115_071307_1d0f42d5-b05f-4e21-bf76-f52fb4b12bb5.png' | url_encode | prepend: proxy
+  assign sheet_url = origin | append: 'hf_20261115_071304_55f839b8-7976-43af-8b07-b439c6be0936.png' | url_encode | prepend: proxy
+  assign plates = 'hf_20261115_071402_80cf9c12-dd74-45cf-a639-1f8580543ff3.png,hf_20261115_071402_63307d14-96fd-4b18-bae5-034018df0692.png,hf_20261115_071402_01ef6ea1-a2e6-4d0d-83ce-cbae31202ccc.png,hf_20261115_071400_47a4d43c-8f7c-4f0a-b860-1dc753202b92.png' | split: ','
+  assign crops = '134,79,760,863|1138,79,790,863|137,1024,748,901|1146,1011,776,966' | split: '|'
+  assign first = section.blocks.first
+-%}
+
+{% style %}
+  @font-face {
+    font-family: 'Vestra Inter';
+    src: url('https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Vestra Archivo';
+    src: url('https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q8EsJaRE-NWIDdgffTTtDRZ9xdp.woff2') format('woff2');
+    font-weight: 800;
+    font-stretch: 125%;
+    font-display: swap;
+  }
+  {{ scope }} {
+    --v-bg: #DEE4E8;
+    --v-nav: #F5F7F8;
+    --v-ink: #18222D;
+    --v-muted: #56616A;
+    --v-white: #FFFFFF;
+    --v-nav-border: rgba(24,34,45,.06);
+    --v-dash-idle: rgba(24,34,45,.22);
+    --v-track: rgba(24,34,45,.10);
+    --u: min(100vw / 1440, 100vh / 900);
+    --gutter: calc(64 * var(--u));
+    --nav-height: 0px;
+    --shot: calc(146 * var(--u));
+    display: block;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    background: var(--v-bg);
+    color: var(--v-ink);
+    font: 500 max(13px, calc(16 * var(--u))) / 1.25 'Vestra Inter', sans-serif;
+    letter-spacing: normal;
+    text-align: left;
+    touch-action: pan-y pinch-zoom;
+  }
+  {{ scope }}[data-nav] { --nav-height: max(48px, calc(76 * var(--u))); }
+  {{ scope }}[data-locked] { position: sticky; top: 0; }
+  {{ scope }} *, {{ scope }} *::before, {{ scope }} *::after { box-sizing: border-box; }
+  {{ scope }} [hidden] { display: none !important; }
+  {{ scope }} :is(a, button) {
+    appearance: none; border: 0; border-radius: 0; background: transparent;
+    padding: 0; margin: 0; font: inherit; color: inherit; letter-spacing: inherit;
+    text-decoration: none; text-transform: none; cursor: pointer; box-shadow: none;
+  }
+  {{ scope }} :focus-visible { outline: 2px solid var(--v-ink); outline-offset: 3px; }
+  {{ scope }} button:disabled { cursor: default; }
+  {{ scope }} .v-nav {
+    position: absolute; z-index: 6; inset: 0 0 auto; height: var(--nav-height);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--gutter); border-bottom: 1px solid var(--v-nav-border); background: var(--v-nav);
+  }
+  {{ scope }} .v-brand, {{ scope }} .v-title {
+    font-family: 'Vestra Archivo', sans-serif; font-weight: 800; font-stretch: 125%; letter-spacing: -.055em;
+  }
+  {{ scope }} .v-brand { font-size: max(22px, calc(32 * var(--u))); }
+  {{ scope }} .v-nav-title { position: absolute; left: 50%; transform: translateX(-50%); color: var(--v-muted); }
+  {{ scope }} .v-cart-link { display: flex; align-items: center; gap: .55em; }
+  {{ scope }} .v-count { border-radius: 2em; min-width: 1.7em; padding: .22em .45em; background: var(--v-ink); color: var(--v-white); text-align: center; font-size: .8em; }
+  {{ scope }} .v-stage { position: absolute; inset: var(--nav-height) 0 0; overflow: hidden; pointer-events: none; }
+  {{ scope }} .v-plate {
+    display: block; position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0;
+  }
+  {{ scope }} .v-plate img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: center top; }
+  {{ scope }} .v-base, {{ scope }} .v-plate[data-current] { opacity: 1; }
+  {{ scope }} .v-plate[data-current] { z-index: 1; }
+  {{ scope }} .v-copy {
+    position: absolute; z-index: 3; left: var(--gutter); top: 46%; transform: translateY(-50%); width: 30%;
+  }
+  {{ scope }} .v-title { margin: 0; color: inherit; text-transform: uppercase; font-size: calc(84 * var(--u)); line-height: .94; overflow-wrap: anywhere; }
+  {{ scope }} .v-roll { display: grid; overflow: hidden; }
+  {{ scope }} .v-roll > span { grid-area: 1 / 1; align-self: end; }
+  {{ scope }} .v-price { margin-top: calc(20 * var(--u)); font-size: max(16px, calc(24 * var(--u))); }
+  {{ scope }} .v-shop { display: inline-flex; gap: 1.6em; align-items: center; margin-top: calc(32 * var(--u)); padding: .95em 1.5em; border-radius: 3em; background: var(--v-ink); color: var(--v-white); }
+  {{ scope }} .v-rail { position: absolute; z-index: 3; right: var(--gutter); top: 48%; transform: translateY(-50%); display: grid; gap: calc(32 * var(--u)); }
+  {{ scope }} .v-slot { display: grid; justify-items: center; gap: .5em; width: var(--shot); font-size: max(11px, calc(14 * var(--u))); }
+  {{ scope }} .v-art {
+    display: block; position: relative; overflow: hidden; width: var(--shot);
+    aspect-ratio: var(--crop-w) / var(--crop-h);
+    background-image: var(--sheet); background-repeat: no-repeat;
+    background-size: calc(2048 / var(--crop-w) * 100%) calc(2048 / var(--crop-h) * 100%);
+    background-position: calc(var(--crop-x) / (2048 - var(--crop-w)) * 100%) calc(var(--crop-y) / (2048 - var(--crop-h)) * 100%);
+    pointer-events: none;
+  }
+  {{ scope }} .v-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  {{ scope }} .v-art[data-custom] { background: none; mix-blend-mode: normal; }
+  {{ scope }} .v-flyer { position: absolute; z-index: 4; transform-origin: center; }
+  {{ scope }} .v-controls {
+    position: absolute; z-index: 5; bottom: calc(44 * var(--u)); left: var(--gutter); right: var(--gutter);
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; pointer-events: none;
+  }
+  {{ scope }} .v-controls > * { pointer-events: auto; }
+  {{ scope }} .v-pager, {{ scope }} .v-dashes { display: flex; align-items: center; }
+  {{ scope }} .v-pager { gap: .6em; }
+  {{ scope }} .v-dash { display: grid; place-items: center; width: max(22px, calc(34 * var(--u))); height: 40px; }
+  {{ scope }} .v-dash::before { content: ''; width: 78%; height: 3px; border-radius: 3px; background: var(--v-dash-idle); }
+  {{ scope }} .v-dash[aria-current="true"]::before { background: var(--v-ink); }
+  {{ scope }} .v-play { width: 40px; height: 40px; border: 1px solid var(--v-track); border-radius: 50%; }
+  {{ scope }} .v-pill { display: flex; align-items: center; gap: 1em; margin-left: auto; padding: .5em .5em .5em 1.4em; background: var(--v-white); border-radius: 3em; }
+  {{ scope }} .v-pill-copy { display: grid; gap: 2px; min-width: 0; }
+  {{ scope }} .v-pill-name { font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  {{ scope }} .v-label { color: var(--v-muted); font-size: .8em; }
+  {{ scope }} .v-add { width: 2.65em; height: 2.65em; border-radius: 50%; color: var(--v-white); background: var(--v-ink); font-size: 1.15em; }
+  {{ scope }} .v-add:disabled { opacity: .55; }
+  {{ scope }} .v-status { position: absolute; z-index: 5; right: var(--gutter); bottom: calc(112 * var(--u)); max-width: 80%; background: var(--v-nav); padding: .5em .8em; border-radius: .5em; }
+  {{ scope }} .v-status:empty { display: none; }
+  {{ scope }} .v-veil { position: absolute; inset: 0; z-index: 7; display: grid; pointer-events: none; }
+  {{ scope }} .v-veil i { background: var(--v-bg); }
+  @media (width < 820px) {
+    {{ scope }} .v-art:not([data-custom]) { background-image: var(--small-sheet); }
+    {{ scope }} { --u: calc(100vw / 390); --gutter: calc(20 * var(--u)); --shot: min(16vw, 8dvh); font-size: 14px; }
+    {{ scope }}[data-nav] { --nav-height: clamp(48px, 7dvh, 64px); }
+    {{ scope }} .v-brand { font-size: clamp(20px, 6vw, 26px); }
+    {{ scope }} .v-nav-title { position: static; transform: none; }
+    {{ scope }} .v-stage { bottom: 25%; mask-image: linear-gradient(to bottom, black 69%, transparent 97%); }
+    {{ scope }} .v-copy { top: auto; bottom: max(88px, 12%); transform: none; width: 72%; }
+    {{ scope }} .v-title { font-size: min(13vw, 7dvh); max-width: 12ch; }
+    {{ scope }} .v-price { font-size: 16px; margin-top: 7px; }
+    {{ scope }} .v-shop { margin-top: 12px; padding: .7em 1.2em; }
+    {{ scope }} .v-rail { gap: 16px; right: calc(12 * var(--u)); top: 39%; }
+    {{ scope }} .v-slot { font-size: 10px; }
+    {{ scope }} .v-controls { bottom: max(16px, env(safe-area-inset-bottom)); gap: 8px; }
+    {{ scope }} .v-dashes { flex-wrap: wrap; max-width: 88px; }
+    {{ scope }} .v-dash { width: 22px; height: 24px; }
+    {{ scope }} .v-play { width: 30px; height: 30px; flex-shrink: 0; }
+    {{ scope }} .v-pill { max-width: 53%; font-size: 12px; gap: .6em; }
+    {{ scope }} .v-add { flex-shrink: 0; }
+    {{ scope }} .v-status { bottom: 72px; }
+  }
+  @media (width < 820px) and (height < 520px) and (orientation: landscape) {
+    {{ scope }} { --gutter: 18px; --shot: 12dvh; }
+    {{ scope }}[data-nav] { --nav-height: 38px; }
+    {{ scope }} .v-stage { bottom: 0; mask-image: none; }
+    {{ scope }} .v-copy { width: 29%; bottom: 26%; }
+    {{ scope }} .v-title { font-size: min(5vw, 10dvh); }
+    {{ scope }} .v-rail { top: 48%; gap: 6px; }
+    {{ scope }} .v-controls { bottom: 8px; }
+    {{ scope }} .v-dashes { max-width: none; }
+  }
+  {% if section.settings.hide_theme_header %}
+    body:has({{ scope }}[data-active][data-locked]) :is(#shopify-section-header, .shopify-section-group-header-group[id$="__header"]) { display: none; }
+  {% endif %}
+{% endstyle %}
+
+{% if first %}
+  <vestra-tryon-hero class="vestra-hero-root" role="region" aria-label="VESTRA virtual try-on" tabindex="0"
+    {% if section.settings.show_custom_nav %}data-nav{% endif %}
+    {% if section.settings.full_viewport_lock and request.page_type == 'index' %}data-lock-home{% endif %}
+    data-cart-add="{{ routes.cart_add_url | escape }}.js" data-cart="{{ routes.cart_url | escape }}.js"
+    style="--sheet: url('{{ sheet_url | escape }}&amp;w=2048&amp;q=85'); --small-sheet: url('{{ sheet_url | escape }}&amp;w=1024&amp;q=85');">
+    {% if section.settings.show_custom_nav %}
+      <nav class="v-nav" aria-label="VESTRA">
+        <a class="v-brand" href="{{ routes.root_url }}">VESTRA</a>
+        <span class="v-nav-title">Virtual Try-On</span>
+        <a class="v-cart-link" href="{{ routes.cart_url }}">Cart <span class="v-count js-cart-count">{{ cart.item_count }}</span></a>
+      </nav>
+    {% endif %}
+    <div class="v-stage" aria-hidden="true">
+      <picture class="v-plate v-base">
+        <source media="(width < 820px)" srcset="{{ base_url | escape }}&amp;w=1280&amp;q=85">
+        <img src="{{ base_url | escape }}&amp;w=2048&amp;q=85" width="2048" height="1360" alt="">
+      </picture>
+      {% for block in section.blocks %}
+        {%- liquid
+          assign slot = block.settings.fallback | plus: 0
+          assign plate = origin | append: plates[slot] | url_encode | prepend: proxy
+          assign desktop = plate | append: '&w=2048&q=85'
+          assign mobile = plate | append: '&w=1280&q=85'
+          if block.settings.wear_plate_image != blank
+            assign desktop = block.settings.wear_plate_image | image_url: width: 2048
+            assign mobile = block.settings.wear_plate_image | image_url: width: 1280
+          endif
+        -%}
+        <picture class="v-plate" data-wear {% if forloop.first %}data-current{% endif %}>
+          <source media="(width < 820px)" srcset="{{ mobile | escape }}">
+          <img src="{{ desktop | escape }}" width="2048" height="1360" alt="" {% if forloop.first %}fetchpriority="high"{% else %}fetchpriority="low"{% endif %}>
+        </picture>
+      {% endfor %}
+    </div>
+    <div class="v-copy">
+      <h2 class="v-title v-roll"><span>{{ first.settings.title | escape }}</span><span hidden aria-hidden="true"></span></h2>
+      <div class="v-price v-roll"><span>{{ first.settings.price | escape }}</span><span hidden aria-hidden="true"></span></div>
+      <a class="v-shop" href="{{ first.settings.product.url | default: routes.all_products_collection_url | escape }}">Shop Now <span aria-hidden="true">&#8599;</span></a>
+    </div>
+    <div class="v-rail" aria-label="Try another garment"></div>
+    <div class="v-controls">
+      <div class="v-pager" {% if section.blocks.size < 2 %}hidden{% endif %}>
+        <div class="v-dashes" role="group" aria-label="Choose a garment">
+          {% for block in section.blocks %}
+            {%- assign slot = block.settings.fallback | plus: 0 -%}
+            {%- assign crop = crops[slot] | split: ',' -%}
+            <button class="v-dash" type="button" aria-label="Try on {{ block.settings.title | escape }}"
+              aria-current="{{ forloop.first }}" data-block="{{ block.id }}"
+              data-title="{{ block.settings.title | escape }}" data-price="{{ block.settings.price | escape }}"
+              data-name="{{ block.settings.cart_name | escape }}" data-label="{{ block.settings.sub_label | escape }}"
+              data-url="{{ block.settings.product.url | default: routes.all_products_collection_url | escape }}"
+              data-variant="{{ block.settings.product.first_available_variant.id }}"
+              data-product="{{ block.settings.product.id }}" {{ block.shopify_attributes }}>
+              <template>
+                <span class="v-art" style="--crop-x: {{ crop[0] }}; --crop-y: {{ crop[1] }}; --crop-w: {{ crop[2] }}; --crop-h: {{ crop[3] }};"
+                  {% if block.settings.packshot_image != blank %}data-custom{% endif %}>
+                  {% if block.settings.packshot_image != blank %}
+                    {{ block.settings.packshot_image | image_url: width: 760 | image_tag: widths: '200, 400, 760', sizes: '(max-width: 819px) 16vw, 12vw', alt: '' }}
+                  {% endif %}
+                </span>
+              </template>
+            </button>
+          {% endfor %}
+        </div>
+        <button class="v-play" type="button" aria-label="Pause autoplay">&#10074;&#10074;</button>
+      </div>
+      <div class="v-pill">
+        <span class="v-pill-copy"><span class="v-pill-name">{{ first.settings.cart_name | escape }}</span><span class="v-label">{{ first.settings.sub_label | escape }}</span></span>
+        <button class="v-add" type="button" aria-label="Add {{ first.settings.cart_name | escape }} to cart" disabled>+</button>
+      </div>
+    </div>
+    <div class="v-status" role="status"></div>
+    <div class="v-veil" aria-hidden="true"></div>
+  </vestra-tryon-hero>
+{% elsif request.design_mode %}
+  <div class="vestra-hero-root" style="height: auto; padding: 2em;">Add a garment block to preview the VESTRA try-on hero.</div>
+{% endif %}
+
+{% javascript %}
+  if (!customElements.get('vestra-tryon-hero')) {
+    class VestraTryonHero extends HTMLElement {
+      connectedCallback() {
+        // Shopify can insert or move the element while the editor is open.
+        this.frame = requestAnimationFrame(() => this.mount());
+      }
+
+      disconnectedCallback() {
+        cancelAnimationFrame(this.frame);
+        this.cleanup?.();
+      }
+
+      mount() {
+        const root = this;
+        const find = selector => root.querySelector(selector);
+        const dashes = Array.from(root.querySelectorAll('.v-dash'));
+        if (!dashes.length) return;
+        const plates = Array.from(root.querySelectorAll('[data-wear]'));
+        const rail = find('.v-rail');
+        const pill = find('.v-pill');
+        const add = find('.v-add');
+        const play = find('.v-play');
+        const status = find('.v-status');
+        const veil = find('.v-veil');
+        const rolls = [find('.v-title'), find('.v-price')];
+        const motion = matchMedia('(prefers-reduced-motion: reduce)');
+        const small = matchMedia('(width < 820px)');
+        const lifecycle = new AbortController();
+        const { signal } = lifecycle;
+        const on = (target, event, fn, options = {}) => target.addEventListener(event, fn, { ...options, signal });
+        const timers = new Set();
+        function later(fn, delay) {
+          const id = setTimeout(() => { timers.delete(id); fn(); }, delay);
+          timers.add(id);
+          return id;
+        }
+        const wrap = index => (index + dashes.length) % dashes.length;
+        const ease = 'cubic-bezier(.22,.9,.3,1)';
+        let current = 0;
+        let shown = 0;
+        let pending = null;
+        let queued = null;
+        let ready = false;
+        let visible = false;
+        let paused = motion.matches;
+        let hovered = false;
+        let editing = false;
+        let adding = false;
+        let holdUntil = 0;
+        let autoTimer;
+        let nextAuto = 0;
+
+        function schedule() {
+          clearTimeout(autoTimer);
+          if (!ready || !visible || document.hidden || paused || hovered || editing || adding ||
+              pending !== null || dashes.length < 2) return;
+          autoTimer = setTimeout(() => choose(wrap(current + 1), 1), Math.max(0, nextAuto - performance.now(), holdUntil - performance.now()));
+        }
+        function hold() {
+          holdUntil = performance.now() + 6000;
+          schedule();
+        }
+        function setPlay() {
+          play.textContent = paused ? '▶' : '❚❚';
+          play.setAttribute('aria-label', paused ? 'Resume autoplay' : 'Pause autoplay');
+        }
+        function renderAdd() {
+          const item = dashes[shown].dataset;
+          const label = item.variant ? 'Add ' + item.name + ' to cart' : item.product ? 'Sold out' : 'No product selected';
+          add.disabled = adding || !item.variant;
+          add.setAttribute('aria-label', label);
+          add.title = label;
+        }
+        function renderControls(index, animate) {
+          shown = index;
+          const item = dashes[index].dataset;
+          find('.v-shop').href = item.url;
+          find('.v-pill-name').textContent = item.name;
+          find('.v-label').textContent = item.label;
+          renderAdd();
+          dashes.forEach((dash, i) => dash.setAttribute('aria-current', String(i === index)));
+          // Keep the rail buttons (and keyboard focus) across refills.
+          const count = Math.min(2, dashes.length - 1);
+          for (let n = 0; n < count; n++) {
+            const target = wrap(index + n + 1);
+            let button = rail.children[n];
+            if (!button) {
+              button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'v-slot';
+              rail.append(button);
+            }
+            button.dataset.index = target;
+            button.setAttribute('aria-label', dashes[target].getAttribute('aria-label'));
+            const caption = document.createElement('span');
+            caption.textContent = dashes[target].dataset.title;
+            button.replaceChildren(dashes[target].querySelector('template').content.cloneNode(true), caption);
+            if (animate) button.animate([{ transform: 'translateX(calc(45 * var(--u)))', opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }], { duration: 410, easing: ease });
+          }
+          if (animate) pill.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 230 });
+        }
+        function resetRolls(index) {
+          const item = dashes[index].dataset;
+          rolls.forEach((roll, i) => {
+            roll.firstElementChild.textContent = i === 0 ? item.title : item.price;
+            roll.lastElementChild.hidden = true;
+          });
+        }
+        function makeFlyer(index, direction, animate) {
+          const item = direction < 0 ? current : index;
+          const slot = rail.querySelector('[data-index="' + item + '"]') || rail.firstElementChild;
+          if (!slot) return;
+          const art = slot.querySelector('.v-art');
+          const box = art.getBoundingClientRect();
+          const bounds = root.getBoundingClientRect();
+          const stage = find('.v-stage').getBoundingClientRect();
+          const ps = Math.max(stage.width / 2048, stage.height / 1360);
+          const ox = stage.left - bounds.left + (stage.width - 2048 * ps) / 2;
+          // All plates use cover with top alignment, clamped at the nav baseline.
+          const oy = stage.top - bounds.top;
+          const flyer = dashes[item].querySelector('template').content.firstElementChild.cloneNode(true);
+          flyer.classList.add('v-flyer');
+          flyer.setAttribute('aria-hidden', 'true');
+          flyer.style.width = box.width + 'px';
+          flyer.style.left = box.left - bounds.left + 'px';
+          flyer.style.top = box.top - bounds.top + 'px';
+          root.append(flyer);
+          if (slot.dataset.index === String(item)) art.style.visibility = 'hidden';
+          const s = box.width / Number(flyer.style.getPropertyValue('--crop-w'));
+          const k = (.86 * 600 * ps) / (760 * s);
+          const dx = ox + 1012 * ps - (box.left - bounds.left + box.width / 2);
+          const dy = oy + 710 * ps - (box.top - bounds.top + flyer.offsetHeight / 2);
+          const atRail = 'translate(0, 0) scale(1)';
+          const atModel = 'translate(' + dx + 'px,' + dy + 'px) scale(' + k + ')';
+          const backwards = direction < 0;
+          animate(flyer, [{ transform: backwards ? atModel : atRail }, { transform: backwards ? atRail : atModel }], 60, 950, ease);
+          const opacity = backwards
+            ? [{ opacity: 0 }, { opacity: 1, offset: .18 }, { opacity: 1 }]
+            : [{ opacity: 1 }, { opacity: 1, offset: .45 }, { opacity: .6, offset: .72 }, { opacity: 0 }];
+          animate(flyer, opacity, 60, 1010);
+          return flyer;
+        }
+        function swap(index, direction) {
+          const target = plates[index];
+          const effects = [];
+          let flyer;
+          function animate(element, frames, delay, duration, easing = 'linear') {
+            effects.push(element.animate(frames, { delay, duration, easing, fill: 'both' }));
+          }
+          function finish() {
+            plates[current].removeAttribute('data-current');
+            target.setAttribute('data-current', '');
+            target.style.zIndex = '';
+            resetRolls(index);
+            if (shown !== index) renderControls(index, false);
+            effects.forEach(effect => effect.cancel());
+            flyer?.remove();
+            current = index;
+            pending = null;
+            const requested = queued;
+            queued = null;
+            if (requested !== null && requested !== current) choose(requested, requested < current ? -1 : 1);
+            else schedule();
+          }
+          if (motion.matches) { finish(); return; }
+          // The outgoing plate stays fully opaque until the incoming plate owns the layer.
+          target.style.zIndex = '2';
+          animate(target, [{ opacity: 0 }, { opacity: 1 }], 420, 760);
+          flyer = makeFlyer(index, direction, animate);
+          rolls.forEach((roll, i) => {
+            const outgoing = roll.firstElementChild;
+            const incoming = roll.lastElementChild;
+            incoming.textContent = i === 0 ? dashes[index].dataset.title : dashes[index].dataset.price;
+            incoming.hidden = false;
+            animate(outgoing, [{ transform: 'translateY(0)' }, { transform: 'translateY(-105%)' }], 100, 250, ease);
+            animate(incoming, [{ transform: 'translateY(105%)' }, { transform: 'translateY(0)' }], 350, 450, ease);
+          });
+          const fadePill = pill.animate([{ opacity: 1 }, { opacity: 0 }], { delay: 470, duration: 130, fill: 'both' });
+          later(() => {
+            fadePill.cancel();
+            renderControls(index, true);
+          }, 600);
+          later(finish, 1200);
+        }
+        async function choose(index, direction) {
+          if (pending !== null) { queued = index; return; }
+          if (index === current) return;
+          pending = index;
+          clearTimeout(autoTimer);
+          status.textContent = '';
+          try {
+            await plates[index].querySelector('img').decode();
+          } catch {
+            if (signal.aborted) return;
+            status.textContent = 'This try-on image could not load.';
+            pending = null;
+            nextAuto = performance.now() + 2000;
+            const requested = queued;
+            queued = null;
+            if (requested !== null && requested !== index) choose(requested, requested < current ? -1 : 1);
+            else schedule();
+            return;
+          }
+          if (signal.aborted) return;
+          nextAuto = performance.now() + 2000;
+          swap(index, direction);
+        }
+        function manual(index, direction) {
+          hold();
+          choose(index, direction);
+        }
+        on(root, 'click', event => {
+          const slot = event.target.closest('.v-slot');
+          const dash = event.target.closest('.v-dash');
+          if (slot) manual(Number(slot.dataset.index), 1);
+          if (dash) {
+            const index = dashes.indexOf(dash);
+            manual(index, index < current ? -1 : 1);
+          }
+        });
+        on(play, 'click', () => {
+          paused = !paused;
+          setPlay();
+          nextAuto = performance.now() + 2000;
+          schedule();
+        });
+        on(add, 'click', async () => {
+          const item = dashes[shown].dataset;
+          if (adding || !item.variant) return;
+          adding = true;
+          hold();
+          renderAdd();
+          let added = false;
+          try {
+            const response = await fetch(root.dataset.cartAdd, {
+              method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify({ items: [{ id: item.variant, quantity: 1 }] })
+            });
+            if (!response.ok) {
+              const error = await response.json();
+              throw new Error(error.description || 'Could not add this item to your cart.');
+            }
+            added = true;
+            const summary = await fetch(root.dataset.cart, { cache: 'no-store' });
+            if (!summary.ok) throw new Error();
+            const cart = await summary.json();
+            document.querySelectorAll('.js-cart-count').forEach(badge => { badge.textContent = cart.item_count; });
+            window.theme?.miniCart?.generateCart?.();
+            status.textContent = item.name + ' added to cart.';
+          } catch (error) {
+            status.textContent = added ? 'Item added. Open your cart to see the updated total.' : error.message || 'Could not add this item to your cart.';
+          } finally {
+            adding = false;
+            if (!signal.aborted) { renderAdd(); hold(); }
+          }
+        });
+
+        const section = root.closest('.shopify-section');
+        function setLock() {
+          const firstSection = section?.parentElement?.querySelector(':scope > .shopify-section');
+          root.toggleAttribute('data-locked', root.hasAttribute('data-lock-home') && firstSection === section);
+        }
+        setLock();
+        for (const event of ['shopify:section:load', 'shopify:section:unload', 'shopify:section:reorder']) {
+          on(document, event, () => later(setLock, 0));
+        }
+        const observer = new IntersectionObserver(([entry]) => {
+          visible = entry.intersectionRatio >= .55;
+          root.toggleAttribute('data-active', visible);
+          if (visible) nextAuto = performance.now() + 2000;
+          schedule();
+        }, { threshold: [0, .55] });
+        observer.observe(root);
+        let wheelSum = 0;
+        let lastWheel = -Infinity;
+        let usedGesture = false;
+        on(root, 'wheel', event => {
+          if (!visible || event.ctrlKey || dashes.length < 2) return;
+          const now = performance.now();
+          if (now - lastWheel > 140) { wheelSum = 0; usedGesture = false; }
+          lastWheel = now;
+          const horizontal = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+          const delta = horizontal ? event.deltaX : event.deltaY;
+          const direction = Math.sign(delta);
+          if (!direction) return;
+          // A locked homepage hero aligns on the first gesture. An in-flow hero
+          // accepts vertical wheel input only once it reaches the viewport.
+          const rect = root.getBoundingClientRect();
+          if (!horizontal && !usedGesture) {
+            if (direction > 0 ? current === dashes.length - 1 : current === 0) return;
+            if (Math.abs(rect.top) > 2) {
+              if (!root.hasAttribute('data-locked')) {
+                // A wheel step can scroll past exact alignment.
+                if (Math.abs(rect.top) > Math.min(100, rect.height * .12)) return;
+              } else {
+                root.scrollIntoView({ block: 'start', behavior: 'instant' });
+              }
+            }
+          }
+          event.preventDefault();
+          if (usedGesture || pending !== null) return;
+          if (Math.sign(wheelSum) !== direction) wheelSum = 0;
+          wheelSum += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? root.clientHeight : 1);
+          if (Math.abs(wheelSum) >= 50) {
+            usedGesture = true;
+            manual(wrap(current + direction), direction);
+          }
+        }, { passive: false });
+        let drag;
+        on(root, 'pointerdown', event => {
+          if (!event.isPrimary || event.button !== 0 || event.target.closest('a,button')) return;
+          drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+          root.setPointerCapture(event.pointerId);
+        });
+        on(root, 'pointercancel', () => { drag = null; });
+        on(root, 'pointerup', event => {
+          if (!drag || drag.id !== event.pointerId) return;
+          const dx = event.clientX - drag.x;
+          const dy = event.clientY - drag.y;
+          drag = null;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+            const direction = dx < 0 ? 1 : -1;
+            manual(wrap(current + direction), direction);
+          }
+        });
+        on(document, 'keydown', event => {
+          if (dashes.length < 2 || event.defaultPrevented) return;
+          const focused = root.contains(event.target);
+          if (!focused && !(visible && root.hasAttribute('data-locked') && event.target === document.body)) return;
+          if (event.altKey || event.ctrlKey || event.metaKey || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+          const direction = ['ArrowLeft', 'ArrowUp'].includes(event.key) ? -1 : 1;
+          event.preventDefault();
+          manual(wrap(current + direction), direction);
+        });
+        for (const element of [rail, pill, find('.v-shop'), play]) {
+          on(element, 'pointerenter', event => { if (event.pointerType !== 'touch') { hovered = true; schedule(); } });
+          on(element, 'pointerleave', () => { hovered = false; nextAuto = performance.now() + 2000; schedule(); });
+        }
+        on(root, 'focusin', hold);
+        on(document, 'visibilitychange', () => { nextAuto = performance.now() + 2000; schedule(); });
+        on(motion, 'change', () => { paused = motion.matches; setPlay(); schedule(); });
+        on(root, 'shopify:block:select', event => {
+          const index = dashes.findIndex(dash => dash.dataset.block === event.detail.blockId);
+          if (index < 0) return;
+          editing = true;
+          manual(index, index < current ? -1 : 1);
+        });
+        on(root, 'shopify:block:deselect', () => { editing = false; hold(); });
+
+        setPlay();
+        renderControls(0, false);
+        const columns = small.matches ? 5 : 10;
+        const rows = small.matches ? 9 : 6;
+        veil.hidden = false;
+        veil.style.gridTemplateColumns = 'repeat(' + columns + ', 1fr)';
+        veil.style.gridTemplateRows = 'repeat(' + rows + ', 1fr)';
+        const tiles = Array.from({ length: columns * rows }, () => veil.appendChild(document.createElement('i')));
+        for (let i = tiles.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+        }
+        let revealing = false;
+        function reveal() {
+          if (signal.aborted || revealing) return;
+          revealing = true;
+          function done() {
+            veil.hidden = true;
+            veil.replaceChildren();
+            ready = true;
+            nextAuto = performance.now() + 2000;
+            schedule();
+          }
+          if (motion.matches) { done(); return; }
+          tiles.forEach((tile, i) => tile.animate([{ opacity: 1 }, { opacity: 0 }], {
+            delay: 440 * i / (tiles.length - 1), duration: 160, fill: 'forwards'
+          }));
+          later(done, 600);
+        }
+        Promise.all([find('.v-base img').decode(), plates[0].querySelector('img').decode()]).then(reveal, () => {});
+        later(reveal, 1800);
+        this.cleanup = () => {
+          lifecycle.abort();
+          observer.disconnect();
+          clearTimeout(autoTimer);
+          timers.forEach(clearTimeout);
+          root.getAnimations({ subtree: true }).forEach(effect => effect.cancel());
+          find('.v-flyer')?.remove();
+          veil.replaceChildren();
+          plates.forEach((plate, i) => { plate.style.zIndex = ''; plate.toggleAttribute('data-current', i === 0); });
+          resetRolls(0);
+          root.removeAttribute('data-active');
+        };
+      }
+    }
+    customElements.define('vestra-tryon-hero', VestraTryonHero);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "VESTRA Try-On Hero",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "checkbox", "id": "full_viewport_lock", "label": "Lock hero to viewport", "default": true, "info": "Applies when this is the first homepage section. Elsewhere the hero occupies one viewport in the page." },
+    { "type": "checkbox", "id": "show_custom_nav", "label": "Show VESTRA navigation", "default": true },
+    { "type": "checkbox", "id": "hide_theme_header", "label": "Hide theme header while locked", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "garment",
+      "name": "Garment",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Alpine Puffer" },
+        { "type": "text", "id": "price", "label": "Display price", "default": "$238.00" },
+        { "type": "text", "id": "cart_name", "label": "Cart display name", "default": "Alpine Puffer Jacket" },
+        { "type": "text", "id": "sub_label", "label": "Color or subtitle", "default": "Ice Grey" },
+        { "type": "product", "id": "product", "label": "Product", "info": "Shop Now opens this product. Add to cart uses its first available variant." },
+        { "type": "select", "id": "fallback", "label": "Default imagery", "default": "0", "options": [
+          { "value": "0", "label": "Alpine Puffer" }, { "value": "1", "label": "Ridge Fleece" },
+          { "value": "2", "label": "Drift Shell" }, { "value": "3", "label": "Harbor Parka" }
+        ] },
+        { "type": "image_picker", "id": "wear_plate_image", "label": "Try-on image", "info": "For aligned transitions use a 2048 × 1360 composition with the model centered." },
+        { "type": "image_picker", "id": "packshot_image", "label": "Packshot image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VESTRA Try-On Hero",
+      "blocks": [
+        { "type": "garment", "settings": { "fallback": "0", "title": "Alpine Puffer", "price": "$238.00", "cart_name": "Alpine Puffer Jacket", "sub_label": "Ice Grey" } },
+        { "type": "garment", "settings": { "fallback": "1", "title": "Ridge Fleece", "price": "$148.00", "cart_name": "Ridge Fleece Jacket", "sub_label": "Sage" } },
+        { "type": "garment", "settings": { "fallback": "2", "title": "Drift Shell", "price": "$196.00", "cart_name": "Drift Shell Jacket", "sub_label": "Light Grey" } },
+        { "type": "garment", "settings": { "fallback": "3", "title": "Harbor Parka", "price": "$284.00", "cart_name": "Harbor Parka", "sub_label": "Navy" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
