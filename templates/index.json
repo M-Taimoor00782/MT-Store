@@ -38,6 +38,7 @@
         },
         "garment_xi4dtm": {
           "type": "garment",
+          "disabled": true,
           "settings": {
             "title": "Drift Shell",
             "price": "$196.00",
@@ -49,6 +50,7 @@
         },
         "garment_EymFEL": {
           "type": "garment",
+          "disabled": true,
           "settings": {
             "title": "Harbor Parka",
             "price": "$284.00",
