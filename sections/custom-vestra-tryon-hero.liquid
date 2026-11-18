@@ -20,27 +20,29 @@
     --v-ink: {{ section.settings.text_color }};
     --u: min(100vw / 1440, 100svh / 810);
     --gutter: clamp(16px, 4vw, 64px);
-    --shot: clamp(64px, calc(146 * var(--u)), 180px);
+    --hero-height: {{ section.settings.desktop_hero_height }}px;
+    --footer: 108px;
+    --shot: min(10cqw, calc(var(--hero-height) * .17), 150px);
+    container-type: inline-size;
     --position: {{ section.settings.text_position }};
     display: block;
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    width: 100%; aspect-ratio: 16 / 9;
-    max-height: 100svh;
+    width: 100%; height: var(--hero-height);
     background-color: var(--v-bg);
     color: var(--v-ink);
     touch-action: pan-y pinch-zoom;
   }
   {{ scope }}[data-locked] { position: sticky; top: 0; }
   {{ scope }} [hidden] { display: none !important; }
-  {{ scope }} .v-stage { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-  {{ scope }} .v-plate { display: block; position: absolute; inset: 0; background: var(--v-bg); opacity: 0; }
-  {{ scope }} .v-plate img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+  {{ scope }} .v-stage { position: absolute; inset: 0 0 var(--footer); overflow: hidden; pointer-events: none; }
+  {{ scope }} .v-plate { display: flex; align-items: center; position: absolute; inset: 0; background: var(--v-bg); opacity: 0; }
+  {{ scope }} .v-plate img { display: block; width: 70%; margin: 0 auto; height: auto; max-height: 100%; object-fit: contain; object-position: center; }
   {{ scope }} .v-base, {{ scope }} .v-plate[data-current] { opacity: 1; }
   {{ scope }} .v-plate[data-current] { z-index: 1; }
   {{ scope }} .v-copy-area {
-    position: absolute; z-index: 3; inset: 0 var(--gutter); display: grid; align-items: center;
+    position: absolute; z-index: 3; inset: 0 var(--gutter) var(--footer); display: grid; align-items: center;
     pointer-events: none;
   }
   {{ scope }} .v-copy { width: min(34%, 34rem); justify-self: var(--position); text-align: var(--position); pointer-events: auto; }
@@ -53,9 +55,10 @@
   {{ scope }} .v-measure { visibility: hidden; }
   {{ scope }} .v-price { margin: .65em 0 1em; font-size: max(16px, calc(24 * var(--u))); }
   {{ scope }} .v-rail {
-    position: absolute; z-index: 3; right: var(--gutter); top: 47%; transform: translateY(-50%);
-    display: grid; gap: clamp(4px, 2vh, 20px);
+    position: absolute; z-index: 3; right: 0; top: 0; bottom: var(--footer); width: 15%;
+    display: grid; align-content: center; grid-template-columns: minmax(0, 1fr); gap: .5rem;
   }
+  {{ scope }} .v-caption { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   {{ scope }} .v-art-frame { display: grid; place-items: center; width: var(--shot); height: var(--shot); margin-inline: auto; }
   {{ scope }} .v-art {
     display: block; position: relative; margin-inline: auto; overflow: hidden;
@@ -70,13 +73,18 @@
   {{ scope }} .v-art[data-custom] { background-image: none; --art-ratio: var(--packshot-ratio); }
   {{ scope }} .v-flyer { position: absolute; z-index: 4; margin: 0; transform-origin: center; }
   {{ scope }} .v-controls {
-    position: absolute; z-index: 5; bottom: max(14px, 4vh); inset-inline: var(--gutter);
-    gap: .5rem; pointer-events: none;
+    position: absolute; z-index: 5; inset: auto var(--gutter) 8px; height: calc(var(--footer) - 8px);
+    pointer-events: none;
   }
   {{ scope }} .v-controls > * { pointer-events: auto; }
-  {{ scope }} .v-pager { max-width: 55%; }
-  {{ scope }} .v-dashes { overflow-x: auto; }
-  {{ scope }} .v-pill { gap: .75rem; margin-left: auto; padding: .4em; padding-left: 1em; max-width: 60%; background: var(--v-bg); }
+  {{ scope }} .v-pill, {{ scope }} .v-pager { position: absolute; left: 50%; transform: translateX(-50%); }
+  {{ scope }} .v-pager { bottom: 0; width: min(48%, 224px); }
+  {{ scope }} .v-pages { width: 100%; gap: 2px; }
+  {{ scope }} .v-segment { display: grid; align-items: center; height: 24px; }
+  {{ scope }} .v-segment::before { content: ''; height: 3px; background: var(--v-ink); opacity: .24; }
+  {{ scope }} [aria-current="true"] .v-segment::before { opacity: 1; }
+  {{ scope }} .v-pill { bottom: 28px; width: max-content; max-width: 100%; gap: .75rem; padding: .4em .4em .4em 1em; background: var(--v-bg); }
+  {{ scope }} .v-pager[hidden] + .v-pill { bottom: 8px; }
   {{ scope }} .v-pill-copy { display: grid; min-width: 0; line-height: 1.25; }
   {{ scope }} .v-pill-name { font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   {{ scope }} .v-label { font-size: .85em; }
@@ -84,43 +92,32 @@
   {{ scope }} .v-status:empty { display: none; }
   {{ scope }} .v-veil { position: absolute; inset: 0; z-index: 7; display: grid; pointer-events: none; }
   {{ scope }} .v-veil i { background: var(--v-bg); }
-  @media (min-width: 768px) {
-    {{ scope }}[data-locked] { height: 100svh; aspect-ratio: auto; }
-    {{ scope }}[data-position="right"] .v-rail { right: auto; left: var(--gutter); }
-    {{ scope }}[data-position="center"] .v-copy-area { align-items: end; bottom: 17%; }
+  @media (width > 768px) {
+    {{ scope }}[data-position="right"] .v-rail { right: auto; left: 0; }
+    {{ scope }}[data-position="center"] .v-copy-area { align-items: end; bottom: var(--footer); }
     {{ scope }}[data-position="center"] .v-copy { width: min(60%, 44rem); }
   }
-  @media (max-width: 767.98px) {
+  @media (max-width: 768px) {
     #shopify-section-{{ section.id }} { padding: {{ section.settings.paddingmobile | default: '0' | escape }}; }
     {{ scope }} {
+      --hero-height: {{ section.settings.mobile_hero_height }}px;
       --u: calc(100vw / 390); --gutter: clamp(12px, 4vw, 24px); --shot: min(16vw, 8dvh);
       --position: {{ section.settings.mobile_text_position }};
       display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem;
-      aspect-ratio: auto; max-height: none;
+      grid-template-rows: minmax(0, 1fr) auto auto var(--footer);
     }
     {{ scope }} .v-art:not([data-custom]) { background-image: var(--small-sheet); }
-    {{ scope }} .v-stage { position: relative; inset: auto; aspect-ratio: 16 / 9; }
-    {{ scope }} .v-copy-area { position: relative; inset: auto; margin-inline: var(--gutter); }
+    {{ scope }} .v-stage { position: relative; inset: auto; grid-row: 1; container-type: size; }
+    {{ scope }} .v-plate { inset: 50% auto auto 50%; transform: translate(-50%, -50%); width: min(100cqw, 100cqh); aspect-ratio: 1 / 1; }
+    {{ scope }} .v-plate img { width: 100%; height: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+    {{ scope }} .v-copy-area { grid-row: 2; position: relative; inset: auto; margin-inline: var(--gutter); }
     {{ scope }} .v-copy { width: 100%; }
     {{ scope }} .v-title { font-size: clamp(28px, 9vw, 54px); }
     {{ scope }} .v-price { margin: .35em 0 .65em; font-size: 1rem; }
-    {{ scope }} .v-rail { position: static; transform: none; grid-auto-flow: column; justify-content: center; gap: .5rem; }
+    {{ scope }} .v-rail { grid-row: 3; position: static; width: auto; margin-inline: var(--gutter); grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(0, 1fr); align-items: start; gap: .5rem; }
     {{ scope }} .v-rail:empty { display: none; }
-    {{ scope }} .v-controls { position: relative; inset: auto; flex-wrap: wrap; margin: 0 var(--gutter) max(14px, env(safe-area-inset-bottom)); }
-    {{ scope }} .v-caption { display: block; font-size: .75rem; }
-    {{ scope }} .v-pager, {{ scope }} .v-pill { max-width: 100%; }
-    {{ scope }} .v-status { bottom: 4.25rem; }
-  }
-  @media (max-width: 767.98px) and (max-height: 519px) and (orientation: landscape) {
-    {{ scope }} { --shot: 12svh; display: block; height: 100svh; }
-    {{ scope }} .v-stage { position: absolute; inset: 0; aspect-ratio: auto; }
-    {{ scope }} .v-copy-area { position: absolute; inset: 6% var(--gutter) 22%; margin: 0; }
-    {{ scope }} .v-copy { width: 29%; }
-    {{ scope }}[data-mobile-position="center"] .v-copy-area { align-items: end; bottom: 16%; }
-    {{ scope }} .v-title { font-size: min(5vw, 9svh); }
-    {{ scope }} .v-rail { position: absolute; right: var(--gutter); top: 45%; transform: translateY(-50%); grid-auto-flow: row; gap: 0; }
-    {{ scope }}[data-mobile-position="right"] .v-rail { right: auto; left: var(--gutter); }
-    {{ scope }} .v-controls { position: absolute; inset: auto var(--gutter) 8px; margin: 0; }
+    {{ scope }} .v-caption { font-size: .75rem; }
+    {{ scope }} .v-status { bottom: var(--footer); }
   }
 {% endstyle %}
 
@@ -134,7 +131,7 @@
     <div class="v-stage" aria-hidden="true">
       {% if first.settings.wear_plate_image == blank or section.settings.use_studio_set %}
         <picture class="v-plate v-base">
-          <source media="(max-width: 767.98px)" srcset="{{ base_url | escape }}&amp;w=1280&amp;q=85">
+          <source media="(max-width: 768px)" srcset="{{ base_url | escape }}&amp;w=1280&amp;q=85">
           <img src="{{ base_url | escape }}&amp;w=2048&amp;q=85" width="2048" height="1360" alt="">
         </picture>
       {% endif %}
@@ -154,7 +151,7 @@
           endif
         -%}
         <picture class="v-plate" data-wear {% if forloop.first %}data-current{% endif %}>
-          <source media="(max-width: 767.98px)" srcset="{{ mobile | escape }}">
+          <source media="(max-width: 768px)" srcset="{{ mobile | escape }}">
           <img src="{{ desktop | escape }}" width="{{ image_width }}" height="{{ image_height }}" alt="" {% if forloop.first %}fetchpriority="high"{% else %}fetchpriority="low"{% endif %}>
         </picture>
       {% endfor %}
@@ -175,25 +172,25 @@
       </div>
     </div>
     <div class="v-rail" aria-label="Try another garment"></div>
-    <div class="v-controls d-flex justify-content-between align-items-center">
+    <div class="v-controls">
       <div class="v-pager d-flex align-items-center" {% if section.blocks.size < 2 %}hidden{% endif %}>
-        <div class="v-dashes d-flex align-items-center" role="group" aria-label="Choose a garment">
+        <div class="v-pages d-flex align-items-center" role="group" aria-label="Choose a garment">
           {% for block in section.blocks %}
             {%- assign slot = block.settings.fallback | plus: 0 -%}
             {%- assign crop = crops[slot] | split: ',' -%}
-            <button class="btn" data-garment type="button" aria-label="Try on {{ block.settings.title | escape }}"
+            <button class="btn p-0 flex-fill" data-garment type="button" aria-label="Try on {{ block.settings.title | escape }}"
               aria-current="{{ forloop.first }}" data-block="{{ block.id }}"
               data-title="{{ block.settings.title | escape }}" data-price="{{ block.settings.price | escape }}"
               data-name="{{ block.settings.cart_name | escape }}" data-label="{{ block.settings.sub_label | escape }}"
               data-url="{{ block.settings.product.url | default: routes.all_products_collection_url | escape }}"
               data-variant="{{ block.settings.product.first_available_variant.id }}"
               data-product="{{ block.settings.product.id }}" {{ block.shopify_attributes }}>
-              <span data-indicator aria-hidden="true">{% if forloop.first %}●{% else %}○{% endif %}</span>
+              <span class="v-segment" aria-hidden="true"></span>
               <template>
                 <span class="v-art" style="--packshot-ratio: {{ block.settings.packshot_image.aspect_ratio | default: 1 }}; --crop-x: {{ crop[0] }}; --crop-y: {{ crop[1] }}; --crop-w: {{ crop[2] }}; --crop-h: {{ crop[3] }};"
                   {% if block.settings.packshot_image != blank and section.settings.use_studio_set == false %}data-custom{% endif %}>
                   {% if block.settings.packshot_image != blank and section.settings.use_studio_set == false %}
-                    {{ block.settings.packshot_image | image_url: width: 760 | image_tag: widths: '200, 400, 760', sizes: '(max-width: 767.98px) 16vw, 12vw', alt: '' }}
+                    {{ block.settings.packshot_image | image_url: width: 760 | image_tag: widths: '200, 400, 760', sizes: '(max-width: 768px) 16vw, 12vw', alt: '' }}
                   {% endif %}
                 </span>
               </template>
@@ -241,7 +238,7 @@
         const veil = find('.v-veil');
         const rolls = [find('.v-title'), find('.v-price')];
         const motion = matchMedia('(prefers-reduced-motion: reduce)');
-        const small = matchMedia('(max-width: 767.98px)');
+        const small = matchMedia('(max-width: 768px)');
         const lifecycle = new AbortController();
         const { signal } = lifecycle;
         const on = (target, event, fn, options = {}) => target.addEventListener(event, fn, { ...options, signal });
@@ -294,7 +291,6 @@
           renderAdd();
           dashes.forEach((dash, i) => {
             dash.setAttribute('aria-current', String(i === index));
-            dash.querySelector('[data-indicator]').textContent = i === index ? '●' : '○';
           });
           // Keep the rail buttons (and keyboard focus) across refills.
           const count = Math.min(2, dashes.length - 1);
@@ -334,11 +330,11 @@
           const art = slot.querySelector('.v-art');
           const slotFrame = art.parentElement.getBoundingClientRect();
           const bounds = root.getBoundingClientRect();
-          // Match CSS object-fit: contain, including letterboxing in both axes.
+          // Follow the displayed plate, including mobile cover cropping and desktop letterboxing.
           const plate = plates[item].querySelector('img');
           const stage = plate.getBoundingClientRect();
           const ratio = plate.naturalWidth && plate.naturalHeight ? plate.naturalWidth / plate.naturalHeight : 16 / 9;
-          const fittedWidth = Math.min(stage.width, stage.height * ratio);
+          const fittedWidth = small.matches ? Math.max(stage.width, stage.height * ratio) : Math.min(stage.width, stage.height * ratio);
           const fittedHeight = fittedWidth / ratio;
           const torsoX = stage.left + stage.width / 2;
           const torsoY = stage.top + (stage.height - fittedHeight) / 2 + fittedHeight * .52;
@@ -487,11 +483,11 @@
           on(document, event, () => later(setLock, 0));
         }
         const observer = new IntersectionObserver(([entry]) => {
-          visible = entry.intersectionRatio >= .55;
+          visible = entry.intersectionRect.height >= Math.min(root.clientHeight, innerHeight) * .55;
           root.toggleAttribute('data-active', visible);
           if (visible) nextAuto = performance.now() + dwell;
           schedule();
-        }, { threshold: [0, .55] });
+        }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
         observer.observe(root);
         let wheelSum = 0;
         let lastWheel = -Infinity;
@@ -623,7 +619,9 @@
   "name": "custom Vestra Try-On Hero",
   "max_blocks": 8,
   "settings": [
-    { "type": "checkbox", "id": "full_viewport_lock", "label": "Lock hero to viewport", "default": true, "info": "Applies when this is the first homepage section. Elsewhere the hero occupies one viewport in the page." },
+    { "type": "range", "id": "desktop_hero_height", "label": "Desktop hero height", "min": 420, "max": 1200, "step": 20, "unit": "px", "default": 740 },
+    { "type": "range", "id": "mobile_hero_height", "label": "Mobile hero height", "min": 560, "max": 1200, "step": 20, "unit": "px", "default": 760 },
+    { "type": "checkbox", "id": "full_viewport_lock", "label": "Lock hero to viewport", "default": true, "info": "Applies when this is the first homepage section. The height settings apply in either mode." },
     { "type": "select", "id": "setwidth", "label": "Section width", "default": "full", "options": [
       { "value": "container", "label": "Container" }, { "value": "container-fluid", "label": "Fluid container" }, { "value": "full", "label": "Full width" }
     ] },

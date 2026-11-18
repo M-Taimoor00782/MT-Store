@@ -1,0 +1,248 @@
+{%- liquid
+  assign scope = '#shopify-section-' | append: section.id | append: ' .custom-store-header'
+  assign menu = section.settings.menu
+  assign navigation_label = 'general.drawers.navigation' | t
+-%}
+
+{% style %}
+  {{ scope }} {
+    display: block;
+    position: relative;
+    z-index: 25;
+    background: {{ section.settings.background }};
+    color: {{ section.settings.text_color }};
+  }
+  {{ scope }} .ch-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    min-height: 68px;
+    padding: .5rem clamp(16px, 3vw, 48px);
+    gap: .5rem;
+  }
+  {{ scope }} a, {{ scope }} button, {{ scope }} summary { color: inherit; }
+  {{ scope }} a:focus-visible, {{ scope }} button:focus-visible, {{ scope }} summary:focus-visible {
+    outline: 2px solid currentColor; outline-offset: 2px;
+  }
+  {{ scope }} .ch-list { list-style: none; padding: 0; margin: 0; }
+  {{ scope }} .ch-desktop > .ch-list { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; }
+  {{ scope }} details { position: relative; }
+  {{ scope }} summary { cursor: pointer; }
+  {{ scope }} .ch-desktop .ch-sublist {
+    position: absolute; top: 100%; left: 0; min-width: 12rem; padding: .75rem 1rem;
+    background: {{ section.settings.background }}; box-shadow: 0 6px 18px rgba(0,0,0,.12);
+  }
+  {{ scope }} .ch-sublist a { display: block; padding-block: .35rem; }
+  {{ scope }} .ch-sublist ul { padding-inline-start: 1rem; }
+  {{ scope }} .ch-brand {
+    grid-column: 2; justify-self: center; text-align: center; font-weight: 700;
+    max-width: min(30vw, 16rem); overflow-wrap: anywhere; line-height: 1.15;
+  }
+  {{ scope }} .ch-brand img { display: block; width: {{ section.settings.logo_width }}px; max-width: 100%; height: auto; }
+  {{ scope }} .ch-actions { justify-self: end; display: flex; align-items: center; gap: clamp(0px, .6vw, 12px); }
+  {{ scope }} .ch-icon { display: inline-grid; place-items: center; position: relative; min-width: 34px; height: 44px; }
+  {{ scope }} .ch-icon svg { display: block; width: 22px; height: 22px; }
+  {{ scope }} .ch-badge {
+    position: absolute; top: 0; right: -4px; padding: 0 .25rem; border-radius: 1rem;
+    min-width: 1rem; text-align: center; font-size: .7rem; line-height: 1rem;
+    color: {{ section.settings.background }}; background: {{ section.settings.text_color }};
+  }
+  {{ scope }} .ch-trigger { display: none; justify-self: start; }
+  {{ scope }} .ch-drawer {
+    position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none;
+    margin: 0; padding: 0; border: 0; overflow: hidden; color: inherit; background: rgba(0,0,0,.38);
+  }
+  {{ scope }} .ch-drawer:not([open]) { display: none; }
+  {{ scope }} .ch-drawer::backdrop { background: transparent; }
+  html:has({{ scope }} .ch-drawer[open]) { overflow: hidden; }
+  {{ scope }} .ch-panel {
+    width: min(84vw, 24rem); height: 100%; padding: 1rem 1.25rem; box-sizing: border-box;
+    background: {{ section.settings.background }}; overflow-y: auto; overscroll-behavior: contain;
+  }
+  {{ scope }} .ch-panel nav > .ch-list > li { padding: .65rem 0; }
+  {{ scope }} .ch-panel .ch-sublist { padding-inline-start: 1rem; }
+  @media (max-width: 768px) {
+    {{ scope }} .ch-bar { min-height: 54px; padding-inline: 10px; gap: 0; }
+    {{ scope }} .ch-desktop { display: none; }
+    {{ scope }} .ch-trigger { display: inline-grid; }
+    {{ scope }} .ch-brand { max-width: min(34vw, calc(100vw - 220px)); }
+    {{ scope }} .ch-actions { gap: 0; }
+    {{ scope }} .ch-icon { min-width: 30px; }
+  }
+{% endstyle %}
+
+{% capture navigation %}
+  <ul class="ch-list">
+    {% for link in menu.links %}
+      <li>
+        {% if link.links != blank %}
+          <details>
+            <summary>{{ link.title | escape }}</summary>
+            <ul class="ch-list ch-sublist">
+              <li><a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
+              {% for child in link.links %}
+                <li>
+                  <a href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
+                  {% if child.links != blank %}
+                    <ul class="ch-list">
+                      {% for leaf in child.links %}
+                        <li><a href="{{ leaf.url | escape }}"{% if leaf.current %} aria-current="page"{% endif %}>{{ leaf.title | escape }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% else %}
+          <a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endcapture %}
+
+<custom-store-header class="custom-store-header">
+  <header class="ch-bar">
+    <div>
+      {% if menu.links != blank %}
+        <nav class="ch-desktop" aria-label="{{ navigation_label | escape }}">{{ navigation }}</nav>
+        <button class="btn p-0 ch-icon ch-trigger" type="button" data-open
+          aria-controls="MenuDrawer-{{ section.id }}" aria-haspopup="dialog" aria-expanded="false" aria-label="{{ navigation_label | escape }}">
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 5h20M2 12h20M2 19h20"/>
+          </svg>
+        </button>
+      {% endif %}
+    </div>
+    <a class="ch-brand" href="{{ routes.root_url }}">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 640 | image_tag: widths: '100, 160, 240, 320, 480, 640', sizes: '240px', alt: shop.name }}
+      {% else %}
+        {{ shop.name | escape }}
+      {% endif %}
+    </a>
+    <div class="ch-actions">
+      <a class="ch-icon" href="{{ routes.search_url }}" aria-label="{{ 'general.search.search' | t | escape }}">{% render 'icon-search' %}</a>
+      <a class="ch-icon" href="{{ routes.account_url }}" aria-label="{{ 'layout.customer.account' | t | escape }}">{% render 'icon-user' %}</a>
+      <a class="ch-icon" href="{{ routes.cart_url }}">
+        <span aria-hidden="true">{% render 'icon-cart' %}</span>
+        <span class="sr-only">{{ 'layout.cart.title' | t }}</span>
+        <span class="ch-badge js-cart-count" aria-live="polite" aria-atomic="true">{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </header>
+  {% if menu.links != blank %}
+    <dialog class="ch-drawer" id="MenuDrawer-{{ section.id }}" aria-label="{{ navigation_label | escape }}">
+      <div class="ch-panel">
+        <div class="d-flex justify-content-end">
+          <button class="btn ch-icon" type="button" data-close aria-label="{{ 'general.accessibility.close' | t | escape }}">{% render 'icon-close' %}</button>
+        </div>
+        <nav aria-label="{{ navigation_label | escape }}">{{ navigation }}</nav>
+      </div>
+    </dialog>
+  {% endif %}
+</custom-store-header>
+
+{% javascript %}
+  if (!customElements.get('custom-store-header')) {
+    customElements.define('custom-store-header', class extends HTMLElement {
+      connectedCallback() {
+        this.frame = requestAnimationFrame(() => this.mount());
+      }
+      disconnectedCallback() {
+        cancelAnimationFrame(this.frame);
+        this.cleanup?.();
+      }
+      mount() {
+        const dialog = this.querySelector('dialog');
+        if (!dialog) return;
+        const trigger = this.querySelector('[data-open]');
+        const close = this.querySelector('[data-close]');
+        const panel = dialog.querySelector('.ch-panel');
+        const desktop = this.querySelector('.ch-desktop');
+        const mobile = matchMedia('(max-width: 768px)');
+        const motion = matchMedia('(prefers-reduced-motion: reduce)');
+        const life = new AbortController();
+        const options = { signal: life.signal };
+        let effects = [];
+        let closing = false;
+
+        function stopEffects() {
+          effects.forEach(effect => effect.cancel());
+          effects = [];
+        }
+        function slide(out) {
+          stopEffects();
+          const options = { duration: out ? 200 : 280, easing: 'cubic-bezier(.2,.7,.2,1)', direction: out ? 'reverse' : 'normal', fill: 'both' };
+          effects = [
+            panel.animate([{ transform: 'translateX(-100%)' }, { transform: 'translateX(0)' }], options),
+            dialog.animate([{ backgroundColor: 'transparent' }, { backgroundColor: 'rgba(0,0,0,.38)' }], options)
+          ];
+          return effects[0];
+        }
+        function closeDrawer() {
+          if (!dialog.open || closing) return;
+          closing = true;
+          if (motion.matches || !mobile.matches) dialog.close();
+          else if (effects[0]?.playState === 'running') {
+            effects.forEach(effect => effect.reverse());
+            effects[0].onfinish = () => dialog.close();
+          } else slide(true).onfinish = () => dialog.close();
+        }
+        trigger.addEventListener('click', () => {
+          if (dialog.open) return;
+          closing = false;
+          trigger.focus({ preventScroll: true });
+          dialog.showModal();
+          trigger.setAttribute('aria-expanded', 'true');
+          close.focus();
+          if (!motion.matches) slide(false);
+        }, options);
+        close.addEventListener('click', closeDrawer, options);
+        dialog.addEventListener('click', event => { if (event.target === dialog) closeDrawer(); }, options);
+        dialog.addEventListener('cancel', event => { event.preventDefault(); closeDrawer(); }, options);
+        dialog.addEventListener('close', () => {
+          if (dialog.open) return;
+          stopEffects();
+          closing = false;
+          trigger.setAttribute('aria-expanded', 'false');
+          if (mobile.matches) trigger.focus();
+        }, options);
+        mobile.addEventListener('change', () => { if (!mobile.matches && dialog.open) dialog.close(); }, options);
+        function closeDropdowns(except) {
+          desktop.querySelectorAll('details[open]').forEach(details => { if (details !== except) details.open = false; });
+        }
+        document.addEventListener('click', event => closeDropdowns(desktop.contains(event.target) && event.target.closest('details')), options);
+        desktop.addEventListener('focusout', event => { if (!desktop.contains(event.relatedTarget)) closeDropdowns(); }, options);
+        desktop.addEventListener('keydown', event => {
+          if (event.key !== 'Escape') return;
+          const details = event.target.closest('details[open]');
+          if (details) { details.open = false; details.querySelector('summary').focus(); }
+        }, options);
+        this.cleanup = () => {
+          life.abort();
+          stopEffects();
+          if (dialog.open) dialog.close();
+          trigger.setAttribute('aria-expanded', 'false');
+        };
+      }
+    });
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "custom Header",
+  "enabled_on": { "groups": ["header"] },
+  "limit": 1,
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo image" },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 240, "step": 10, "unit": "px", "default": 120 },
+    { "type": "link_list", "id": "menu", "label": "Navigation menu", "default": "main-menu" },
+    { "type": "color", "id": "background", "label": "Background color", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#18222d" }
+  ],
+  "presets": [{ "name": "custom Header" }]
+}
+{% endschema %}

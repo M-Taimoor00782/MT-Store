@@ -54,6 +54,7 @@
     },
     "header": {
       "type": "header",
+      "disabled": true,
       "settings": {
         "logo": "{{ shop.brand.logo }}",
         "logo_white": "{{ shop.brand.logo }}",
@@ -106,6 +107,16 @@
         "icon_search": "icon"
       }
     },
+    "custom_header": {
+      "type": "custom-header",
+      "settings": {
+        "logo": "{{ shop.brand.logo }}",
+        "logo_width": 100,
+        "menu": "main-menu",
+        "background": "#ffffff",
+        "text_color": "#000000"
+      }
+    },
     "store-messages": {
       "type": "store-messages",
       "disabled": true,
@@ -126,6 +137,7 @@
     "announcement-bar",
     "announcement-bar-slide",
     "header",
+    "custom_header",
     "store-messages"
   ]
 }
