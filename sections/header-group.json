@@ -113,7 +113,7 @@
         "logo": "{{ shop.brand.logo }}",
         "logo_width": 100,
         "menu": "main-menu",
-        "background": "#ffffff",
+        "background": "rgba(0,0,0,0)",
         "text_color": "#000000"
       }
     },
