@@ -9,6 +9,67 @@
  */
 {
   "sections": {
+    "vestra_tryon_hero_7pHdMf": {
+      "type": "vestra-tryon-hero",
+      "blocks": {
+        "garment_jMr4Gf": {
+          "type": "garment",
+          "settings": {
+            "title": "Alpine Puffer",
+            "price": "$238.00",
+            "cart_name": "Alpine Puffer Jacket",
+            "sub_label": "Ice Grey",
+            "product": "alpine-quilted-down-puffer-jacket",
+            "fallback": "0"
+          }
+        },
+        "garment_jw33FV": {
+          "type": "garment",
+          "settings": {
+            "title": "Ridge Fleece",
+            "price": "$148.00",
+            "cart_name": "Ridge Fleece Jacket",
+            "sub_label": "Sage",
+            "product": "",
+            "fallback": "1"
+          }
+        },
+        "garment_xi4dtm": {
+          "type": "garment",
+          "settings": {
+            "title": "Drift Shell",
+            "price": "$196.00",
+            "cart_name": "Drift Shell Jacket",
+            "sub_label": "Light Grey",
+            "product": "",
+            "fallback": "2"
+          }
+        },
+        "garment_EymFEL": {
+          "type": "garment",
+          "settings": {
+            "title": "Harbor Parka",
+            "price": "$284.00",
+            "cart_name": "Harbor Parka",
+            "sub_label": "Navy",
+            "product": "",
+            "fallback": "3"
+          }
+        }
+      },
+      "block_order": [
+        "garment_jMr4Gf",
+        "garment_jw33FV",
+        "garment_xi4dtm",
+        "garment_EymFEL"
+      ],
+      "name": "VESTRA Try-On Hero",
+      "settings": {
+        "full_viewport_lock": true,
+        "show_custom_nav": true,
+        "hide_theme_header": false
+      }
+    },
     "6246d7cd-b4a1-4a9a-8ac4-1e523b009616": {
       "type": "scrolling-text",
       "blocks": {
@@ -623,6 +684,7 @@
     }
   },
   "order": [
+    "vestra_tryon_hero_7pHdMf",
     "6246d7cd-b4a1-4a9a-8ac4-1e523b009616",
     "36fa167d-bfb9-43c1-bc77-97cd1b353c26",
     "featured_collections_5_rjcWz4",

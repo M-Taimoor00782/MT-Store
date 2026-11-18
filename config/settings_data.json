@@ -555,7 +555,7 @@
         ],
         "custom_css": [],
         "settings": {
-          "enable_slideshow": true,
+          "enable_slideshow": false,
           "setwidthout": "full",
           "slideshow_height_adapt": "full-header",
           "slideshow_height_mobile": "500",
