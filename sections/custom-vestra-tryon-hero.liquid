@@ -9,90 +9,66 @@
   assign first = section.blocks.first
 -%}
 
+{% if first or request.design_mode %}
 {% style %}
-  @font-face {
-    font-family: 'Vestra Inter';
-    src: url('https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2') format('woff2');
-    font-style: normal;
-    font-weight: 100 900;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: 'Vestra Archivo';
-    src: url('https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q8EsJaRE-NWIDdgffTTtDRZ9xdp.woff2') format('woff2');
-    font-weight: 800;
-    font-stretch: 125%;
-    font-display: swap;
+  #shopify-section-{{ section.id }} {
+    background-color: {{ section.settings.bgsection }};
+    padding: {{ section.settings.paddingsection | default: '0' | escape }};
   }
   {{ scope }} {
-    --v-bg: #DEE4E8;
-    --v-nav: #F5F7F8;
-    --v-ink: #18222D;
-    --v-muted: #56616A;
-    --v-white: #FFFFFF;
-    --v-nav-border: rgba(24,34,45,.06);
-    --v-dash-idle: rgba(24,34,45,.22);
-    --v-track: rgba(24,34,45,.10);
+    --v-bg: {{ section.settings.bgsection }};
+    --v-ink: {{ section.settings.text_color }};
     --u: min(100vw / 1440, 100vh / 900);
-    --gutter: calc(64 * var(--u));
-    --nav-height: 0px;
-    --shot: calc(146 * var(--u));
+    --gutter: clamp(16px, 4vw, 64px);
+    --shot: clamp(64px, calc(146 * var(--u)), 180px);
+    --position: {{ section.settings.text_position }};
     display: block;
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    width: 100%;
     height: 100vh;
     height: 100dvh;
-    background: var(--v-bg);
+    background-color: var(--v-bg);
     color: var(--v-ink);
-    font: 500 max(13px, calc(16 * var(--u))) / 1.25 'Vestra Inter', sans-serif;
-    letter-spacing: normal;
-    text-align: left;
     touch-action: pan-y pinch-zoom;
   }
-  {{ scope }}[data-nav] { --nav-height: max(48px, calc(76 * var(--u))); }
   {{ scope }}[data-locked] { position: sticky; top: 0; }
-  {{ scope }} *, {{ scope }} *::before, {{ scope }} *::after { box-sizing: border-box; }
   {{ scope }} [hidden] { display: none !important; }
-  {{ scope }} :is(a, button) {
-    appearance: none; border: 0; border-radius: 0; background: transparent;
-    padding: 0; margin: 0; font: inherit; color: inherit; letter-spacing: inherit;
-    text-decoration: none; text-transform: none; cursor: pointer; box-shadow: none;
-  }
-  {{ scope }} :focus-visible { outline: 2px solid var(--v-ink); outline-offset: 3px; }
-  {{ scope }} button:disabled { cursor: default; }
-  {{ scope }} .v-nav {
-    position: absolute; z-index: 6; inset: 0 0 auto; height: var(--nav-height);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 var(--gutter); border-bottom: 1px solid var(--v-nav-border); background: var(--v-nav);
-  }
-  {{ scope }} .v-brand, {{ scope }} .v-title {
-    font-family: 'Vestra Archivo', sans-serif; font-weight: 800; font-stretch: 125%; letter-spacing: -.055em;
-  }
-  {{ scope }} .v-brand { font-size: max(22px, calc(32 * var(--u))); }
-  {{ scope }} .v-nav-title { position: absolute; left: 50%; transform: translateX(-50%); color: var(--v-muted); }
-  {{ scope }} .v-cart-link { display: flex; align-items: center; gap: .55em; }
-  {{ scope }} .v-count { border-radius: 2em; min-width: 1.7em; padding: .22em .45em; background: var(--v-ink); color: var(--v-white); text-align: center; font-size: .8em; }
-  {{ scope }} .v-stage { position: absolute; inset: var(--nav-height) 0 0; overflow: hidden; pointer-events: none; }
-  {{ scope }} .v-plate {
-    display: block; position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0;
-  }
-  {{ scope }} .v-plate img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: center top; }
+  {{ scope }} .v-stage { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  {{ scope }} .v-plate { display: block; position: absolute; inset: 0; opacity: 0; }
+  {{ scope }} .v-plate img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
   {{ scope }} .v-base, {{ scope }} .v-plate[data-current] { opacity: 1; }
   {{ scope }} .v-plate[data-current] { z-index: 1; }
-  {{ scope }} .v-copy {
-    position: absolute; z-index: 3; left: var(--gutter); top: 46%; transform: translateY(-50%); width: 30%;
+  {{ scope }} .v-stage::after {
+    content: ''; position: absolute; z-index: 3; inset: 0;
+    background: linear-gradient(90deg, var(--v-bg), transparent 35% 65%, var(--v-bg));
   }
-  {{ scope }} .v-title { margin: 0; color: inherit; text-transform: uppercase; font-size: calc(84 * var(--u)); line-height: .94; overflow-wrap: anywhere; }
+  {{ scope }} .v-categories {
+    position: absolute; z-index: 5; left: 50%; top: clamp(12px, 3vh, 32px);
+    box-sizing: border-box;
+    transform: translateX(-50%); max-width: calc(100% - 2 * var(--gutter));
+    padding: .25rem .6rem; overflow-x: auto; overscroll-behavior-x: contain;
+    white-space: nowrap; background: var(--v-bg); box-shadow: 0 2px 14px rgba(0,0,0,.11);
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+  {{ scope }} .v-copy-area {
+    position: absolute; z-index: 3; inset: 0 var(--gutter); display: grid; align-items: center;
+    pointer-events: none;
+  }
+  {{ scope }} .v-copy { width: min(34%, 34rem); justify-self: var(--position); text-align: var(--position); pointer-events: auto; }
+  {{ scope }} .v-title {
+    margin: 0; color: inherit; text-transform: uppercase; font-size: clamp(32px, calc(78 * var(--u)), 96px);
+    line-height: 1; overflow-wrap: anywhere;
+  }
   {{ scope }} .v-roll { display: grid; overflow: hidden; }
   {{ scope }} .v-roll > span { grid-area: 1 / 1; align-self: end; }
-  {{ scope }} .v-price { margin-top: calc(20 * var(--u)); font-size: max(16px, calc(24 * var(--u))); }
-  {{ scope }} .v-shop { display: inline-flex; gap: 1.6em; align-items: center; margin-top: calc(32 * var(--u)); padding: .95em 1.5em; border-radius: 3em; background: var(--v-ink); color: var(--v-white); }
-  {{ scope }} .v-rail { position: absolute; z-index: 3; right: var(--gutter); top: 48%; transform: translateY(-50%); display: grid; gap: calc(32 * var(--u)); }
-  {{ scope }} .v-slot { display: grid; justify-items: center; gap: .5em; width: var(--shot); font-size: max(11px, calc(14 * var(--u))); }
+  {{ scope }} .v-price { margin: .65em 0 1em; font-size: max(16px, calc(24 * var(--u))); }
+  {{ scope }} .v-rail {
+    position: absolute; z-index: 3; right: var(--gutter); top: 47%; transform: translateY(-50%);
+    display: grid; gap: clamp(4px, 2vh, 20px);
+  }
   {{ scope }} .v-art {
-    display: block; position: relative; overflow: hidden; width: var(--shot);
+    display: block; position: relative; margin-inline: auto; overflow: hidden; width: var(--shot);
     aspect-ratio: var(--crop-w) / var(--crop-h);
     background-image: var(--sheet); background-repeat: no-repeat;
     background-size: calc(2048 / var(--crop-w) * 100%) calc(2048 / var(--crop-h) * 100%);
@@ -100,81 +76,92 @@
     pointer-events: none;
   }
   {{ scope }} .v-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
-  {{ scope }} .v-art[data-custom] { background: none; mix-blend-mode: normal; }
-  {{ scope }} .v-flyer { position: absolute; z-index: 4; transform-origin: center; }
+  {{ scope }} .v-art[data-custom] { background-image: none; }
+  {{ scope }} .v-flyer { position: absolute; z-index: 4; margin: 0; transform-origin: center; }
   {{ scope }} .v-controls {
-    position: absolute; z-index: 5; bottom: calc(44 * var(--u)); left: var(--gutter); right: var(--gutter);
-    display: flex; align-items: center; justify-content: space-between; gap: 16px; pointer-events: none;
+    position: absolute; z-index: 5; bottom: max(14px, 4vh); inset-inline: var(--gutter);
+    gap: .5rem; pointer-events: none;
   }
   {{ scope }} .v-controls > * { pointer-events: auto; }
-  {{ scope }} .v-pager, {{ scope }} .v-dashes { display: flex; align-items: center; }
-  {{ scope }} .v-pager { gap: .6em; }
-  {{ scope }} .v-dash { display: grid; place-items: center; width: max(22px, calc(34 * var(--u))); height: 40px; }
-  {{ scope }} .v-dash::before { content: ''; width: 78%; height: 3px; border-radius: 3px; background: var(--v-dash-idle); }
-  {{ scope }} .v-dash[aria-current="true"]::before { background: var(--v-ink); }
-  {{ scope }} .v-play { width: 40px; height: 40px; border: 1px solid var(--v-track); border-radius: 50%; }
-  {{ scope }} .v-pill { display: flex; align-items: center; gap: 1em; margin-left: auto; padding: .5em .5em .5em 1.4em; background: var(--v-white); border-radius: 3em; }
-  {{ scope }} .v-pill-copy { display: grid; gap: 2px; min-width: 0; }
+  {{ scope }} .v-pager { max-width: 55%; }
+  {{ scope }} .v-dashes { overflow-x: auto; }
+  {{ scope }} .v-pill { gap: .75rem; margin-left: auto; padding: .4em; padding-left: 1em; max-width: 60%; background: var(--v-bg); }
+  {{ scope }} .v-pill-copy { display: grid; min-width: 0; line-height: 1.25; }
   {{ scope }} .v-pill-name { font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  {{ scope }} .v-label { color: var(--v-muted); font-size: .8em; }
-  {{ scope }} .v-add { width: 2.65em; height: 2.65em; border-radius: 50%; color: var(--v-white); background: var(--v-ink); font-size: 1.15em; }
-  {{ scope }} .v-add:disabled { opacity: .55; }
-  {{ scope }} .v-status { position: absolute; z-index: 5; right: var(--gutter); bottom: calc(112 * var(--u)); max-width: 80%; background: var(--v-nav); padding: .5em .8em; border-radius: .5em; }
+  {{ scope }} .v-label { font-size: .85em; }
+  {{ scope }} .v-status { position: absolute; z-index: 5; right: var(--gutter); bottom: calc(5vh + 65px); max-width: 80%; background: var(--v-bg); }
   {{ scope }} .v-status:empty { display: none; }
   {{ scope }} .v-veil { position: absolute; inset: 0; z-index: 7; display: grid; pointer-events: none; }
   {{ scope }} .v-veil i { background: var(--v-bg); }
-  @media (width < 820px) {
+  @media (min-width: 768px) {
+    {{ scope }}[data-position="right"] .v-rail { right: auto; left: var(--gutter); }
+    {{ scope }}[data-position="center"] .v-copy-area { align-items: end; bottom: 17%; }
+    {{ scope }}[data-position="center"] .v-copy { width: min(60%, 44rem); }
+  }
+  @media (max-width: 767.98px) {
+    #shopify-section-{{ section.id }} { padding: {{ section.settings.paddingmobile | default: '0' | escape }}; }
+    {{ scope }} {
+      --u: calc(100vw / 390); --gutter: clamp(12px, 4vw, 24px); --shot: min(16vw, 8dvh);
+      --position: {{ section.settings.mobile_text_position }};
+      display: grid; grid-template-rows: minmax(0, 1fr) auto auto;
+    }
     {{ scope }} .v-art:not([data-custom]) { background-image: var(--small-sheet); }
-    {{ scope }} { --u: calc(100vw / 390); --gutter: calc(20 * var(--u)); --shot: min(16vw, 8dvh); font-size: 14px; }
-    {{ scope }}[data-nav] { --nav-height: clamp(48px, 7dvh, 64px); }
-    {{ scope }} .v-brand { font-size: clamp(20px, 6vw, 26px); }
-    {{ scope }} .v-nav-title { position: static; transform: none; }
-    {{ scope }} .v-stage { bottom: 25%; mask-image: linear-gradient(to bottom, black 69%, transparent 97%); }
-    {{ scope }} .v-copy { top: auto; bottom: max(88px, 12%); transform: none; width: 72%; }
-    {{ scope }} .v-title { font-size: min(13vw, 7dvh); max-width: 12ch; }
-    {{ scope }} .v-price { font-size: 16px; margin-top: 7px; }
-    {{ scope }} .v-shop { margin-top: 12px; padding: .7em 1.2em; }
-    {{ scope }} .v-rail { gap: 16px; right: calc(12 * var(--u)); top: 39%; }
-    {{ scope }} .v-slot { font-size: 10px; }
-    {{ scope }} .v-controls { bottom: max(16px, env(safe-area-inset-bottom)); gap: 8px; }
-    {{ scope }} .v-dashes { flex-wrap: wrap; max-width: 88px; }
-    {{ scope }} .v-dash { width: 22px; height: 24px; }
-    {{ scope }} .v-play { width: 30px; height: 30px; flex-shrink: 0; }
-    {{ scope }} .v-pill { max-width: 53%; font-size: 12px; gap: .6em; }
-    {{ scope }} .v-add { flex-shrink: 0; }
-    {{ scope }} .v-status { bottom: 72px; }
+    {{ scope }} .v-stage { top: 2.75rem; bottom: 24%; mask-image: linear-gradient(black 66%, transparent 99%); }
+    {{ scope }} .v-copy-area { position: relative; inset: auto; grid-row: 2; margin-inline: var(--gutter); }
+    {{ scope }} .v-copy { width: 78%; }
+    {{ scope }} .v-title { font-size: min(12vw, 7dvh); }
+    {{ scope }} .v-price { margin: .35em 0 .65em; font-size: 1rem; }
+    {{ scope }} .v-rail { top: 38%; gap: 0; }
+    {{ scope }}[data-mobile-position="right"] .v-rail { right: auto; left: var(--gutter); }
+    {{ scope }} .v-controls {
+      position: relative; inset: auto; grid-row: 3; flex-direction: column-reverse;
+      margin: .75rem var(--gutter) max(14px, env(safe-area-inset-bottom));
+    }
+    {{ scope }} .v-caption { font-size: .75rem; }
+    {{ scope }} .v-pager, {{ scope }} .v-pill { max-width: 100%; margin-inline: auto; }
+    {{ scope }} .v-status { bottom: 118px; }
   }
-  @media (width < 820px) and (height < 520px) and (orientation: landscape) {
-    {{ scope }} { --gutter: 18px; --shot: 12dvh; }
-    {{ scope }}[data-nav] { --nav-height: 38px; }
+  @media (max-width: 767.98px) and (max-height: 519px) and (orientation: landscape) {
+    {{ scope }} { --shot: 12dvh; display: block; }
     {{ scope }} .v-stage { bottom: 0; mask-image: none; }
-    {{ scope }} .v-copy { width: 29%; bottom: 26%; }
-    {{ scope }} .v-title { font-size: min(5vw, 10dvh); }
-    {{ scope }} .v-rail { top: 48%; gap: 6px; }
-    {{ scope }} .v-controls { bottom: 8px; }
-    {{ scope }} .v-dashes { max-width: none; }
+    {{ scope }} .v-copy-area { position: absolute; inset: 20% var(--gutter) 22%; margin: 0; }
+    {{ scope }} .v-copy { width: 31%; }
+    {{ scope }}[data-mobile-position="center"] .v-copy-area { align-items: end; bottom: 14%; }
+    {{ scope }} .v-title { font-size: min(5vw, 9dvh); }
+    {{ scope }} .v-rail { top: 50%; }
+    {{ scope }} .v-controls { position: absolute; inset: auto var(--gutter) 8px; flex-direction: row; margin: 0; }
+    {{ scope }} .v-pager { margin: 0; }
+    {{ scope }} .v-pill { margin: 0 0 0 auto; }
   }
-  {% if section.settings.hide_theme_header %}
-    body:has({{ scope }}[data-active][data-locked]) :is(#shopify-section-header, .shopify-section-group-header-group[id$="__header"]) { display: none; }
-  {% endif %}
 {% endstyle %}
 
+<div class="{{ section.settings.setwidth }}">
 {% if first %}
   <vestra-tryon-hero class="vestra-hero-root" role="region" aria-label="VESTRA virtual try-on" tabindex="0"
-    {% if section.settings.show_custom_nav %}data-nav{% endif %}
+    data-position="{{ section.settings.text_position }}" data-mobile-position="{{ section.settings.mobile_text_position }}"
     {% if section.settings.full_viewport_lock and request.page_type == 'index' %}data-lock-home{% endif %}
     data-cart-add="{{ routes.cart_add_url | escape }}.js" data-cart="{{ routes.cart_url | escape }}.js"
     style="--sheet: url('{{ sheet_url | escape }}&amp;w=2048&amp;q=85'); --small-sheet: url('{{ sheet_url | escape }}&amp;w=1024&amp;q=85');">
-    {% if section.settings.show_custom_nav %}
-      <nav class="v-nav" aria-label="VESTRA">
-        <a class="v-brand" href="{{ routes.root_url }}">VESTRA</a>
-        <span class="v-nav-title">Virtual Try-On</span>
-        <a class="v-cart-link" href="{{ routes.cart_url }}">Cart <span class="v-count js-cart-count">{{ cart.item_count }}</span></a>
+    {% assign category_names = section.settings.category_names | split: ',' %}
+    {% if section.settings.category_menu.links.size > 0 or section.settings.category_names != blank %}
+      <nav class="v-categories rounded-pill d-flex align-items-center" aria-label="Shop by category">
+        {% if section.settings.category_menu.links.size > 0 %}
+          {% for link in section.settings.category_menu.links %}
+            <a class="btn" href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+          {% endfor %}
+        {% else %}
+          {% for name in category_names %}
+            {% assign category = name | strip %}
+            {% if category != blank %}
+              <a class="btn" href="{{ routes.search_url }}?type=product&amp;q={{ category | url_encode }}">{{ category | escape }}</a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </nav>
     {% endif %}
     <div class="v-stage" aria-hidden="true">
       <picture class="v-plate v-base">
-        <source media="(width < 820px)" srcset="{{ base_url | escape }}&amp;w=1280&amp;q=85">
+        <source media="(max-width: 767.98px)" srcset="{{ base_url | escape }}&amp;w=1280&amp;q=85">
         <img src="{{ base_url | escape }}&amp;w=2048&amp;q=85" width="2048" height="1360" alt="">
       </picture>
       {% for block in section.blocks %}
@@ -183,59 +170,64 @@
           assign plate = origin | append: plates[slot] | url_encode | prepend: proxy
           assign desktop = plate | append: '&w=2048&q=85'
           assign mobile = plate | append: '&w=1280&q=85'
-          if block.settings.wear_plate_image != blank
-            assign desktop = block.settings.wear_plate_image | image_url: width: 2048
-            assign mobile = block.settings.wear_plate_image | image_url: width: 1280
+          if block.settings.wear_plate_image != blank and section.settings.use_studio_set == false
+            assign desktop = block.settings.wear_plate_image | image_url: width: 2048, height: 1360, crop: 'center'
+            assign mobile = block.settings.wear_plate_image | image_url: width: 1280, height: 850, crop: 'center'
           endif
         -%}
         <picture class="v-plate" data-wear {% if forloop.first %}data-current{% endif %}>
-          <source media="(width < 820px)" srcset="{{ mobile | escape }}">
+          <source media="(max-width: 767.98px)" srcset="{{ mobile | escape }}">
           <img src="{{ desktop | escape }}" width="2048" height="1360" alt="" {% if forloop.first %}fetchpriority="high"{% else %}fetchpriority="low"{% endif %}>
         </picture>
       {% endfor %}
     </div>
-    <div class="v-copy">
-      <h2 class="v-title v-roll"><span>{{ first.settings.title | escape }}</span><span hidden aria-hidden="true"></span></h2>
-      <div class="v-price v-roll"><span>{{ first.settings.price | escape }}</span><span hidden aria-hidden="true"></span></div>
-      <a class="v-shop" href="{{ first.settings.product.url | default: routes.all_products_collection_url | escape }}">Shop Now <span aria-hidden="true">&#8599;</span></a>
+    <div class="v-copy-area">
+      <div class="v-copy">
+        <h2 class="v-title v-roll"><span>{{ first.settings.title | escape }}</span><span hidden aria-hidden="true"></span></h2>
+        <div class="v-price v-roll"><span>{{ first.settings.price | escape }}</span><span hidden aria-hidden="true"></span></div>
+        <a class="btn btn-theme" data-shop href="{{ first.settings.product.url | default: routes.all_products_collection_url | escape }}">Shop Now <span aria-hidden="true">&#8599;</span></a>
+      </div>
     </div>
     <div class="v-rail" aria-label="Try another garment"></div>
-    <div class="v-controls">
-      <div class="v-pager" {% if section.blocks.size < 2 %}hidden{% endif %}>
-        <div class="v-dashes" role="group" aria-label="Choose a garment">
+    <div class="v-controls d-flex justify-content-between align-items-center">
+      <div class="v-pager d-flex align-items-center" {% if section.blocks.size < 2 %}hidden{% endif %}>
+        <div class="v-dashes d-flex align-items-center" role="group" aria-label="Choose a garment">
           {% for block in section.blocks %}
             {%- assign slot = block.settings.fallback | plus: 0 -%}
             {%- assign crop = crops[slot] | split: ',' -%}
-            <button class="v-dash" type="button" aria-label="Try on {{ block.settings.title | escape }}"
+            <button class="btn" data-garment type="button" aria-label="Try on {{ block.settings.title | escape }}"
               aria-current="{{ forloop.first }}" data-block="{{ block.id }}"
               data-title="{{ block.settings.title | escape }}" data-price="{{ block.settings.price | escape }}"
               data-name="{{ block.settings.cart_name | escape }}" data-label="{{ block.settings.sub_label | escape }}"
               data-url="{{ block.settings.product.url | default: routes.all_products_collection_url | escape }}"
               data-variant="{{ block.settings.product.first_available_variant.id }}"
               data-product="{{ block.settings.product.id }}" {{ block.shopify_attributes }}>
+              <span data-indicator aria-hidden="true">{% if forloop.first %}●{% else %}○{% endif %}</span>
               <template>
                 <span class="v-art" style="--crop-x: {{ crop[0] }}; --crop-y: {{ crop[1] }}; --crop-w: {{ crop[2] }}; --crop-h: {{ crop[3] }};"
-                  {% if block.settings.packshot_image != blank %}data-custom{% endif %}>
-                  {% if block.settings.packshot_image != blank %}
-                    {{ block.settings.packshot_image | image_url: width: 760 | image_tag: widths: '200, 400, 760', sizes: '(max-width: 819px) 16vw, 12vw', alt: '' }}
+                  {% if block.settings.packshot_image != blank and section.settings.use_studio_set == false %}data-custom{% endif %}>
+                  {% if block.settings.packshot_image != blank and section.settings.use_studio_set == false %}
+                    {{ block.settings.packshot_image | image_url: width: 760 | image_tag: widths: '200, 400, 760', sizes: '(max-width: 767.98px) 16vw, 12vw', alt: '' }}
                   {% endif %}
                 </span>
               </template>
             </button>
           {% endfor %}
         </div>
-        <button class="v-play" type="button" aria-label="Pause autoplay">&#10074;&#10074;</button>
+        <button class="btn btn-outline" data-play type="button" aria-label="Pause autoplay">Pause</button>
       </div>
-      <div class="v-pill">
+      <div class="v-pill rounded-pill d-flex align-items-center">
         <span class="v-pill-copy"><span class="v-pill-name">{{ first.settings.cart_name | escape }}</span><span class="v-label">{{ first.settings.sub_label | escape }}</span></span>
-        <button class="v-add" type="button" aria-label="Add {{ first.settings.cart_name | escape }} to cart" disabled>+</button>
+        <button class="btn btn-theme" data-add type="button" aria-label="Add {{ first.settings.cart_name | escape }} to cart" disabled>Add to cart</button>
       </div>
     </div>
     <div class="v-status" role="status"></div>
     <div class="v-veil" aria-hidden="true"></div>
   </vestra-tryon-hero>
 {% elsif request.design_mode %}
-  <div class="vestra-hero-root" style="height: auto; padding: 2em;">Add a garment block to preview the VESTRA try-on hero.</div>
+  <div class="vestra-hero-root" style="height: auto;">Add a garment block to preview the VESTRA try-on hero.</div>
+{% endif %}
+</div>
 {% endif %}
 
 {% javascript %}
@@ -254,18 +246,18 @@
       mount() {
         const root = this;
         const find = selector => root.querySelector(selector);
-        const dashes = Array.from(root.querySelectorAll('.v-dash'));
+        const dashes = Array.from(root.querySelectorAll('[data-garment]'));
         if (!dashes.length) return;
         const plates = Array.from(root.querySelectorAll('[data-wear]'));
         const rail = find('.v-rail');
         const pill = find('.v-pill');
-        const add = find('.v-add');
-        const play = find('.v-play');
+        const add = find('[data-add]');
+        const play = find('[data-play]');
         const status = find('.v-status');
         const veil = find('.v-veil');
         const rolls = [find('.v-title'), find('.v-price')];
         const motion = matchMedia('(prefers-reduced-motion: reduce)');
-        const small = matchMedia('(width < 820px)');
+        const small = matchMedia('(max-width: 767.98px)');
         const lifecycle = new AbortController();
         const { signal } = lifecycle;
         const on = (target, event, fn, options = {}) => target.addEventListener(event, fn, { ...options, signal });
@@ -302,7 +294,7 @@
           schedule();
         }
         function setPlay() {
-          play.textContent = paused ? '▶' : '❚❚';
+          play.textContent = paused ? 'Play' : 'Pause';
           play.setAttribute('aria-label', paused ? 'Resume autoplay' : 'Pause autoplay');
         }
         function renderAdd() {
@@ -315,11 +307,14 @@
         function renderControls(index, animate) {
           shown = index;
           const item = dashes[index].dataset;
-          find('.v-shop').href = item.url;
+          find('[data-shop]').href = item.url;
           find('.v-pill-name').textContent = item.name;
           find('.v-label').textContent = item.label;
           renderAdd();
-          dashes.forEach((dash, i) => dash.setAttribute('aria-current', String(i === index)));
+          dashes.forEach((dash, i) => {
+            dash.setAttribute('aria-current', String(i === index));
+            dash.querySelector('[data-indicator]').textContent = i === index ? '●' : '○';
+          });
           // Keep the rail buttons (and keyboard focus) across refills.
           const count = Math.min(2, dashes.length - 1);
           for (let n = 0; n < count; n++) {
@@ -328,12 +323,13 @@
             if (!button) {
               button = document.createElement('button');
               button.type = 'button';
-              button.className = 'v-slot';
+              button.className = 'btn';
               rail.append(button);
             }
             button.dataset.index = target;
             button.setAttribute('aria-label', dashes[target].getAttribute('aria-label'));
             const caption = document.createElement('span');
+            caption.className = 'v-caption';
             caption.textContent = dashes[target].dataset.title;
             button.replaceChildren(dashes[target].querySelector('template').content.cloneNode(true), caption);
             if (animate) button.animate([{ transform: 'translateX(calc(45 * var(--u)))', opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }], { duration: 410, easing: ease });
@@ -357,7 +353,7 @@
           const stage = find('.v-stage').getBoundingClientRect();
           const ps = Math.max(stage.width / 2048, stage.height / 1360);
           const ox = stage.left - bounds.left + (stage.width - 2048 * ps) / 2;
-          // All plates use cover with top alignment, clamped at the nav baseline.
+          // The base, every wear plate, and the flyer share the same studio coordinate system.
           const oy = stage.top - bounds.top;
           const flyer = dashes[item].querySelector('template').content.firstElementChild.cloneNode(true);
           flyer.classList.add('v-flyer');
@@ -451,8 +447,8 @@
           choose(index, direction);
         }
         on(root, 'click', event => {
-          const slot = event.target.closest('.v-slot');
-          const dash = event.target.closest('.v-dash');
+          const slot = event.target.closest('[data-index]');
+          const dash = event.target.closest('[data-garment]');
           if (slot) manual(Number(slot.dataset.index), 1);
           if (dash) {
             const index = dashes.indexOf(dash);
@@ -516,7 +512,7 @@
         let lastWheel = -Infinity;
         let usedGesture = false;
         on(root, 'wheel', event => {
-          if (!visible || event.ctrlKey || dashes.length < 2) return;
+          if (!visible || event.ctrlKey || dashes.length < 2 || event.target.closest('.v-categories')) return;
           const now = performance.now();
           if (now - lastWheel > 140) { wheelSum = 0; usedGesture = false; }
           lastWheel = now;
@@ -549,7 +545,7 @@
         }, { passive: false });
         let drag;
         on(root, 'pointerdown', event => {
-          if (!event.isPrimary || event.button !== 0 || event.target.closest('a,button')) return;
+          if (!event.isPrimary || event.button !== 0 || event.target.closest('a,button,.v-categories')) return;
           drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
           root.setPointerCapture(event.pointerId);
         });
@@ -565,7 +561,7 @@
           }
         });
         on(document, 'keydown', event => {
-          if (dashes.length < 2 || event.defaultPrevented) return;
+          if (dashes.length < 2 || event.defaultPrevented || event.target.closest('.v-categories')) return;
           const focused = root.contains(event.target);
           if (!focused && !(visible && root.hasAttribute('data-locked') && event.target === document.body)) return;
           if (event.altKey || event.ctrlKey || event.metaKey || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
@@ -573,7 +569,7 @@
           event.preventDefault();
           manual(wrap(current + direction), direction);
         });
-        for (const element of [rail, pill, find('.v-shop'), play]) {
+        for (const element of [rail, pill, find('[data-shop]'), play, find('.v-categories')].filter(Boolean)) {
           on(element, 'pointerenter', event => { if (event.pointerType !== 'touch') { hovered = true; schedule(); } });
           on(element, 'pointerleave', () => { hovered = false; nextAuto = performance.now() + 2000; schedule(); });
         }
@@ -639,12 +635,22 @@
 
 {% schema %}
 {
-  "name": "VESTRA Try-On Hero",
+  "name": "custom Vestra Try-On Hero",
   "max_blocks": 8,
   "settings": [
     { "type": "checkbox", "id": "full_viewport_lock", "label": "Lock hero to viewport", "default": true, "info": "Applies when this is the first homepage section. Elsewhere the hero occupies one viewport in the page." },
-    { "type": "checkbox", "id": "show_custom_nav", "label": "Show VESTRA navigation", "default": true },
-    { "type": "checkbox", "id": "hide_theme_header", "label": "Hide theme header while locked", "default": false }
+    { "type": "select", "id": "setwidth", "label": "Section width", "default": "full", "options": [
+      { "value": "container", "label": "Container" }, { "value": "container-fluid", "label": "Fluid container" }, { "value": "full", "label": "Full width" }
+    ] },
+    { "type": "color", "id": "bgsection", "label": "Background color", "default": "#DEE4E8" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#18222D" },
+    { "type": "text", "id": "paddingsection", "label": "Desktop padding", "default": "0px", "info": "CSS padding, for example 24px 0." },
+    { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "0px" },
+    { "type": "text_alignment", "id": "text_position", "label": "Desktop text position", "default": "left" },
+    { "type": "text_alignment", "id": "mobile_text_position", "label": "Mobile text position", "default": "left" },
+    { "type": "link_list", "id": "category_menu", "label": "Category menu", "info": "Choose a navigation menu to set the pill labels and destinations." },
+    { "type": "text", "id": "category_names", "label": "Fallback categories", "default": "Tops, Bottoms, Outerwear, Shoes, Accessories", "info": "Without a menu, each comma-separated label opens a product search. Clear to hide." },
+    { "type": "checkbox", "id": "use_studio_set", "label": "Use matching studio imagery", "default": false, "info": "Use the original model and packshots for every garment. Turn off to use the block image pickers." }
   ],
   "blocks": [
     {
@@ -660,14 +666,14 @@
           { "value": "0", "label": "Alpine Puffer" }, { "value": "1", "label": "Ridge Fleece" },
           { "value": "2", "label": "Drift Shell" }, { "value": "3", "label": "Harbor Parka" }
         ] },
-        { "type": "image_picker", "id": "wear_plate_image", "label": "Try-on image", "info": "For aligned transitions use a 2048 × 1360 composition with the model centered." },
+        { "type": "image_picker", "id": "wear_plate_image", "label": "Try-on image", "info": "Use the same front-facing studio model, pose, framing and background as the base, at 2048 × 1360." },
         { "type": "image_picker", "id": "packshot_image", "label": "Packshot image" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "VESTRA Try-On Hero",
+      "name": "custom Vestra Try-On Hero",
       "blocks": [
         { "type": "garment", "settings": { "fallback": "0", "title": "Alpine Puffer", "price": "$238.00", "cart_name": "Alpine Puffer Jacket", "sub_label": "Ice Grey" } },
         { "type": "garment", "settings": { "fallback": "1", "title": "Ridge Fleece", "price": "$148.00", "cart_name": "Ridge Fleece Jacket", "sub_label": "Sage" } },

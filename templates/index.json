@@ -10,7 +10,7 @@
 {
   "sections": {
     "vestra_tryon_hero_7pHdMf": {
-      "type": "vestra-tryon-hero",
+      "type": "custom-vestra-tryon-hero",
       "blocks": {
         "garment_jMr4Gf": {
           "type": "garment",
@@ -65,11 +65,10 @@
         "garment_xi4dtm",
         "garment_EymFEL"
       ],
-      "name": "VESTRA Try-On Hero",
+      "name": "custom Vestra Try-On Hero",
       "settings": {
         "full_viewport_lock": true,
-        "show_custom_nav": false,
-        "hide_theme_header": false
+        "use_studio_set": true
       }
     },
     "6246d7cd-b4a1-4a9a-8ac4-1e523b009616": {
