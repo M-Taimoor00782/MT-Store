@@ -68,7 +68,7 @@
       "name": "VESTRA Try-On Hero",
       "settings": {
         "full_viewport_lock": true,
-        "show_custom_nav": true,
+        "show_custom_nav": false,
         "hide_theme_header": false
       }
     },
