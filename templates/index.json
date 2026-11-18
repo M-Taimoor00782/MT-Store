@@ -20,7 +20,9 @@
             "cart_name": "Alpine Puffer Jacket",
             "sub_label": "Ice Grey",
             "product": "alpine-quilted-down-puffer-jacket",
-            "fallback": "0"
+            "fallback": "0",
+            "wear_plate_image": "shopify://shop_images/Model_wearing_puffer_jacket_50408330_2K.jpg",
+            "packshot_image": "shopify://shop_images/Charcoal_puffer_jacket_studio_shot_0cc61247_2K.png"
           }
         },
         "garment_jw33FV": {
