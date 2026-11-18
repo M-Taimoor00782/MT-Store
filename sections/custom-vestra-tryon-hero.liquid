@@ -18,7 +18,7 @@
   {{ scope }} {
     --v-bg: {{ section.settings.bgsection }};
     --v-ink: {{ section.settings.text_color }};
-    --u: min(100vw / 1440, 100vh / 900);
+    --u: min(100vw / 1440, 100svh / 810);
     --gutter: clamp(16px, 4vw, 64px);
     --shot: clamp(64px, calc(146 * var(--u)), 180px);
     --position: {{ section.settings.text_position }};
@@ -26,8 +26,8 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    height: 100vh;
-    height: 100dvh;
+    width: 100%; aspect-ratio: 16 / 9;
+    max-height: 100svh;
     background-color: var(--v-bg);
     color: var(--v-ink);
     touch-action: pan-y pinch-zoom;
@@ -35,22 +35,10 @@
   {{ scope }}[data-locked] { position: sticky; top: 0; }
   {{ scope }} [hidden] { display: none !important; }
   {{ scope }} .v-stage { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-  {{ scope }} .v-plate { display: block; position: absolute; inset: 0; opacity: 0; }
-  {{ scope }} .v-plate img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+  {{ scope }} .v-plate { display: block; position: absolute; inset: 0; background: var(--v-bg); opacity: 0; }
+  {{ scope }} .v-plate img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
   {{ scope }} .v-base, {{ scope }} .v-plate[data-current] { opacity: 1; }
   {{ scope }} .v-plate[data-current] { z-index: 1; }
-  {{ scope }} .v-stage::after {
-    content: ''; position: absolute; z-index: 3; inset: 0;
-    background: linear-gradient(90deg, var(--v-bg), transparent 35% 65%, var(--v-bg));
-  }
-  {{ scope }} .v-categories {
-    position: absolute; z-index: 5; left: 50%; top: clamp(12px, 3vh, 32px);
-    box-sizing: border-box;
-    transform: translateX(-50%); max-width: calc(100% - 2 * var(--gutter));
-    padding: .25rem .6rem; overflow-x: auto; overscroll-behavior-x: contain;
-    white-space: nowrap; background: var(--v-bg); box-shadow: 0 2px 14px rgba(0,0,0,.11);
-    touch-action: pan-x pan-y pinch-zoom;
-  }
   {{ scope }} .v-copy-area {
     position: absolute; z-index: 3; inset: 0 var(--gutter); display: grid; align-items: center;
     pointer-events: none;
@@ -61,22 +49,25 @@
     line-height: 1; overflow-wrap: anywhere;
   }
   {{ scope }} .v-roll { display: grid; overflow: hidden; }
-  {{ scope }} .v-roll > span { grid-area: 1 / 1; align-self: end; }
+  {{ scope }} .v-roll > span { grid-area: 1 / 1; display: grid; align-content: end; }
+  {{ scope }} .v-measure { visibility: hidden; }
   {{ scope }} .v-price { margin: .65em 0 1em; font-size: max(16px, calc(24 * var(--u))); }
   {{ scope }} .v-rail {
     position: absolute; z-index: 3; right: var(--gutter); top: 47%; transform: translateY(-50%);
     display: grid; gap: clamp(4px, 2vh, 20px);
   }
+  {{ scope }} .v-art-frame { display: grid; place-items: center; width: var(--shot); height: var(--shot); margin-inline: auto; }
   {{ scope }} .v-art {
-    display: block; position: relative; margin-inline: auto; overflow: hidden; width: var(--shot);
-    aspect-ratio: var(--crop-w) / var(--crop-h);
+    display: block; position: relative; margin-inline: auto; overflow: hidden;
+    --art-ratio: calc(var(--crop-w) / var(--crop-h));
+    width: min(var(--shot), calc(var(--shot) * var(--art-ratio))); aspect-ratio: var(--art-ratio);
     background-image: var(--sheet); background-repeat: no-repeat;
     background-size: calc(2048 / var(--crop-w) * 100%) calc(2048 / var(--crop-h) * 100%);
     background-position: calc(var(--crop-x) / (2048 - var(--crop-w)) * 100%) calc(var(--crop-y) / (2048 - var(--crop-h)) * 100%);
     pointer-events: none;
   }
   {{ scope }} .v-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
-  {{ scope }} .v-art[data-custom] { background-image: none; }
+  {{ scope }} .v-art[data-custom] { background-image: none; --art-ratio: var(--packshot-ratio); }
   {{ scope }} .v-flyer { position: absolute; z-index: 4; margin: 0; transform-origin: center; }
   {{ scope }} .v-controls {
     position: absolute; z-index: 5; bottom: max(14px, 4vh); inset-inline: var(--gutter);
@@ -94,6 +85,7 @@
   {{ scope }} .v-veil { position: absolute; inset: 0; z-index: 7; display: grid; pointer-events: none; }
   {{ scope }} .v-veil i { background: var(--v-bg); }
   @media (min-width: 768px) {
+    {{ scope }}[data-locked] { height: 100svh; aspect-ratio: auto; }
     {{ scope }}[data-position="right"] .v-rail { right: auto; left: var(--gutter); }
     {{ scope }}[data-position="center"] .v-copy-area { align-items: end; bottom: 17%; }
     {{ scope }}[data-position="center"] .v-copy { width: min(60%, 44rem); }
@@ -103,35 +95,32 @@
     {{ scope }} {
       --u: calc(100vw / 390); --gutter: clamp(12px, 4vw, 24px); --shot: min(16vw, 8dvh);
       --position: {{ section.settings.mobile_text_position }};
-      display: grid; grid-template-rows: minmax(0, 1fr) auto auto;
+      display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem;
+      aspect-ratio: auto; max-height: none;
     }
     {{ scope }} .v-art:not([data-custom]) { background-image: var(--small-sheet); }
-    {{ scope }} .v-stage { top: 2.75rem; bottom: 24%; mask-image: linear-gradient(black 66%, transparent 99%); }
-    {{ scope }} .v-copy-area { position: relative; inset: auto; grid-row: 2; margin-inline: var(--gutter); }
-    {{ scope }} .v-copy { width: 78%; }
-    {{ scope }} .v-title { font-size: min(12vw, 7dvh); }
+    {{ scope }} .v-stage { position: relative; inset: auto; aspect-ratio: 16 / 9; }
+    {{ scope }} .v-copy-area { position: relative; inset: auto; margin-inline: var(--gutter); }
+    {{ scope }} .v-copy { width: 100%; }
+    {{ scope }} .v-title { font-size: clamp(28px, 9vw, 54px); }
     {{ scope }} .v-price { margin: .35em 0 .65em; font-size: 1rem; }
-    {{ scope }} .v-rail { top: 38%; gap: 0; }
-    {{ scope }}[data-mobile-position="right"] .v-rail { right: auto; left: var(--gutter); }
-    {{ scope }} .v-controls {
-      position: relative; inset: auto; grid-row: 3; flex-direction: column-reverse;
-      margin: .75rem var(--gutter) max(14px, env(safe-area-inset-bottom));
-    }
-    {{ scope }} .v-caption { font-size: .75rem; }
-    {{ scope }} .v-pager, {{ scope }} .v-pill { max-width: 100%; margin-inline: auto; }
-    {{ scope }} .v-status { bottom: 118px; }
+    {{ scope }} .v-rail { position: static; transform: none; grid-auto-flow: column; justify-content: center; gap: .5rem; }
+    {{ scope }} .v-rail:empty { display: none; }
+    {{ scope }} .v-controls { position: relative; inset: auto; flex-wrap: wrap; margin: 0 var(--gutter) max(14px, env(safe-area-inset-bottom)); }
+    {{ scope }} .v-caption { display: block; font-size: .75rem; }
+    {{ scope }} .v-pager, {{ scope }} .v-pill { max-width: 100%; }
+    {{ scope }} .v-status { bottom: 4.25rem; }
   }
   @media (max-width: 767.98px) and (max-height: 519px) and (orientation: landscape) {
-    {{ scope }} { --shot: 12dvh; display: block; }
-    {{ scope }} .v-stage { bottom: 0; mask-image: none; }
-    {{ scope }} .v-copy-area { position: absolute; inset: 20% var(--gutter) 22%; margin: 0; }
-    {{ scope }} .v-copy { width: 31%; }
-    {{ scope }}[data-mobile-position="center"] .v-copy-area { align-items: end; bottom: 14%; }
-    {{ scope }} .v-title { font-size: min(5vw, 9dvh); }
-    {{ scope }} .v-rail { top: 50%; }
-    {{ scope }} .v-controls { position: absolute; inset: auto var(--gutter) 8px; flex-direction: row; margin: 0; }
-    {{ scope }} .v-pager { margin: 0; }
-    {{ scope }} .v-pill { margin: 0 0 0 auto; }
+    {{ scope }} { --shot: 12svh; display: block; height: 100svh; }
+    {{ scope }} .v-stage { position: absolute; inset: 0; aspect-ratio: auto; }
+    {{ scope }} .v-copy-area { position: absolute; inset: 6% var(--gutter) 22%; margin: 0; }
+    {{ scope }} .v-copy { width: 29%; }
+    {{ scope }}[data-mobile-position="center"] .v-copy-area { align-items: end; bottom: 16%; }
+    {{ scope }} .v-title { font-size: min(5vw, 9svh); }
+    {{ scope }} .v-rail { position: absolute; right: var(--gutter); top: 45%; transform: translateY(-50%); grid-auto-flow: row; gap: 0; }
+    {{ scope }}[data-mobile-position="right"] .v-rail { right: auto; left: var(--gutter); }
+    {{ scope }} .v-controls { position: absolute; inset: auto var(--gutter) 8px; margin: 0; }
   }
 {% endstyle %}
 
@@ -142,49 +131,46 @@
     {% if section.settings.full_viewport_lock and request.page_type == 'index' %}data-lock-home{% endif %}
     data-cart-add="{{ routes.cart_add_url | escape }}.js" data-cart="{{ routes.cart_url | escape }}.js"
     style="--sheet: url('{{ sheet_url | escape }}&amp;w=2048&amp;q=85'); --small-sheet: url('{{ sheet_url | escape }}&amp;w=1024&amp;q=85');">
-    {% assign category_names = section.settings.category_names | split: ',' %}
-    {% if section.settings.category_menu.links.size > 0 or section.settings.category_names != blank %}
-      <nav class="v-categories rounded-pill d-flex align-items-center" aria-label="Shop by category">
-        {% if section.settings.category_menu.links.size > 0 %}
-          {% for link in section.settings.category_menu.links %}
-            <a class="btn" href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
-          {% endfor %}
-        {% else %}
-          {% for name in category_names %}
-            {% assign category = name | strip %}
-            {% if category != blank %}
-              <a class="btn" href="{{ routes.search_url }}?type=product&amp;q={{ category | url_encode }}">{{ category | escape }}</a>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      </nav>
-    {% endif %}
     <div class="v-stage" aria-hidden="true">
-      <picture class="v-plate v-base">
-        <source media="(max-width: 767.98px)" srcset="{{ base_url | escape }}&amp;w=1280&amp;q=85">
-        <img src="{{ base_url | escape }}&amp;w=2048&amp;q=85" width="2048" height="1360" alt="">
-      </picture>
+      {% if first.settings.wear_plate_image == blank or section.settings.use_studio_set %}
+        <picture class="v-plate v-base">
+          <source media="(max-width: 767.98px)" srcset="{{ base_url | escape }}&amp;w=1280&amp;q=85">
+          <img src="{{ base_url | escape }}&amp;w=2048&amp;q=85" width="2048" height="1360" alt="">
+        </picture>
+      {% endif %}
       {% for block in section.blocks %}
         {%- liquid
           assign slot = block.settings.fallback | plus: 0
           assign plate = origin | append: plates[slot] | url_encode | prepend: proxy
           assign desktop = plate | append: '&w=2048&q=85'
           assign mobile = plate | append: '&w=1280&q=85'
+          assign image_width = 2048
+          assign image_height = 1360
           if block.settings.wear_plate_image != blank and section.settings.use_studio_set == false
-            assign desktop = block.settings.wear_plate_image | image_url: width: 2048, height: 1360, crop: 'center'
-            assign mobile = block.settings.wear_plate_image | image_url: width: 1280, height: 850, crop: 'center'
+            assign image_width = block.settings.wear_plate_image.width
+            assign image_height = block.settings.wear_plate_image.height
+            assign desktop = block.settings.wear_plate_image | image_url: width: 2560
+            assign mobile = block.settings.wear_plate_image | image_url: width: 1280
           endif
         -%}
         <picture class="v-plate" data-wear {% if forloop.first %}data-current{% endif %}>
           <source media="(max-width: 767.98px)" srcset="{{ mobile | escape }}">
-          <img src="{{ desktop | escape }}" width="2048" height="1360" alt="" {% if forloop.first %}fetchpriority="high"{% else %}fetchpriority="low"{% endif %}>
+          <img src="{{ desktop | escape }}" width="{{ image_width }}" height="{{ image_height }}" alt="" {% if forloop.first %}fetchpriority="high"{% else %}fetchpriority="low"{% endif %}>
         </picture>
       {% endfor %}
     </div>
     <div class="v-copy-area">
       <div class="v-copy">
-        <h2 class="v-title v-roll"><span>{{ first.settings.title | escape }}</span><span hidden aria-hidden="true"></span></h2>
-        <div class="v-price v-roll"><span>{{ first.settings.price | escape }}</span><span hidden aria-hidden="true"></span></div>
+        <h2 class="v-title v-roll">
+          <span>{{ first.settings.title | escape }}</span>
+          {% for block in section.blocks %}<span class="v-measure" aria-hidden="true">{{ block.settings.title | escape }}</span>{% endfor %}
+          <span hidden aria-hidden="true"></span>
+        </h2>
+        <div class="v-price v-roll">
+          <span>{{ first.settings.price | escape }}</span>
+          {% for block in section.blocks %}<span class="v-measure" aria-hidden="true">{{ block.settings.price | escape }}</span>{% endfor %}
+          <span hidden aria-hidden="true"></span>
+        </div>
         <a class="btn btn-theme" data-shop href="{{ first.settings.product.url | default: routes.all_products_collection_url | escape }}">Shop Now <span aria-hidden="true">&#8599;</span></a>
       </div>
     </div>
@@ -204,7 +190,7 @@
               data-product="{{ block.settings.product.id }}" {{ block.shopify_attributes }}>
               <span data-indicator aria-hidden="true">{% if forloop.first %}●{% else %}○{% endif %}</span>
               <template>
-                <span class="v-art" style="--crop-x: {{ crop[0] }}; --crop-y: {{ crop[1] }}; --crop-w: {{ crop[2] }}; --crop-h: {{ crop[3] }};"
+                <span class="v-art" style="--packshot-ratio: {{ block.settings.packshot_image.aspect_ratio | default: 1 }}; --crop-x: {{ crop[0] }}; --crop-y: {{ crop[1] }}; --crop-w: {{ crop[2] }}; --crop-h: {{ crop[3] }};"
                   {% if block.settings.packshot_image != blank and section.settings.use_studio_set == false %}data-custom{% endif %}>
                   {% if block.settings.packshot_image != blank and section.settings.use_studio_set == false %}
                     {{ block.settings.packshot_image | image_url: width: 760 | image_tag: widths: '200, 400, 760', sizes: '(max-width: 767.98px) 16vw, 12vw', alt: '' }}
@@ -214,7 +200,6 @@
             </button>
           {% endfor %}
         </div>
-        <button class="btn btn-outline" data-play type="button" aria-label="Pause autoplay">Pause</button>
       </div>
       <div class="v-pill rounded-pill d-flex align-items-center">
         <span class="v-pill-copy"><span class="v-pill-name">{{ first.settings.cart_name | escape }}</span><span class="v-label">{{ first.settings.sub_label | escape }}</span></span>
@@ -252,7 +237,6 @@
         const rail = find('.v-rail');
         const pill = find('.v-pill');
         const add = find('[data-add]');
-        const play = find('[data-play]');
         const status = find('.v-status');
         const veil = find('.v-veil');
         const rolls = [find('.v-title'), find('.v-price')];
@@ -268,14 +252,15 @@
           return id;
         }
         const wrap = index => (index + dashes.length) % dashes.length;
-        const ease = 'cubic-bezier(.22,.9,.3,1)';
+        const ease = 'cubic-bezier(.42,0,.2,1)';
+        const dwell = 3600;
+        const swapDuration = 2100;
         let current = 0;
         let shown = 0;
         let pending = null;
         let queued = null;
         let ready = false;
         let visible = false;
-        let paused = motion.matches;
         let hovered = false;
         let editing = false;
         let adding = false;
@@ -285,17 +270,13 @@
 
         function schedule() {
           clearTimeout(autoTimer);
-          if (!ready || !visible || document.hidden || paused || hovered || editing || adding ||
+          if (!ready || !visible || document.hidden || motion.matches || hovered || editing || adding ||
               pending !== null || dashes.length < 2) return;
           autoTimer = setTimeout(() => choose(wrap(current + 1), 1), Math.max(0, nextAuto - performance.now(), holdUntil - performance.now()));
         }
         function hold() {
           holdUntil = performance.now() + 6000;
           schedule();
-        }
-        function setPlay() {
-          play.textContent = paused ? 'Play' : 'Pause';
-          play.setAttribute('aria-label', paused ? 'Resume autoplay' : 'Pause autoplay');
         }
         function renderAdd() {
           const item = dashes[shown].dataset;
@@ -331,10 +312,13 @@
             const caption = document.createElement('span');
             caption.className = 'v-caption';
             caption.textContent = dashes[target].dataset.title;
-            button.replaceChildren(dashes[target].querySelector('template').content.cloneNode(true), caption);
-            if (animate) button.animate([{ transform: 'translateX(calc(45 * var(--u)))', opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }], { duration: 410, easing: ease });
+            const frame = document.createElement('span');
+            frame.className = 'v-art-frame';
+            frame.append(dashes[target].querySelector('template').content.cloneNode(true));
+            button.replaceChildren(frame, caption);
+            if (animate) button.animate([{ transform: 'translateX(calc(45 * var(--u)))', opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }], { duration: 620, easing: ease });
           }
-          if (animate) pill.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 230 });
+          if (animate) pill.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 360 });
         }
         function resetRolls(index) {
           const item = dashes[index].dataset;
@@ -348,33 +332,37 @@
           const slot = rail.querySelector('[data-index="' + item + '"]') || rail.firstElementChild;
           if (!slot) return;
           const art = slot.querySelector('.v-art');
-          const box = art.getBoundingClientRect();
+          const slotFrame = art.parentElement.getBoundingClientRect();
           const bounds = root.getBoundingClientRect();
-          const stage = find('.v-stage').getBoundingClientRect();
-          const ps = Math.max(stage.width / 2048, stage.height / 1360);
-          const ox = stage.left - bounds.left + (stage.width - 2048 * ps) / 2;
-          // The base, every wear plate, and the flyer share the same studio coordinate system.
-          const oy = stage.top - bounds.top;
+          // Match CSS object-fit: contain, including letterboxing in both axes.
+          const plate = plates[item].querySelector('img');
+          const stage = plate.getBoundingClientRect();
+          const ratio = plate.naturalWidth && plate.naturalHeight ? plate.naturalWidth / plate.naturalHeight : 16 / 9;
+          const fittedWidth = Math.min(stage.width, stage.height * ratio);
+          const fittedHeight = fittedWidth / ratio;
+          const torsoX = stage.left + stage.width / 2;
+          const torsoY = stage.top + (stage.height - fittedHeight) / 2 + fittedHeight * .52;
           const flyer = dashes[item].querySelector('template').content.firstElementChild.cloneNode(true);
           flyer.classList.add('v-flyer');
           flyer.setAttribute('aria-hidden', 'true');
-          flyer.style.width = box.width + 'px';
-          flyer.style.left = box.left - bounds.left + 'px';
-          flyer.style.top = box.top - bounds.top + 'px';
           root.append(flyer);
+          const box = flyer.getBoundingClientRect();
+          const startX = slotFrame.left + slotFrame.width / 2;
+          const startY = slotFrame.top + slotFrame.height / 2;
+          flyer.style.left = startX - bounds.left - box.width / 2 + 'px';
+          flyer.style.top = startY - bounds.top - box.height / 2 + 'px';
           if (slot.dataset.index === String(item)) art.style.visibility = 'hidden';
-          const s = box.width / Number(flyer.style.getPropertyValue('--crop-w'));
-          const k = (.86 * 600 * ps) / (760 * s);
-          const dx = ox + 1012 * ps - (box.left - bounds.left + box.width / 2);
-          const dy = oy + 710 * ps - (box.top - bounds.top + flyer.offsetHeight / 2);
+          const k = Math.min(.85 * fittedWidth / box.width, .46 * fittedHeight / box.height);
+          const dx = torsoX - startX;
+          const dy = torsoY - startY;
           const atRail = 'translate(0, 0) scale(1)';
           const atModel = 'translate(' + dx + 'px,' + dy + 'px) scale(' + k + ')';
           const backwards = direction < 0;
-          animate(flyer, [{ transform: backwards ? atModel : atRail }, { transform: backwards ? atRail : atModel }], 60, 950, ease);
+          animate(flyer, [{ transform: backwards ? atModel : atRail }, { transform: backwards ? atRail : atModel }], 220, 1500, ease);
           const opacity = backwards
-            ? [{ opacity: 0 }, { opacity: 1, offset: .18 }, { opacity: 1 }]
+            ? [{ opacity: 0 }, { opacity: 1, offset: .28 }, { opacity: 1, offset: .78 }, { opacity: 0 }]
             : [{ opacity: 1 }, { opacity: 1, offset: .45 }, { opacity: .6, offset: .72 }, { opacity: 0 }];
-          animate(flyer, opacity, 60, 1010);
+          animate(flyer, opacity, 220, 1610);
           return flyer;
         }
         function swap(index, direction) {
@@ -382,7 +370,9 @@
           const effects = [];
           let flyer;
           function animate(element, frames, delay, duration, easing = 'linear') {
-            effects.push(element.animate(frames, { delay, duration, easing, fill: 'both' }));
+            const effect = element.animate(frames, { delay, duration, easing, fill: 'both' });
+            effects.push(effect);
+            return effect;
           }
           function finish() {
             plates[current].removeAttribute('data-current');
@@ -394,6 +384,7 @@
             flyer?.remove();
             current = index;
             pending = null;
+            nextAuto = performance.now() + dwell;
             const requested = queued;
             queued = null;
             if (requested !== null && requested !== current) choose(requested, requested < current ? -1 : 1);
@@ -402,22 +393,23 @@
           if (motion.matches) { finish(); return; }
           // The outgoing plate stays fully opaque until the incoming plate owns the layer.
           target.style.zIndex = '2';
-          animate(target, [{ opacity: 0 }, { opacity: 1 }], 420, 760);
+          const dissolveDelay = 580;
+          const dissolve = animate(target, [{ opacity: 0 }, { opacity: 1 }], dissolveDelay, swapDuration - dissolveDelay, ease);
           flyer = makeFlyer(index, direction, animate);
           rolls.forEach((roll, i) => {
             const outgoing = roll.firstElementChild;
             const incoming = roll.lastElementChild;
             incoming.textContent = i === 0 ? dashes[index].dataset.title : dashes[index].dataset.price;
             incoming.hidden = false;
-            animate(outgoing, [{ transform: 'translateY(0)' }, { transform: 'translateY(-105%)' }], 100, 250, ease);
-            animate(incoming, [{ transform: 'translateY(105%)' }, { transform: 'translateY(0)' }], 350, 450, ease);
+            animate(outgoing, [{ transform: 'translateY(0)' }, { transform: 'translateY(-105%)' }], 280, 550, ease);
+            animate(incoming, [{ transform: 'translateY(105%)' }, { transform: 'translateY(0)' }], 830, 790, ease);
           });
-          const fadePill = pill.animate([{ opacity: 1 }, { opacity: 0 }], { delay: 470, duration: 130, fill: 'both' });
+          const fadePill = pill.animate([{ opacity: 1 }, { opacity: 0 }], { delay: 790, duration: 250, fill: 'both' });
           later(() => {
             fadePill.cancel();
             renderControls(index, true);
-          }, 600);
-          later(finish, 1200);
+          }, 1040);
+          dissolve.onfinish = finish;
         }
         async function choose(index, direction) {
           if (pending !== null) { queued = index; return; }
@@ -431,7 +423,7 @@
             if (signal.aborted) return;
             status.textContent = 'This try-on image could not load.';
             pending = null;
-            nextAuto = performance.now() + 2000;
+            nextAuto = performance.now() + dwell;
             const requested = queued;
             queued = null;
             if (requested !== null && requested !== index) choose(requested, requested < current ? -1 : 1);
@@ -439,7 +431,6 @@
             return;
           }
           if (signal.aborted) return;
-          nextAuto = performance.now() + 2000;
           swap(index, direction);
         }
         function manual(index, direction) {
@@ -454,12 +445,6 @@
             const index = dashes.indexOf(dash);
             manual(index, index < current ? -1 : 1);
           }
-        });
-        on(play, 'click', () => {
-          paused = !paused;
-          setPlay();
-          nextAuto = performance.now() + 2000;
-          schedule();
         });
         on(add, 'click', async () => {
           const item = dashes[shown].dataset;
@@ -504,7 +489,7 @@
         const observer = new IntersectionObserver(([entry]) => {
           visible = entry.intersectionRatio >= .55;
           root.toggleAttribute('data-active', visible);
-          if (visible) nextAuto = performance.now() + 2000;
+          if (visible) nextAuto = performance.now() + dwell;
           schedule();
         }, { threshold: [0, .55] });
         observer.observe(root);
@@ -512,7 +497,7 @@
         let lastWheel = -Infinity;
         let usedGesture = false;
         on(root, 'wheel', event => {
-          if (!visible || event.ctrlKey || dashes.length < 2 || event.target.closest('.v-categories')) return;
+          if (!visible || event.ctrlKey || dashes.length < 2) return;
           const now = performance.now();
           if (now - lastWheel > 140) { wheelSum = 0; usedGesture = false; }
           lastWheel = now;
@@ -545,7 +530,7 @@
         }, { passive: false });
         let drag;
         on(root, 'pointerdown', event => {
-          if (!event.isPrimary || event.button !== 0 || event.target.closest('a,button,.v-categories')) return;
+          if (!event.isPrimary || event.button !== 0 || event.target.closest('a,button')) return;
           drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
           root.setPointerCapture(event.pointerId);
         });
@@ -561,7 +546,7 @@
           }
         });
         on(document, 'keydown', event => {
-          if (dashes.length < 2 || event.defaultPrevented || event.target.closest('.v-categories')) return;
+          if (dashes.length < 2 || event.defaultPrevented) return;
           const focused = root.contains(event.target);
           if (!focused && !(visible && root.hasAttribute('data-locked') && event.target === document.body)) return;
           if (event.altKey || event.ctrlKey || event.metaKey || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
@@ -569,13 +554,13 @@
           event.preventDefault();
           manual(wrap(current + direction), direction);
         });
-        for (const element of [rail, pill, find('[data-shop]'), play, find('.v-categories')].filter(Boolean)) {
+        for (const element of [rail, pill, find('[data-shop]'), find('.v-pager')]) {
           on(element, 'pointerenter', event => { if (event.pointerType !== 'touch') { hovered = true; schedule(); } });
-          on(element, 'pointerleave', () => { hovered = false; nextAuto = performance.now() + 2000; schedule(); });
+          on(element, 'pointerleave', () => { hovered = false; nextAuto = performance.now() + dwell; schedule(); });
         }
         on(root, 'focusin', hold);
-        on(document, 'visibilitychange', () => { nextAuto = performance.now() + 2000; schedule(); });
-        on(motion, 'change', () => { paused = motion.matches; setPlay(); schedule(); });
+        on(document, 'visibilitychange', () => { nextAuto = performance.now() + dwell; schedule(); });
+        on(motion, 'change', schedule);
         on(root, 'shopify:block:select', event => {
           const index = dashes.findIndex(dash => dash.dataset.block === event.detail.blockId);
           if (index < 0) return;
@@ -584,7 +569,6 @@
         });
         on(root, 'shopify:block:deselect', () => { editing = false; hold(); });
 
-        setPlay();
         renderControls(0, false);
         const columns = small.matches ? 5 : 10;
         const rows = small.matches ? 9 : 6;
@@ -604,7 +588,7 @@
             veil.hidden = true;
             veil.replaceChildren();
             ready = true;
-            nextAuto = performance.now() + 2000;
+            nextAuto = performance.now() + dwell;
             schedule();
           }
           if (motion.matches) { done(); return; }
@@ -613,7 +597,8 @@
           }));
           later(done, 600);
         }
-        Promise.all([find('.v-base img').decode(), plates[0].querySelector('img').decode()]).then(reveal, () => {});
+        const initialImages = root.querySelectorAll('.v-base img, [data-current] img');
+        Promise.all(Array.from(initialImages, img => img.decode())).then(reveal, () => {});
         later(reveal, 1800);
         this.cleanup = () => {
           lifecycle.abort();
@@ -648,8 +633,6 @@
     { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "0px" },
     { "type": "text_alignment", "id": "text_position", "label": "Desktop text position", "default": "left" },
     { "type": "text_alignment", "id": "mobile_text_position", "label": "Mobile text position", "default": "left" },
-    { "type": "link_list", "id": "category_menu", "label": "Category menu", "info": "Choose a navigation menu to set the pill labels and destinations." },
-    { "type": "text", "id": "category_names", "label": "Fallback categories", "default": "Tops, Bottoms, Outerwear, Shoes, Accessories", "info": "Without a menu, each comma-separated label opens a product search. Clear to hide." },
     { "type": "checkbox", "id": "use_studio_set", "label": "Use matching studio imagery", "default": false, "info": "Use the original model and packshots for every garment. Turn off to use the block image pickers." }
   ],
   "blocks": [
@@ -666,8 +649,8 @@
           { "value": "0", "label": "Alpine Puffer" }, { "value": "1", "label": "Ridge Fleece" },
           { "value": "2", "label": "Drift Shell" }, { "value": "3", "label": "Harbor Parka" }
         ] },
-        { "type": "image_picker", "id": "wear_plate_image", "label": "Try-on image", "info": "Use the same front-facing studio model, pose, framing and background as the base, at 2048 × 1360." },
-        { "type": "image_picker", "id": "packshot_image", "label": "Packshot image" }
+        { "type": "image_picker", "id": "wear_plate_image", "label": "Try-on image", "info": "Use matched 16:9 plates, for example 1920 × 1080, with the model centered in the same pose." },
+        { "type": "image_picker", "id": "packshot_image", "label": "Packshot image", "info": "Use a centered ghost-mannequin image. Transparent backgrounds work best for the glide." }
       ]
     }
   ],
