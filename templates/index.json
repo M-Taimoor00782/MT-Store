@@ -27,6 +27,7 @@
         },
         "garment_jw33FV": {
           "type": "garment",
+          "disabled": true,
           "settings": {
             "title": "Ridge Fleece",
             "price": "$148.00",
