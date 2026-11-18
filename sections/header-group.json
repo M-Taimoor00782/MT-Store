@@ -110,7 +110,6 @@
     "custom_header": {
       "type": "custom-header",
       "settings": {
-        "logo": "{{ shop.brand.logo }}",
         "logo_width": 100,
         "menu": "main-menu",
         "background": "rgba(0,0,0,0)",

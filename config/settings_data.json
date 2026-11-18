@@ -195,7 +195,7 @@
     "padding_hoz_btn": 32,
     "height_border_btn": 1,
     "input_round": 5,
-    "svg_cart": "cart-6",
+    "svg_cart": "cart-1",
     "cartdraw": true,
     "e_notecart": true,
     "e_upsellcart": false,
