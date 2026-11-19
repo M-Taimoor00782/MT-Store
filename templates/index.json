@@ -21,8 +21,8 @@
             "sub_label": "Ice Grey",
             "product": "alpine-quilted-down-puffer-jacket",
             "fallback": "0",
-            "wear_plate_image": "shopify://shop_images/Alpine_Puffer.png",
-            "packshot_image": "shopify://shop_images/Black_quilted_down_puffer.png"
+            "wear_plate_image": "shopify://shop_images/Alpine_Puffer_9d59c85e-59fe-4e2a-9d8a-6cebba58cc73.png",
+            "packshot_image": "shopify://shop_images/Black_quilted_down_puffer_.jpg_-_Edited.png"
           }
         },
         "garment_jw33FV": {
@@ -69,7 +69,7 @@
       ],
       "name": "custom Vestra Try-On Hero",
       "settings": {
-        "desktop_hero_height": 840,
+        "desktop_hero_height": 720,
         "mobile_hero_height": 760,
         "full_viewport_lock": false,
         "setwidth": "full",

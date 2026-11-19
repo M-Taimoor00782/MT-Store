@@ -54,18 +54,15 @@
     },
     "header": {
       "type": "header",
-      "disabled": true,
       "settings": {
-        "logo": "{{ shop.brand.logo }}",
-        "logo_white": "{{ shop.brand.logo }}",
         "logo_max_width": 100,
-        "enable_transparent": true,
+        "enable_transparent": false,
         "hover_transparent": false,
         "enable_white": true,
         "setwidth": "container-fluid",
         "layout_header": "logo-left-navigation-center",
         "type_sticky": "sticky",
-        "height_header": "normal",
+        "height_header": "small",
         "background": "#ffffff",
         "textcolor": "#000000",
         "linkcolor": "#000000",
@@ -109,6 +106,7 @@
     },
     "custom_header": {
       "type": "custom-header",
+      "disabled": true,
       "settings": {
         "setwidth": "full",
         "logo_width": 100,
