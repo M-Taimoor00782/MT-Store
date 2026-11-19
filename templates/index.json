@@ -86,43 +86,6 @@
         "use_studio_set": false
       }
     },
-    "6246d7cd-b4a1-4a9a-8ac4-1e523b009616": {
-      "type": "scrolling-text",
-      "blocks": {
-        "template--18385545593139__6246d7cd-b4a1-4a9a-8ac4-1e523b009616-16792108611f6fdcd9-0": {
-          "type": "item",
-          "settings": {
-            "code": "SEPTEMBER 15 - OKTOBER 15: LAUNCH SALE"
-          }
-        },
-        "0f6b15df-cdde-4584-ba09-ce5700146804": {
-          "type": "item",
-          "settings": {
-            "code": "20% OFF SITEWIDE"
-          }
-        }
-      },
-      "block_order": [
-        "template--18385545593139__6246d7cd-b4a1-4a9a-8ac4-1e523b009616-16792108611f6fdcd9-0",
-        "0f6b15df-cdde-4584-ba09-ce5700146804"
-      ],
-      "disabled": true,
-      "settings": {
-        "animation": "fade-up",
-        "size_text": "p",
-        "text_style": "solid",
-        "size_icon": 40,
-        "speed": 10,
-        "scroll_type": "from-right",
-        "background": "{{ shop.brand.colors.primary[0].background }}",
-        "gradient_bg": "",
-        "text": "{{ shop.brand.colors.primary[0].foreground }}",
-        "paddingsection": "8px 0px 8px 0px",
-        "paddingmobile": "8px 0px 8px 0px",
-        "marginsection": "0px 0px 0px 0px",
-        "marginmobile": "0px 0px 0px 0px"
-      }
-    },
     "custom_trust_badges_jtYAb8": {
       "type": "custom-trust-badges",
       "blocks": {
@@ -181,6 +144,43 @@
         "text_alignment": "center"
       }
     },
+    "6246d7cd-b4a1-4a9a-8ac4-1e523b009616": {
+      "type": "scrolling-text",
+      "blocks": {
+        "template--18385545593139__6246d7cd-b4a1-4a9a-8ac4-1e523b009616-16792108611f6fdcd9-0": {
+          "type": "item",
+          "settings": {
+            "code": "SEPTEMBER 15 - OKTOBER 15: LAUNCH SALE"
+          }
+        },
+        "0f6b15df-cdde-4584-ba09-ce5700146804": {
+          "type": "item",
+          "settings": {
+            "code": "20% OFF SITEWIDE"
+          }
+        }
+      },
+      "block_order": [
+        "template--18385545593139__6246d7cd-b4a1-4a9a-8ac4-1e523b009616-16792108611f6fdcd9-0",
+        "0f6b15df-cdde-4584-ba09-ce5700146804"
+      ],
+      "disabled": true,
+      "settings": {
+        "animation": "fade-up",
+        "size_text": "p",
+        "text_style": "solid",
+        "size_icon": 40,
+        "speed": 10,
+        "scroll_type": "from-right",
+        "background": "{{ shop.brand.colors.primary[0].background }}",
+        "gradient_bg": "",
+        "text": "{{ shop.brand.colors.primary[0].foreground }}",
+        "paddingsection": "8px 0px 8px 0px",
+        "paddingmobile": "8px 0px 8px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
     "custom_collection_editorial_grid_bxbwLK": {
       "type": "custom-collection-editorial-grid",
       "blocks": {
@@ -226,14 +226,14 @@
         "e_repeat": "no-repeat",
         "e_position": "center center",
         "bgsection": "#ffffff",
-        "title_color": "transparent",
+        "title_color": "rgba(0,0,0,0)",
         "title_top": "Sub Title Top",
         "title": "Product list",
         "des": "",
         "align-heading": "center",
         "collection": "jackets-outerwear",
         "limit": 10,
-        "perviewDesktop": 4,
+        "perviewDesktop": 3,
         "spaceBetween": 30,
         "nowrap": true,
         "arrows": true,
