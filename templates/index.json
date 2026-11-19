@@ -40,26 +40,28 @@
         },
         "garment_xi4dtm": {
           "type": "garment",
-          "disabled": true,
           "settings": {
             "title": "Drift Shell",
             "price": "$196.00",
             "cart_name": "Drift Shell Jacket",
             "sub_label": "Light Grey",
-            "product": "",
-            "fallback": "2"
+            "product": "midnight-corduroy-shearling-collar-jacket",
+            "fallback": "2",
+            "wear_plate_image": "shopify://shop_images/Shearling-Collar_e0510325-79fd-4683-b7d0-f10ad48c48f5.png",
+            "packshot_image": "shopify://shop_images/Jacket_product_packshot.jpg_-_Edited.png"
           }
         },
         "garment_EymFEL": {
           "type": "garment",
-          "disabled": true,
           "settings": {
             "title": "Harbor Parka",
             "price": "$284.00",
             "cart_name": "Harbor Parka",
             "sub_label": "Navy",
-            "product": "",
-            "fallback": "3"
+            "product": "vanguard-technical-windbreaker-shell",
+            "fallback": "3",
+            "wear_plate_image": "shopify://shop_images/Windbreaker_Shell.png",
+            "packshot_image": "shopify://shop_images/Jacket_packshot.jpg_-_Edited.png"
           }
         }
       },
