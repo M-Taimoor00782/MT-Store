@@ -73,7 +73,7 @@
       ],
       "name": "custom Vestra Try-On Hero",
       "settings": {
-        "desktop_hero_height": 720,
+        "desktop_hero_height": 760,
         "mobile_hero_height": 760,
         "full_viewport_lock": false,
         "setwidth": "full",
@@ -119,6 +119,141 @@
         "text": "{{ shop.brand.colors.primary[0].foreground }}",
         "paddingsection": "8px 0px 8px 0px",
         "paddingmobile": "8px 0px 8px 0px",
+        "marginsection": "0px 0px 0px 0px",
+        "marginmobile": "0px 0px 0px 0px"
+      }
+    },
+    "custom_trust_badges_jtYAb8": {
+      "type": "custom-trust-badges",
+      "blocks": {
+        "badge_fD4Qqd": {
+          "type": "badge",
+          "settings": {
+            "symbol": "delivery",
+            "heading": "Delivery",
+            "subtext": "",
+            "badge_tag": ""
+          }
+        },
+        "badge_MfCCUq": {
+          "type": "badge",
+          "settings": {
+            "symbol": "return",
+            "heading": "Returns",
+            "subtext": "",
+            "badge_tag": ""
+          }
+        },
+        "badge_JFCjYF": {
+          "type": "badge",
+          "settings": {
+            "symbol": "shield",
+            "heading": "",
+            "subtext": "",
+            "badge_tag": ""
+          }
+        },
+        "badge_LhVtfF": {
+          "type": "badge",
+          "settings": {
+            "symbol": "shield",
+            "heading": "Secure checkout",
+            "subtext": "",
+            "badge_tag": ""
+          }
+        }
+      },
+      "block_order": [
+        "badge_fD4Qqd",
+        "badge_MfCCUq",
+        "badge_JFCjYF",
+        "badge_LhVtfF"
+      ],
+      "name": "custom - Trust Badges",
+      "settings": {
+        "setwidth": "container-fluid",
+        "background": "#ffffff",
+        "text_color": "#18222d",
+        "paddingsection": "-84px 0",
+        "paddingmobile": "36px 0",
+        "text_alignment": "center"
+      }
+    },
+    "custom_collection_editorial_grid_bxbwLK": {
+      "type": "custom-collection-editorial-grid",
+      "blocks": {
+        "collection_JhdKUi": {
+          "type": "collection",
+          "settings": {
+            "collection": "jacket"
+          }
+        },
+        "collection_Gbt8HM": {
+          "type": "collection",
+          "settings": {
+            "collection": "new-arrival"
+          }
+        }
+      },
+      "block_order": [
+        "collection_JhdKUi",
+        "collection_Gbt8HM"
+      ],
+      "name": "custom - Collection Editorial Grid",
+      "settings": {
+        "setwidth": "container-fluid",
+        "background": "#ffffff",
+        "text_color": "#18222d",
+        "paddingsection": "64px 0",
+        "paddingmobile": "36px 0",
+        "text_alignment": "left",
+        "subheading": "",
+        "heading": "Featured collections",
+        "description": "",
+        "image_ratio": "landscape",
+        "cta_label": ""
+      }
+    },
+    "product_list_swiper_fN3XJC": {
+      "type": "product-list-swiper",
+      "name": "Product list (Swiper)",
+      "settings": {
+        "animation": "",
+        "setwidth": "container",
+        "e_size": "auto",
+        "e_repeat": "no-repeat",
+        "e_position": "center center",
+        "bgsection": "#ffffff",
+        "title_color": "transparent",
+        "title_top": "Sub Title Top",
+        "title": "Product list",
+        "des": "",
+        "align-heading": "center",
+        "collection": "jackets-outerwear",
+        "limit": 10,
+        "perviewDesktop": 4,
+        "spaceBetween": 30,
+        "nowrap": true,
+        "arrows": true,
+        "scrollbar": true,
+        "buttonall": "",
+        "buttonall_link": "",
+        "style_btn": "btn-theme",
+        "enable_first_banner": false,
+        "width_banner": 30,
+        "subtitle_banner": "Sub Title",
+        "title_banner": "Title Banner",
+        "size_text": "h2",
+        "des_banner": "Protection from the",
+        "pos_banner": "mid-center",
+        "button_banner": "discover now",
+        "link_banner": "",
+        "style_btn_banner": "btn-underline btn-underline-white",
+        "text_banner_color": "#ffffff",
+        "overlay_banner": "#000000",
+        "opacity_banner": 0.2,
+        "paddingsection": "0px 0px 0px 0px",
+        "paddingmobile": "40px 0px 40px 0px",
         "marginsection": "0px 0px 0px 0px",
         "marginmobile": "0px 0px 0px 0px"
       }
@@ -703,6 +838,9 @@
   "order": [
     "vestra_tryon_hero_7pHdMf",
     "6246d7cd-b4a1-4a9a-8ac4-1e523b009616",
+    "custom_trust_badges_jtYAb8",
+    "custom_collection_editorial_grid_bxbwLK",
+    "product_list_swiper_fN3XJC",
     "36fa167d-bfb9-43c1-bc77-97cd1b353c26",
     "featured_collections_5_rjcWz4",
     "46879304-b905-4023-b279-2bf6d71497b1",
