@@ -32,8 +32,10 @@
             "price": "$148.00",
             "cart_name": "Ridge Fleece Jacket",
             "sub_label": "Sage",
-            "product": "",
-            "fallback": "1"
+            "product": "sandstone-suede-bomber-jacket",
+            "fallback": "1",
+            "wear_plate_image": "shopify://shop_images/Sandstone_Bomber.png",
+            "packshot_image": "shopify://shop_images/Sandstone_suede_bomber.jpg_-_Edited.png"
           }
         },
         "garment_xi4dtm": {
