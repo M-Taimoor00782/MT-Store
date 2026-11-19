@@ -42,6 +42,7 @@
     touch-action: pan-y pinch-zoom;
   }
   {{ scope }}[data-locked] { position: sticky; top: 0; }
+  {{ scope }} svg { fill: none; }
   {{ scope }} [hidden] { display: none !important; }
   {{ scope }} .v-stage, {{ scope }} .v-pill-layer { position: absolute; inset: 0 0 var(--footer); pointer-events: none; }
   {{ scope }} .v-stage { overflow: hidden; }
@@ -82,15 +83,15 @@
   {{ scope }} .v-art[data-custom] { background-image: none; --art-ratio: var(--packshot-ratio); }
   {{ scope }} .v-flyer { position: absolute; z-index: 4; margin: 0; transform-origin: center; }
   {{ scope }} .v-controls {
-    position: absolute; z-index: 5; left: .75rem; top: 50%; transform: translateY(-50%); width: clamp(70px, 10%, 140px);
-    pointer-events: none;
+    position: absolute; z-index: 5; inset: 0 0 var(--footer); pointer-events: none;
+    container-type: size;
   }
-  {{ scope }} .v-controls > * { pointer-events: auto; }
   {{ scope }} .v-pill { position: absolute; left: 50%; transform: translateX(-50%); }
-  {{ scope }} .v-pager { flex-direction: column-reverse; gap: .2rem; --shot: clamp(40px, 5vw, 78px); }
-  {{ scope }} .v-pages { width: 100%; gap: 2px; }
-  {{ scope }} .v-segment { display: grid; align-items: center; height: 24px; }
-  {{ scope }} .v-segment::before { content: ''; height: 3px; background: var(--v-ink); opacity: .24; }
+  {{ scope }} .v-pager, {{ scope }} .v-current-preview { position: absolute; top: 50%; transform: translateY(-50%); }
+  {{ scope }} .v-current-preview { left: .75rem; width: clamp(70px, 10%, 140px); --shot: clamp(40px, 5vw, 78px); }
+  {{ scope }} .v-pager { right: 15%; gap: 3px; pointer-events: auto; }
+  {{ scope }} .v-segment { display: grid; justify-items: center; width: 24px; height: min(24px, 8cqh); }
+  {{ scope }} .v-segment::before { content: ''; width: 3px; background: var(--v-ink); opacity: .24; }
   {{ scope }} [aria-current="true"] .v-segment::before { opacity: 1; }
   {{ scope }} .v-pill {
     z-index: 10; bottom: var(--pill-inset); pointer-events: auto; box-sizing: border-box;
@@ -111,7 +112,7 @@
   {{ scope }} .v-veil i { background: var(--v-bg); }
   @media (width > 768px) {
     {{ scope }}[data-position="left"] .v-copy-area { left: calc(11% + 1rem); }
-    {{ scope }}[data-position="right"] .v-copy-area { right: 16%; }
+    {{ scope }}[data-position="right"] .v-copy-area { right: calc(15% + 28px); }
     {{ scope }}[data-position="center"] .v-copy-area { align-items: end; bottom: calc(var(--footer) + var(--pill-inset) + 82px); }
     {{ scope }}[data-position="center"] .v-copy { width: min(60%, 44rem); }
   }
@@ -127,7 +128,9 @@
     {{ scope }} .v-art:not([data-custom]) { background-image: var(--small-sheet); }
     {{ scope }} .v-stage, {{ scope }} .v-pill-layer { position: relative; inset: auto; grid-area: 1 / 1; container-type: size; }
     {{ scope }} .v-pill { --pill-inset: calc((100cqh - min(100cqw, 100cqh)) / 2 + 10px); }
-    {{ scope }} .v-controls { position: relative; inset: auto; grid-area: 1 / 1; align-self: center; margin-left: .5rem; width: clamp(58px, 15vw, 90px); transform: none; }
+    {{ scope }} .v-controls { position: relative; inset: auto; grid-area: 1 / 1; }
+    {{ scope }} .v-current-preview { left: .5rem; width: clamp(58px, 15vw, 90px); }
+    {{ scope }} .v-pager { right: calc((100cqw - min(100cqw, 100cqh)) / 2 + 2px); }
     {{ scope }} .v-pill { padding: 0; }
     {{ scope }} .v-pill-copy, {{ scope }} .v-thumb { display: none; }
     {{ scope }} .v-plate { inset: 50% auto auto 50%; transform: translate(-50%, -50%); width: min(100cqw, 100cqh); aspect-ratio: 1 / 1; }
@@ -195,8 +198,7 @@
     </div>
     <div class="v-rail" aria-label="Try another garment"></div>
     <div class="v-controls">
-      <div class="v-pager d-flex align-items-center" {% if section.blocks.size < 2 %}hidden{% endif %}>
-        <div class="v-pages d-flex align-items-center" role="group" aria-label="Choose a garment">
+      <div class="v-pager d-flex flex-column" role="group" aria-label="Choose a garment" {% if section.blocks.size < 2 %}hidden{% endif %}>
           {% for block in section.blocks %}
             {%- assign slot = block.settings.fallback | plus: 0 -%}
             {%- assign crop = crops[slot] | split: ',' -%}
@@ -220,9 +222,8 @@
               {% if forloop.first %}{% assign first_artwork = artwork %}{% endif %}
             </button>
           {% endfor %}
-        </div>
-        <span class="v-current-preview" aria-hidden="true">{{ first_artwork }}</span>
       </div>
+      {% if section.blocks.size > 1 %}<span class="v-current-preview" aria-hidden="true">{{ first_artwork }}</span>{% endif %}
     </div>
     <div class="v-pill-layer">
       <div class="v-pill d-flex align-items-center">
@@ -232,9 +233,7 @@
           <span class="v-pill-detail"><span class="v-label">{{ first.settings.sub_label | escape }}</span><span class="v-pill-price">{{ first.settings.price | escape }}</span></span>
         </span>
         <button class="btn btn-theme rounded-circle p-0" data-add type="button" aria-label="Add {{ first.settings.cart_name | default: first.settings.title | escape }} to cart" disabled>
-          <span class="v-cart-glyph"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h2.5l2.4 12h11.9l2.4-8H5.4"/><circle cx="8.5" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/>
-          </svg></span>
+          <span class="v-cart-glyph" aria-hidden="true">{% render 'icon-cart' %}</span>
         </button>
       </div>
     </div>

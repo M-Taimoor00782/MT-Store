@@ -24,6 +24,7 @@
     gap: .5rem;
   }
   {{ scope }} a, {{ scope }} summary { color: inherit; }
+  {{ scope }} svg { fill: none; }
   {{ scope }} a:focus-visible, {{ scope }} summary:focus-visible {
     outline: 2px solid currentColor; outline-offset: 2px;
   }
@@ -94,9 +95,7 @@
       {% if menu.links != blank %}
         <span class="ch-trigger"><button class="btn p-0" type="button" data-open
           aria-controls="MenuDrawer-{{ section.id }}" aria-haspopup="dialog" aria-expanded="false" aria-label="{{ navigation_label | escape }}">
-          <span class="ch-icon"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M2 5h20M2 12h20M2 19h20"/>
-          </svg></span>
+          <span class="ch-icon">{% render 'icon-hamburger' %}</span>
         </button></span>
       {% endif %}
     <a class="ch-brand" href="{{ routes.root_url }}">

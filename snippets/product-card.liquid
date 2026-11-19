@@ -1,3 +1,12 @@
+{%- liquid
+  assign item = settings.productgrid
+  if enable_edit_item
+    assign item = select_item
+  endif
+-%}
+{%- if item == 'product-11' -%}
+  {%- render 'custom-product-card-11', product: product -%}
+{%- else -%}
 {%- comment -%} image {%- endcomment -%}
 {%- capture image_product -%}
   {%- assign image = product.featured_media -%}
@@ -65,14 +74,6 @@
     </div>  
   {%- endif -%}
 {% endcapture %}
-{%- liquid
-  assign item = settings.productgrid
-  if enable_edit_item 
-    assign item = select_item
-  else
-    assign item = settings.productgrid
-  endif
--%}
 {%- case item -%}
   {%- when 'product-1' -%}
     {%- comment -%} product-grid-1.liquid {%- endcomment -%}
@@ -720,3 +721,4 @@
         </div>
       </div>
 {%- endcase -%}
+{%- endif -%}

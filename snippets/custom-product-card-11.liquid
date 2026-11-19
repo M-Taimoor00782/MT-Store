@@ -1,4 +1,5 @@
 {% liquid
+  assign sizes = 'auto, (max-width: 768px) 50vw, 25vw'
   assign variant = product.selected_or_first_available_variant
   assign primary = variant.featured_image | default: product.featured_image
   assign secondary = product.images[1]
@@ -20,7 +21,7 @@
   assign add_label = 'products.product.add_to_cart' | t
   assign sold_label = 'products.product.sold_out' | t
 %}
-<custom-product-card-11 class="cc11 js-product-card" data-add-label="{{ add_label | escape }}" data-sold-label="{{ sold_label | escape }}">
+<custom-product-card-11 class="product-card cc11 js-product-card" data-add-label="{{ add_label | escape }}" data-sold-label="{{ sold_label | escape }}">
   <div class="cc11-media">
     <a class="cc11-images" href="{{ variant.url | default: product.url }}" data-product-link aria-label="{{ product.title | escape }}">
       <span class="cc11-primary">
@@ -41,7 +42,7 @@
     <div class="cc11-actions">
       <span><button type="button" class="btn btn-theme js-grid-cart px-2 py-1" data-id="{{ variant.id }}" {% unless variant.available %}disabled{% endunless %}
         aria-label="{% if variant.available %}{{ add_label | escape }}{% else %}{{ sold_label | escape }}{% endif %}">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" aria-hidden="true"><path d="M2 3h3l2.3 12h11.8l2-9H6"/><circle cx="9" cy="20" r="1.1"/><circle cx="18" cy="20" r="1.1"/></svg>
+        {% render 'icon-cart' %}
       </button></span>
       {% if settings.enable_wishlsit %}
         <span><button type="button" class="btn btn-theme js-btn-wishlist px-2 py-1" data-handle="{{ product.handle }}" aria-label="{{ 'products.product.wishlist_text' | t | escape }}">{% render 'icon-heart' %}</button></span>
@@ -100,6 +101,7 @@
 
 {% stylesheet %}
   .cc11 { display: block; min-width: 0; }
+  .cc11 svg { fill: none; }
   .cc11-media { position: relative; isolation: isolate; }
   .cc11-images { display: block; position: relative; overflow: hidden; aspect-ratio: 4 / 5; background: #f3f2ef; }
   .cc11-images :is(img,svg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
