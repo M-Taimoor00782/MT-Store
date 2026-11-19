@@ -1,18 +1,18 @@
 
 {%- liquid
-  capture iconWishlist 
+  capture icon_wishlist 
     render 'icon-heart' 
   endcapture 
-  capture iconWishlistAdded 
+  capture icon_wishlist_added 
     render 'icon-heart-solid' 
   endcapture 
-  capture iconCompare 
+  capture icon_compare 
     render 'icon-exchange' 
   endcapture 
-  capture iconRemove 
+  capture icon_remove 
     render 'icon-close-solid' 
   endcapture 
-  capture iconCart 
+  capture icon_cart 
     render 'icon-cart' 
   endcapture 
 -%}
@@ -53,16 +53,16 @@
     ajaxSearchViewAll: {{ 'general.search.view_all' | t | json }},
     ajaxSearchNoResult: {{ 'general.search.no_result' | t | json }},
     wishlistNoResult: {{ 'products.product.wishlist_no_result' | t | json }},
-    wishlistIcon: {{ iconWishlist | json }},
-    wishlistIconAdded: {{ iconWishlistAdded | json }},
+    wishlistIcon: {{ icon_wishlist | json }},
+    wishlistIconAdded: {{ icon_wishlist_added | json }},
     wishlistText: {{ 'products.product.add_to_wishlist' | t | json }},
     wishlistTextAdded: {{ 'products.product.view_wishlist' | t | json }},
     wishlistRemove: {{ 'products.product.wishlist_remove' | t | json }},
     compareNoResult: {{ 'products.product.compare_no_result' | t | json }},
-    compareIcon: {{ iconCompare | json }},
+    compareIcon: {{ icon_compare | json }},
     compareText: {{ 'products.product.compare_text' | t | json }},
     compareTextRemove: {{ 'products.product.compare_remove' | t | json }},
-    compareRemove: {{ iconRemove | json }},
+    compareRemove: {{ icon_remove | json }},
     compareNotifyAdded: {{ 'products.product.compare_notice_added' | t | json }},
     compareNotifyRemoved: {{ 'products.product.compare_notice_removed' | t | json }},
     compareNotifyMaximum: {{ 'products.product.compare_notice_maximum' | t | json }},
@@ -75,7 +75,7 @@
     cartEmptyButton: {{ 'cart.general.empty_button' | t | json }},
     cartMore: {{ 'cart.general.and_more' | t | json }},
     cartView: {{ 'cart.general.view' | t | json }},
-    cartIcon: {{ iconCart | json }},
+    cartIcon: {{ icon_cart | json }},
     couponTitle: {{ settings.coupon_title | json }},
     couponAlert: {{ settings.coupon_copied | json }},
     cartCollection:{{ routes.all_products_collection_url | json }},
