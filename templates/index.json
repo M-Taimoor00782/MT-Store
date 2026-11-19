@@ -69,7 +69,7 @@
       ],
       "name": "custom Vestra Try-On Hero",
       "settings": {
-        "desktop_hero_height": 740,
+        "desktop_hero_height": 840,
         "mobile_hero_height": 760,
         "full_viewport_lock": false,
         "setwidth": "full",
