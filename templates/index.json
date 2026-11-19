@@ -15,8 +15,8 @@
         "garment_jMr4Gf": {
           "type": "garment",
           "settings": {
-            "title": "Alpine Puffer",
-            "price": "$238.00",
+            "title": "Puffer Jacket",
+            "price": "Rs 14,500",
             "cart_name": "Alpine Puffer Jacket",
             "sub_label": "Ice Grey",
             "product": "alpine-quilted-down-puffer-jacket",
@@ -28,10 +28,10 @@
         "garment_jw33FV": {
           "type": "garment",
           "settings": {
-            "title": "Ridge Fleece",
-            "price": "$148.00",
-            "cart_name": "Ridge Fleece Jacket",
-            "sub_label": "Sage",
+            "title": "Bomber Jacket",
+            "price": "Rs 15,900",
+            "cart_name": "Sandstone Bomber Jacket",
+            "sub_label": "Ice Grey",
             "product": "sandstone-suede-bomber-jacket",
             "fallback": "1",
             "wear_plate_image": "shopify://shop_images/Sandstone_Bomber.png",
@@ -41,10 +41,10 @@
         "garment_xi4dtm": {
           "type": "garment",
           "settings": {
-            "title": "Drift Shell",
-            "price": "$196.00",
-            "cart_name": "Drift Shell Jacket",
-            "sub_label": "Light Grey",
+            "title": "Collar Jacket",
+            "price": "Rs 16,400",
+            "cart_name": "Shearling Collar Jacket",
+            "sub_label": "Ice Grey",
             "product": "midnight-corduroy-shearling-collar-jacket",
             "fallback": "2",
             "wear_plate_image": "shopify://shop_images/Shearling-Collar_e0510325-79fd-4683-b7d0-f10ad48c48f5.png",
@@ -54,10 +54,10 @@
         "garment_EymFEL": {
           "type": "garment",
           "settings": {
-            "title": "Harbor Parka",
-            "price": "$284.00",
-            "cart_name": "Harbor Parka",
-            "sub_label": "Navy",
+            "title": "Windbreaker Shell",
+            "price": "Rs 13,200",
+            "cart_name": "Vanguard Windbreaker Shell",
+            "sub_label": "Ice Grey",
             "product": "vanguard-technical-windbreaker-shell",
             "fallback": "3",
             "wear_plate_image": "shopify://shop_images/Windbreaker_Shell.png",
