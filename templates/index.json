@@ -82,7 +82,7 @@
         "paddingsection": "0px",
         "paddingmobile": "0px",
         "text_position": "left",
-        "mobile_text_position": "left",
+        "mobile_text_position": "center",
         "use_studio_set": false
       }
     },
@@ -130,7 +130,7 @@
           "type": "badge",
           "settings": {
             "symbol": "delivery",
-            "heading": "Delivery",
+            "heading": "Shipping Truck",
             "subtext": "",
             "badge_tag": ""
           }
@@ -138,8 +138,8 @@
         "badge_MfCCUq": {
           "type": "badge",
           "settings": {
-            "symbol": "return",
-            "heading": "Returns",
+            "symbol": "payment",
+            "heading": "Secure Payment",
             "subtext": "",
             "badge_tag": ""
           }
@@ -147,8 +147,8 @@
         "badge_JFCjYF": {
           "type": "badge",
           "settings": {
-            "symbol": "shield",
-            "heading": "",
+            "symbol": "support",
+            "heading": "Customer Support",
             "subtext": "",
             "badge_tag": ""
           }
@@ -156,8 +156,8 @@
         "badge_LhVtfF": {
           "type": "badge",
           "settings": {
-            "symbol": "shield",
-            "heading": "Secure checkout",
+            "symbol": "quality",
+            "heading": "Quality Checked",
             "subtext": "",
             "badge_tag": ""
           }
@@ -174,8 +174,10 @@
         "setwidth": "container-fluid",
         "background": "#ffffff",
         "text_color": "#18222d",
-        "paddingsection": "-84px 0",
-        "paddingmobile": "36px 0",
+        "paddingsection": "0 0 32px",
+        "paddingmobile": "0 0 20px",
+        "overlap": 28,
+        "overlap_mobile": 14,
         "text_alignment": "center"
       }
     },
@@ -248,7 +250,7 @@
         "pos_banner": "mid-center",
         "button_banner": "discover now",
         "link_banner": "",
-        "style_btn_banner": "btn-underline btn-underline-white",
+        "style_btn_banner": "btn-outline",
         "text_banner_color": "#ffffff",
         "overlay_banner": "#000000",
         "opacity_banner": 0.2,
@@ -837,8 +839,8 @@
   },
   "order": [
     "vestra_tryon_hero_7pHdMf",
-    "6246d7cd-b4a1-4a9a-8ac4-1e523b009616",
     "custom_trust_badges_jtYAb8",
+    "6246d7cd-b4a1-4a9a-8ac4-1e523b009616",
     "custom_collection_editorial_grid_bxbwLK",
     "product_list_swiper_fN3XJC",
     "36fa167d-bfb9-43c1-bc77-97cd1b353c26",

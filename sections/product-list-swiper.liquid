@@ -2,7 +2,10 @@
 {%-liquid
   assign buttonall = section.settings.buttonall
   assign buttonall_link = section.settings.buttonall_link
-  assign style_btn = section.settings.style_btn
+  assign style_btn = 'btn-theme'
+  if section.settings.style_btn contains 'outline' or section.settings.style_btn contains 'underline'
+    assign style_btn = 'btn-outline'
+  endif
   assign text_color = section.settings.title_color
 
   assign text_banner_color = section.settings.text_banner_color 
@@ -16,7 +19,10 @@
   assign link_banner = section.settings.link_banner
   assign des_banner = section.settings.des_banner
   assign button_banner = section.settings.button_banner
-  assign style_btn_banner = section.settings.style_btn_banner
+  assign style_btn_banner = 'btn-theme'
+  if section.settings.style_btn_banner contains 'outline' or section.settings.style_btn_banner contains 'underline'
+    assign style_btn_banner = 'btn-outline'
+  endif
   assign enable_first_banner = section.settings.enable_first_banner
   assign width_banner = section.settings.width_banner
   
@@ -59,7 +65,7 @@
     {% endif %}
   }
     {%- if section.settings.nowrap -%}
-    .productswiper .swiper-container {
+    .customstyle{{ section.id }} .swiper-container {
         overflow: visible;
     }
     {%- endif -%}
@@ -86,19 +92,19 @@
       padding:32px;
       background:rgba(var(--bg-overlay-rgba),var(--bg-opacity));
     }
-    @media (max-width:749px){
-      .productswiper .swiper-container {
+    @media (max-width:768px){
+      .customstyle{{ section.id }} .swiper-container {
           overflow: visible;
       }
-      .productswiper .container-p .swiper-slide{
+      .customstyle{{ section.id }} .container-p .swiper-slide{
         width: {% if enable_first_banner %}74% {% else %} 42% {% endif %} !important;
         margin-right:20px !important;
       }
-      .productswiper .container-p .productlist-banner {
+      .customstyle{{ section.id }} .container-p .productlist-banner {
         width:75% !important;
       }
     }
-    @media (min-width:750px){
+    @media (min-width:769px){
       .productlist-wrapper .swiper-button-prev{
         left: -58px;
       } 
@@ -107,12 +113,13 @@
       } 
     }
 </style>
+<custom-product-scroll class="custom-product-scroll"{% if settings.enable_animationscroll %} data-smooth-scroll{% endif %}>
+  <div class="custom-product-scroll-panel">
 <div class="customstyle{{ section.id }} productswiper lazyload" data-aos="{{ section.settings.animation }}"
-  data-bgset="{% render 'bgset', image: image_banner_bg %}"
+  data-bgset="{% render 'bgset', image: section.settings.image_bg %}"
   data-sizes="auto"
   data-parent-fit="cover" >
     {%- render 'style-section' -%}
-  <div >
     <div class="section-block">
       <div class="{{ section.settings.setwidth }}">
         {%- render 'section-heading' -%}
@@ -223,6 +230,107 @@
     </div>
   </div>
   </div>
+</custom-product-scroll>
+
+{% stylesheet %}
+  .custom-product-scroll { display: block; }
+  .custom-product-scroll svg { fill: none; }
+  .custom-product-scroll-panel { display: flow-root; overflow: clip; }
+  .custom-product-scroll[data-pinned] { height: var(--pin-height); }
+  .custom-product-scroll[data-pinned] > .custom-product-scroll-panel { position: sticky; top: var(--pin-top); }
+  /* The theme's drawer wrapper normally creates a scrolling ancestor for sticky children. */
+  .page-container:has(.custom-product-scroll[data-pinned]) { overflow: clip; }
+{% endstylesheet %}
+{% javascript %}
+  if (!customElements.get('custom-product-scroll')) {
+    customElements.define('custom-product-scroll', class extends HTMLElement {
+      connectedCallback() {
+        this.frame = requestAnimationFrame(() => this.mount());
+      }
+      disconnectedCallback() {
+        cancelAnimationFrame(this.frame);
+        this.ready?.disconnect();
+        this.cleanup?.();
+      }
+      mount() {
+        const slider = this.querySelector('.swiper-container');
+        if (!slider || this.hasAttribute('data-smooth-scroll')) return;
+        const connect = () => {
+          if (!slider.swiper?.initialized) return;
+          this.ready.disconnect();
+          this.bindScroll(slider.swiper);
+        };
+        this.ready = new MutationObserver(connect);
+        this.ready.observe(slider, { attributes: true, attributeFilter: ['class'] });
+        connect();
+      }
+      bindScroll(swiper) {
+        const panel = this.querySelector('.custom-product-scroll-panel');
+        const desktop = matchMedia('(min-width: 769px) and (prefers-reduced-motion: no-preference)');
+        const header = document.querySelector('.site-header--sticky');
+        let travel = 0;
+        let inset = 0;
+        let previous;
+        let frame = 0;
+        const render = () => {
+          frame = 0;
+          if (!travel || swiper.destroyed) return;
+          const progress = Math.max(0, Math.min(1, (inset - this.getBoundingClientRect().top) / travel));
+          if (progress === previous) return;
+          previous = progress;
+          swiper.setTransition(0);
+          swiper.setTranslate(swiper.minTranslate() - progress * travel);
+          swiper.updateActiveIndex();
+          swiper.updateSlidesClasses();
+        };
+        const schedule = () => { if (travel && !frame) frame = requestAnimationFrame(render); };
+        const measure = () => {
+          if (swiper.destroyed) return;
+          const height = panel.offsetHeight;
+          const headerHeight = header?.offsetHeight || 0;
+          const available = innerHeight - headerHeight;
+          travel = desktop.matches && height > 0 && height <= available && CSS.supports('selector(:has(*))') && CSS.supports('overflow', 'clip')
+            ? Math.max(0, swiper.minTranslate() - swiper.maxTranslate()) : 0;
+          inset = headerHeight + Math.max(0, Math.floor((available - height) / 2));
+          this.style.setProperty('--pin-top', inset + 'px');
+          this.style.setProperty('--pin-height', (height + travel) + 'px');
+          this.toggleAttribute('data-pinned', travel > 1);
+          previous = undefined;
+          schedule();
+        };
+        // Keep the document and Swiper in sync when its arrows or keyboard move a slide.
+        const syncNavigation = (_swiper, speed) => {
+          if (!travel || !speed) return;
+          const position = inset - this.getBoundingClientRect().top;
+          if (position >= -1 && position <= travel + 1) {
+            window.scrollBy({ top: swiper.progress * travel - position, behavior: 'instant' });
+          }
+        };
+        const observer = new ResizeObserver(measure);
+        observer.observe(panel);
+        if (header) observer.observe(header);
+        swiper.on('update resize slidesLengthChange', measure);
+        swiper.on('beforeTransitionStart', syncNavigation);
+        desktop.addEventListener('change', measure);
+        window.addEventListener('resize', measure);
+        window.addEventListener('scroll', schedule, { passive: true });
+        measure();
+        this.cleanup = () => {
+          cancelAnimationFrame(frame);
+          observer.disconnect();
+          if (!swiper.destroyed) {
+            swiper.off('update resize slidesLengthChange', measure);
+            swiper.off('beforeTransitionStart', syncNavigation);
+          }
+          desktop.removeEventListener('change', measure);
+          window.removeEventListener('resize', measure);
+          window.removeEventListener('scroll', schedule);
+          this.removeAttribute('data-pinned');
+        };
+      }
+    });
+  }
+{% endjavascript %}
   
   {% schema %}
   
@@ -580,24 +688,8 @@
           "label": "Button Box"
         },
         {
-          "value": "btn-theme btn-white",
-          "label": "Button Box White"
-        },
-        {
-          "value": "btn-underline",
-          "label": "Button Line"
-        },
-        {
-          "value": "btn-underline btn-underline-white",
-          "label": "Button Line White"
-        },
-        {
           "value": "btn-outline",
           "label": "Button Outline"
-        },
-        {
-          "value": "btn-outline btn-outline-white",
-          "label": "Button Outline White"
         }
       ]
     },
@@ -735,31 +827,15 @@
       "type": "select",
       "id": "style_btn_banner",
       "label": "Style Button 1",
-      "default": "btn-underline btn-underline-white",
+      "default": "btn-outline",
       "options": [
         {
           "value": "btn-theme",
           "label": "Button Box"
         },
         {
-          "value": "btn-theme btn-white",
-          "label": "Button Box White"
-        },
-        {
-          "value": "btn-underline",
-          "label": "Button Line"
-        },
-        {
-          "value": "btn-underline btn-underline-white",
-          "label": "Button Line White"
-        },
-        {
           "value": "btn-outline",
           "label": "Button Outline"
-        },
-        {
-          "value": "btn-outline btn-outline-white",
-          "label": "Button Outline White"
         }
       ]
     },

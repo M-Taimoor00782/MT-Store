@@ -27,8 +27,9 @@
     --hero-height: {{ section.settings.desktop_hero_height }}px;
     --footer: 0px;
     --stage-height: calc(var(--hero-height) - var(--footer));
-    --image-height: min(var(--stage-height), 70cqw / var(--plate-ratio));
-    --pill-inset: calc((var(--stage-height) - var(--image-height)) / 2 + 12px);
+    --plate-width: 70cqw;
+    --image-height: min(var(--stage-height), var(--plate-width) / var(--plate-ratio));
+    --pill-inset: calc((var(--stage-height) - var(--image-height)) / 2 + 42px);
     --shot: min(10cqw, calc(var(--hero-height) * .17), 150px);
     container-type: inline-size;
     --position: {{ section.settings.text_position }};
@@ -48,7 +49,8 @@
   {{ scope }} .v-stage { overflow: hidden; }
   {{ scope }} .v-pill-layer { z-index: 10; }
   {{ scope }} .v-plate { display: flex; align-items: center; position: absolute; inset: 0; background: var(--v-bg); opacity: 0; }
-  {{ scope }} .v-plate img { display: block; width: 70%; margin: 0 auto; height: auto; max-height: 100%; object-fit: contain; object-position: center; }
+  {{ scope }} .v-plate img { display: block; width: var(--plate-width); margin: 0 auto; height: auto; max-height: 100%; object-fit: contain; object-position: center; }
+  @media (min-width: 1200px) { {{ scope }} { --plate-width: 90cqw; } }
   {{ scope }} .v-base, {{ scope }} .v-plate[data-current] { opacity: 1; }
   {{ scope }} .v-plate[data-current] { z-index: 1; }
   {{ scope }} .v-copy-area {
@@ -87,8 +89,7 @@
     container-type: size;
   }
   {{ scope }} .v-pill { position: absolute; left: 50%; transform: translateX(-50%); }
-  {{ scope }} .v-pager, {{ scope }} .v-current-preview { position: absolute; top: 50%; transform: translateY(-50%); }
-  {{ scope }} .v-current-preview { left: .75rem; width: clamp(70px, 10%, 140px); --shot: clamp(40px, 5vw, 78px); }
+  {{ scope }} .v-pager { position: absolute; top: 50%; transform: translateY(-50%); }
   {{ scope }} .v-pager { right: 15%; gap: 3px; pointer-events: auto; }
   {{ scope }} .v-segment { display: grid; justify-items: center; width: 24px; height: min(24px, 8cqh); }
   {{ scope }} .v-segment::before { content: ''; width: 3px; background: var(--v-ink); opacity: .24; }
@@ -111,7 +112,6 @@
   {{ scope }} .v-veil { position: absolute; inset: 0; z-index: 11; display: grid; pointer-events: none; }
   {{ scope }} .v-veil i { background: var(--v-bg); }
   @media (width > 768px) {
-    {{ scope }}[data-position="left"] .v-copy-area { left: calc(11% + 1rem); }
     {{ scope }}[data-position="right"] .v-copy-area { right: calc(15% + 28px); }
     {{ scope }}[data-position="center"] .v-copy-area { align-items: end; bottom: calc(var(--footer) + var(--pill-inset) + 82px); }
     {{ scope }}[data-position="center"] .v-copy { width: min(60%, 44rem); }
@@ -124,22 +124,22 @@
       --position: {{ section.settings.mobile_text_position }};
       display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem;
       grid-template-rows: minmax(0, 1fr) auto auto;
+      box-sizing: border-box; padding-bottom: 2rem;
     }
     {{ scope }} .v-art:not([data-custom]) { background-image: var(--small-sheet); }
     {{ scope }} .v-stage, {{ scope }} .v-pill-layer { position: relative; inset: auto; grid-area: 1 / 1; container-type: size; }
-    {{ scope }} .v-pill { --pill-inset: calc((100cqh - min(100cqw, 100cqh)) / 2 + 10px); }
+    {{ scope }} .v-pill { --pill-inset: 22px; }
     {{ scope }} .v-controls { position: relative; inset: auto; grid-area: 1 / 1; }
-    {{ scope }} .v-current-preview { left: .5rem; width: clamp(58px, 15vw, 90px); }
-    {{ scope }} .v-pager { right: calc((100cqw - min(100cqw, 100cqh)) / 2 + 2px); }
+    {{ scope }} .v-pager { top: auto; bottom: calc(min(100cqw, 100cqh) / 2); transform: translateY(50%); right: calc((100cqw - min(100cqw, 100cqh)) / 2 + 2px); }
     {{ scope }} .v-pill { padding: 0; }
     {{ scope }} .v-pill-copy, {{ scope }} .v-thumb { display: none; }
-    {{ scope }} .v-plate { inset: 50% auto auto 50%; transform: translate(-50%, -50%); width: min(100cqw, 100cqh); aspect-ratio: 1 / 1; }
+    {{ scope }} .v-plate { inset: auto auto 0 50%; transform: translateX(-50%); width: min(100cqw, 100cqh); aspect-ratio: 1 / 1; }
     {{ scope }} .v-plate img { width: 100%; height: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
-    {{ scope }} .v-copy-area { grid-row: 2; position: relative; inset: auto; margin-inline: var(--gutter); }
+    {{ scope }} .v-copy-area { grid-row: 3; position: relative; inset: auto; margin-inline: var(--gutter); }
     {{ scope }} .v-copy { width: 100%; }
     {{ scope }} .v-title { font-size: clamp(28px, 9vw, 54px); }
     {{ scope }} .v-price { margin: .35em 0 .65em; font-size: 1rem; }
-    {{ scope }} .v-rail { grid-row: 3; position: static; width: auto; margin-inline: var(--gutter); grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(0, 1fr); align-items: start; gap: .5rem; }
+    {{ scope }} .v-rail { grid-row: 2; position: static; width: auto; margin-inline: var(--gutter); grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(0, 1fr); align-items: start; gap: .5rem; }
     {{ scope }} .v-rail:empty { display: none; }
     {{ scope }} .v-caption { font-size: .75rem; }
     {{ scope }} .v-status { bottom: var(--footer); }
@@ -223,7 +223,6 @@
             </button>
           {% endfor %}
       </div>
-      {% if section.blocks.size > 1 %}<span class="v-current-preview" aria-hidden="true">{{ first_artwork }}</span>{% endif %}
     </div>
     <div class="v-pill-layer">
       <div class="v-pill d-flex align-items-center">
@@ -323,9 +322,7 @@
           const plate = plates[index].querySelector('img');
           const ratio = Number(plate.getAttribute('width')) / Number(plate.getAttribute('height'));
           root.style.setProperty('--plate-ratio', ratio);
-          for (const preview of root.querySelectorAll('.v-thumb, .v-current-preview')) {
-            preview.replaceChildren(dashes[index].querySelector('template').content.cloneNode(true));
-          }
+          find('.v-thumb').replaceChildren(dashes[index].querySelector('template').content.cloneNode(true));
           find('.v-pill-name').textContent = item.name;
           find('.v-label').textContent = item.label;
           find('.v-pill-price').textContent = item.price;
@@ -671,7 +668,7 @@
     { "type": "text", "id": "paddingsection", "label": "Desktop padding", "default": "0px", "info": "CSS padding, for example 24px 0." },
     { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "0px" },
     { "type": "text_alignment", "id": "text_position", "label": "Desktop text position", "default": "left" },
-    { "type": "text_alignment", "id": "mobile_text_position", "label": "Mobile text position", "default": "left" },
+    { "type": "text_alignment", "id": "mobile_text_position", "label": "Mobile text position", "default": "center" },
     { "type": "checkbox", "id": "use_studio_set", "label": "Use matching studio imagery", "default": false, "info": "Use the original model and packshots for every garment. Turn off to use the block image pickers." }
   ],
   "blocks": [

@@ -1,15 +1,22 @@
 {% render 'custom-section-frame', section: section %}
 <div class="{{ section.settings.setwidth }}">
   {% render 'custom-section-heading', section: section %}
-  <div class="custom-editorial-grid">
+  <custom-editorial-grid class="custom-editorial-grid">
     {% for block in section.blocks %}
       {% assign sizes = '(max-width: 768px) 100vw, 50vw' %}
       {% render 'custom-collection-tile', block: block, section: section, layout: 'editorial', sizes: sizes, index: forloop.index %}
     {% endfor %}
-  </div>
+  </custom-editorial-grid>
 </div>
 {% stylesheet %}
-  .custom-editorial-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.75rem, 1.6vw, 1.75rem); }
+  .custom-editorial-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.75rem, 1.6vw, 1.75rem); overflow-x: clip; }
+  .custom-editorial-grid svg { fill: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .custom-editorial-grid > [data-entered] { animation: custom-editorial-enter .72s cubic-bezier(.2,.7,.25,1) backwards; }
+    .custom-editorial-grid > :nth-child(odd) { --entry-x: -2rem; }
+    .custom-editorial-grid > :nth-child(even) { --entry-x: 2rem; }
+    @keyframes custom-editorial-enter { from { opacity: 0; transform: translateX(var(--entry-x)); } }
+  }
   .custom-editorial-grid .custom-collection-tile { min-height: 14rem; }
   .custom-editorial-grid .custom-collection-tile::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(0,0,0,.82), transparent 85%); }
   .custom-editorial-grid .custom-tile-label { inset-inline: clamp(1rem, 4vw, 3.5rem); bottom: clamp(1rem, 3vw, 2.75rem); color: #fff; }
@@ -24,6 +31,29 @@
   @media (max-width: 768px) { .custom-editorial-grid { grid-template-columns: minmax(0, 1fr); } }
   @media (prefers-reduced-motion: reduce) { .custom-tile-excerpt { transition: none; } }
 {% endstylesheet %}
+{% javascript %}
+  if (!customElements.get('custom-editorial-grid')) {
+    customElements.define('custom-editorial-grid', class extends HTMLElement {
+      connectedCallback() {
+        if (!window.IntersectionObserver) return;
+        this.observer = new IntersectionObserver(entries => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.setAttribute('data-entered', '');
+            this.observer.unobserve(entry.target);
+          }
+        }, { threshold: .08 });
+        this.frame = requestAnimationFrame(() => {
+          for (const tile of this.children) this.observer.observe(tile);
+        });
+      }
+      disconnectedCallback() {
+        cancelAnimationFrame(this.frame);
+        this.observer?.disconnect();
+      }
+    });
+  }
+{% endjavascript %}
 {% schema %}
 {
   "name": "custom - Editorial Grid",

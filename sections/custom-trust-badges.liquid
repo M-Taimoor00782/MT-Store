@@ -1,4 +1,13 @@
 {% render 'custom-section-frame', section: section %}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    display: flow-root;
+    --trust-overlap: {{ section.settings.overlap }}px;
+  }
+  @media (max-width: 768px) {
+    #shopify-section-{{ section.id }} { --trust-overlap: {{ section.settings.overlap_mobile }}px; }
+  }
+{% endstyle %}
 <div class="{{ section.settings.setwidth }}">
   <ul class="custom-trust-badges" role="list" style="--trust-surface: {{ section.settings.background }};">
     {% for block in section.blocks %}
@@ -8,10 +17,13 @@
             {{ block.settings.icon | image_url: width: 72 | image_tag: widths: '36, 72', sizes: '32px', loading: 'lazy', alt: '' }}
           {% else %}
             {% case block.settings.symbol %}
-              {% when 'delivery' %}{% render 'icon-shipping' %}
+              {% when 'delivery' %}{% render 'icon-truck' %}
+              {% when 'payment' %}{% render 'icon-lock' %}
+              {% when 'support' %}{% render 'icon-comment' %}
+              {% when 'quality' %}{% render 'icon-tick' %}
               {% when 'return' %}{% render 'icon-exchange' %}
               {% else %}
-                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="trust-shield" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="m16 3 11 4v8c0 7-6 12-11 14C11 27 5 22 5 15V7l11-4Z"/><path d="m11 15 4 4 7-8"/>
                 </svg>
             {% endcase %}
@@ -28,7 +40,8 @@
   .custom-trust-badges {
     --trust-rule: color-mix(in srgb, currentColor 16%, transparent);
     display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-    list-style: none; margin: 0; padding: 0; overflow: hidden;
+    position: relative; z-index: 1;
+    list-style: none; margin: calc(-1 * var(--trust-overlap)) 0 0; padding: 0; overflow: hidden;
     border: 1px solid var(--trust-rule); border-radius: .75rem;
     background: linear-gradient(115deg, var(--trust-surface), color-mix(in srgb, var(--trust-surface) 97%, currentColor));
     box-shadow: 0 .35rem 1.5rem color-mix(in srgb, currentColor 5%, transparent);
@@ -44,6 +57,8 @@
     transition: transform .3s ease, background-color .3s ease;
   }
   .custom-trust-badges svg { fill: none; }
+  .custom-trust-badges .icon-truck .a { stroke: currentColor; }
+  .custom-trust-badges .icon-lock { font-size: 1.65rem; line-height: 1; }
   .custom-trust-badges .trust-emblem :is(svg, img) { width: 1.85rem; height: 1.85rem; object-fit: contain; }
   .custom-trust-badges small { display: block; margin-bottom: .5rem; font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
   .custom-trust-badges h3 { margin: 0; font-size: clamp(1.15rem, 1.75vw, 1.55rem); line-height: 1.2; letter-spacing: -.02em; }
@@ -87,8 +102,10 @@
     },
     { "type": "color", "id": "background", "label": "Background color", "default": "#ffffff" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#18222d" },
-    { "type": "text", "id": "paddingsection", "label": "Desktop padding", "default": "64px 0" },
-    { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "36px 0" },
+    { "type": "text", "id": "paddingsection", "label": "Desktop padding", "default": "0 0 32px" },
+    { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "0 0 20px" },
+    { "type": "range", "id": "overlap", "label": "Desktop overlap above", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 28 },
+    { "type": "range", "id": "overlap_mobile", "label": "Mobile overlap above", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 14 },
     { "type": "text_alignment", "id": "text_alignment", "label": "Text alignment", "default": "left" }
   ],
   "blocks": [
@@ -109,8 +126,11 @@
             },
             {
               "value": "delivery",
-              "label": "Delivery"
+              "label": "Shipping truck"
             },
+            { "value": "payment", "label": "Secure payment" },
+            { "value": "support", "label": "Customer support" },
+            { "value": "quality", "label": "Quality checked" },
             {
               "value": "return",
               "label": "Return"
@@ -130,24 +150,25 @@
         {
           "type": "badge",
           "settings": {
-            "heading": "Delivery",
+            "heading": "Shipping Truck",
             "symbol": "delivery"
           }
         },
         {
           "type": "badge",
           "settings": {
-            "heading": "Returns",
-            "symbol": "return"
+            "heading": "Secure Payment",
+            "symbol": "payment"
           }
         },
         {
           "type": "badge",
           "settings": {
-            "heading": "Secure checkout",
-            "symbol": "shield"
+            "heading": "Customer Support",
+            "symbol": "support"
           }
-        }
+        },
+        { "type": "badge", "settings": { "heading": "Quality Checked", "symbol": "quality" } }
       ]
     }
   ]
