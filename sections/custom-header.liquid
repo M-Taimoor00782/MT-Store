@@ -2,10 +2,13 @@
   assign scope = '#shopify-section-' | append: section.id | append: ' .custom-store-header'
   assign menu = section.settings.menu
   assign navigation_label = 'general.drawers.navigation' | t
+  assign wishlist_url = pages[settings.page_wishlist].url
+  assign ink_brightness = section.settings.text_color | color_brightness
 -%}
 
 {% style %}
   {{ scope }} {
+    --ch-surface: linear-gradient({{ section.settings.background }}, {{ section.settings.background }}), var(--color-body, #fff);
     display: block;
     position: relative;
     z-index: 25;
@@ -14,10 +17,10 @@
   }
   {{ scope }} .ch-bar {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
     align-items: center;
     min-height: 68px;
-    padding: .5rem clamp(16px, 3vw, 48px);
+    padding: {{ section.settings.paddingsection | default: '8px 3vw' | escape }};
     gap: .5rem;
   }
   {{ scope }} a, {{ scope }} button, {{ scope }} summary { color: inherit; }
@@ -25,29 +28,35 @@
     outline: 2px solid currentColor; outline-offset: 2px;
   }
   {{ scope }} .ch-list { list-style: none; padding: 0; margin: 0; }
-  {{ scope }} .ch-desktop > .ch-list { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; }
+  {{ scope }} .ch-desktop { grid-area: 1 / 2; }
+  {{ scope }} .ch-desktop > .ch-list { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem clamp(.75rem, 2vw, 2rem); }
+  {{ scope }} .ch-desktop > .ch-list > li > a, {{ scope }} .ch-desktop summary { padding-block: .35em; border-bottom: 2px solid transparent; }
+  {{ scope }} .ch-desktop > .ch-list > li.ch-active > a, {{ scope }} .ch-desktop .ch-active > details > summary { border-bottom-color: currentColor; }
   {{ scope }} details { position: relative; }
-  {{ scope }} summary { cursor: pointer; }
+  {{ scope }} summary { display: inline-flex; align-items: center; gap: .45em; cursor: pointer; list-style: none; }
+  {{ scope }} summary::-webkit-details-marker { display: none; }
+  {{ scope }} summary svg { width: .65em; height: .45em; opacity: .7; }
+  {{ scope }} details[open] > summary svg { transform: rotate(180deg); }
   {{ scope }} .ch-desktop .ch-sublist {
     position: absolute; top: 100%; left: 0; min-width: 12rem; padding: .75rem 1rem;
-    background: {{ section.settings.background }}; box-shadow: 0 6px 18px rgba(0,0,0,.12);
+    background: var(--ch-surface); box-shadow: 0 6px 18px rgba(0,0,0,.12);
   }
   {{ scope }} .ch-sublist a { display: block; padding-block: .35rem; }
   {{ scope }} .ch-sublist ul { padding-inline-start: 1rem; }
   {{ scope }} .ch-brand {
-    grid-column: 2; justify-self: center; text-align: center; font-weight: 700;
-    max-width: min(30vw, 16rem); overflow-wrap: anywhere; line-height: 1.15;
+    grid-area: 1 / 1; justify-self: start; font-weight: 750; font-size: 1.5rem;
+    max-width: 100%; overflow-wrap: anywhere; line-height: 1.15;
   }
   {{ scope }} .ch-brand img { display: block; width: {{ section.settings.logo_width }}px; max-width: 100%; height: auto; }
-  {{ scope }} .ch-actions { justify-self: end; display: flex; align-items: center; gap: clamp(0px, .6vw, 12px); }
+  {{ scope }} .ch-actions { grid-area: 1 / 3; justify-self: end; display: flex; align-items: center; gap: clamp(0px, .6vw, 12px); }
   {{ scope }} .ch-icon { display: inline-grid; place-items: center; position: relative; min-width: 34px; height: 44px; }
   {{ scope }} .ch-icon svg { display: block; width: 22px; height: 22px; }
   {{ scope }} .ch-badge {
     position: absolute; top: 0; right: -4px; padding: 0 .25rem; border-radius: 1rem;
     min-width: 1rem; text-align: center; font-size: .7rem; line-height: 1rem;
-    color: {{ section.settings.background }}; background: {{ section.settings.text_color }};
+    color: {% if ink_brightness > 128 %}#18222d{% else %}#fff{% endif %}; background: {{ section.settings.text_color }};
   }
-  {{ scope }} .ch-trigger { display: none; justify-self: start; }
+  {{ scope }} .ch-trigger { grid-area: 1 / 1; display: none; justify-self: start; }
   {{ scope }} .ch-drawer {
     position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none;
     margin: 0; padding: 0; border: 0; overflow: hidden; color: inherit; background: rgba(0,0,0,.38);
@@ -57,15 +66,15 @@
   html:has({{ scope }} .ch-drawer[open]) { overflow: hidden; }
   {{ scope }} .ch-panel {
     width: min(84vw, 24rem); height: 100%; padding: 1rem 1.25rem; box-sizing: border-box;
-    background: {{ section.settings.background }}; overflow-y: auto; overscroll-behavior: contain;
+    background: var(--ch-surface); overflow-y: auto; overscroll-behavior: contain;
   }
   {{ scope }} .ch-panel nav > .ch-list > li { padding: .65rem 0; }
   {{ scope }} .ch-panel .ch-sublist { padding-inline-start: 1rem; }
   @media (max-width: 768px) {
-    {{ scope }} .ch-bar { min-height: 54px; padding-inline: 10px; gap: 0; }
-    {{ scope }} .ch-desktop { display: none; }
+    {{ scope }} .ch-bar { min-height: 54px; padding: {{ section.settings.paddingmobile | default: '8px 16px' | escape }}; gap: 0; }
+    {{ scope }} .ch-desktop, {{ scope }} .ch-actions .ch-desktop-icon { display: none; }
     {{ scope }} .ch-trigger { display: inline-grid; }
-    {{ scope }} .ch-brand { max-width: min(34vw, calc(100vw - 220px)); }
+    {{ scope }} .ch-brand { grid-area: 1 / 2; justify-self: center; text-align: center; }
     {{ scope }} .ch-actions { gap: 0; }
     {{ scope }} .ch-icon { min-width: 30px; }
   }
@@ -74,10 +83,10 @@
 {% capture navigation %}
   <ul class="ch-list">
     {% for link in menu.links %}
-      <li>
+      <li{% if link.active or link.child_active or link.current %} class="ch-active"{% endif %}>
         {% if link.links != blank %}
           <details>
-            <summary>{{ link.title | escape }}</summary>
+            <summary>{{ link.title | escape }}{% render 'icon-caret' %}</summary>
             <ul class="ch-list ch-sublist">
               <li><a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
               {% for child in link.links %}
@@ -103,10 +112,9 @@
 {% endcapture %}
 
 <custom-store-header class="custom-store-header">
+  <div class="{{ section.settings.setwidth }}">
   <header class="ch-bar">
-    <div>
       {% if menu.links != blank %}
-        <nav class="ch-desktop" aria-label="{{ navigation_label | escape }}">{{ navigation }}</nav>
         <button class="btn p-0 ch-icon ch-trigger" type="button" data-open
           aria-controls="MenuDrawer-{{ section.id }}" aria-haspopup="dialog" aria-expanded="false" aria-label="{{ navigation_label | escape }}">
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -114,7 +122,6 @@
           </svg>
         </button>
       {% endif %}
-    </div>
     <a class="ch-brand" href="{{ routes.root_url }}">
       {% if section.settings.logo != blank %}
         {{ section.settings.logo | image_url: width: 640 | image_tag: widths: '100, 160, 240, 320, 480, 640', sizes: '240px', alt: shop.name }}
@@ -122,16 +129,23 @@
         {{ shop.name | escape }}
       {% endif %}
     </a>
+    {% if menu.links != blank %}
+      <nav class="ch-desktop" aria-label="{{ navigation_label | escape }}">{{ navigation }}</nav>
+    {% endif %}
     <div class="ch-actions">
-      <a class="ch-icon" href="{{ routes.search_url }}" aria-label="{{ 'general.search.search' | t | escape }}">{% render 'icon-search' %}</a>
-      <a class="ch-icon" href="{{ routes.account_url }}" aria-label="{{ 'layout.customer.account' | t | escape }}">{% render 'icon-user' %}</a>
+      <a class="ch-icon ch-desktop-icon" href="{{ routes.search_url }}" aria-label="{{ 'general.search.search' | t | escape }}">{% render 'icon-search' %}</a>
+      <a class="ch-icon ch-desktop-icon" href="{{ routes.account_url }}" aria-label="{{ 'layout.customer.account' | t | escape }}">{% render 'icon-user' %}</a>
+      {% if section.settings.show_wishlist and wishlist_url != blank %}
+        <a class="ch-icon ch-desktop-icon" href="{{ wishlist_url | escape }}" aria-label="{{ 'products.product.wishlist_text' | t | escape }}">{% render 'icon-heart' %}</a>
+      {% endif %}
       <a class="ch-icon" href="{{ routes.cart_url }}">
-        <span aria-hidden="true">{% render 'icon-cart' %}</span>
+        <span aria-hidden="true">{% render 'icon-cart', section: section %}</span>
         <span class="sr-only">{{ 'layout.cart.title' | t }}</span>
         <span class="ch-badge js-cart-count" aria-live="polite" aria-atomic="true">{{ cart.item_count }}</span>
       </a>
     </div>
   </header>
+  </div>
   {% if menu.links != blank %}
     <dialog class="ch-drawer" id="MenuDrawer-{{ section.id }}" aria-label="{{ navigation_label | escape }}">
       <div class="ch-panel">
@@ -174,11 +188,19 @@
         }
         function slide(out) {
           stopEffects();
-          const options = { duration: out ? 200 : 280, easing: 'cubic-bezier(.2,.7,.2,1)', direction: out ? 'reverse' : 'normal', fill: 'both' };
+          const options = { duration: out ? 260 : 380, easing: 'cubic-bezier(.22,.78,.26,1)', direction: out ? 'reverse' : 'normal', fill: 'both' };
           effects = [
             panel.animate([{ transform: 'translateX(-100%)' }, { transform: 'translateX(0)' }], options),
             dialog.animate([{ backgroundColor: 'transparent' }, { backgroundColor: 'rgba(0,0,0,.38)' }], options)
           ];
+          if (!out) {
+            panel.querySelectorAll('nav > ul > li').forEach((item, index) => {
+              effects.push(item.animate(
+                [{ opacity: 0, transform: 'translateX(-12px)' }, { opacity: 1, transform: 'translateX(0)' }],
+                { ...options, duration: 240, delay: 60 + Math.min(index * 34, 240) }
+              ));
+            });
+          }
           return effects[0];
         }
         function closeDrawer() {
@@ -186,7 +208,7 @@
           closing = true;
           if (motion.matches || !mobile.matches) dialog.close();
           else if (effects[0]?.playState === 'running') {
-            effects.forEach(effect => effect.reverse());
+            effects.slice(0, 2).forEach(effect => effect.reverse());
             effects[0].onfinish = () => dialog.close();
           } else slide(true).onfinish = () => dialog.close();
         }
@@ -233,16 +255,25 @@
 
 {% schema %}
 {
-  "name": "custom Header",
+  "name": "custom - Header",
   "enabled_on": { "groups": ["header"] },
   "limit": 1,
   "settings": [
+    { "type": "select", "id": "setwidth", "label": "Section width", "default": "full", "options": [
+      { "value": "container", "label": "Container" }, { "value": "container-fluid", "label": "Fluid container" }, { "value": "full", "label": "Full width" }
+    ] },
     { "type": "image_picker", "id": "logo", "label": "Logo image" },
     { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 240, "step": 10, "unit": "px", "default": 120 },
     { "type": "link_list", "id": "menu", "label": "Navigation menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "show_wishlist", "label": "Show wishlist icon", "default": false, "info": "Links to the wishlist page selected in theme settings." },
+    { "type": "select", "id": "svg_cart", "label": "Cart bag icon", "default": "cart-5", "options": [
+      { "value": "cart-5", "label": "Rounded bag" }, { "value": "cart-4", "label": "Square bag" }
+    ] },
+    { "type": "text", "id": "paddingsection", "label": "Desktop padding", "default": "8px 3vw" },
+    { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "8px 16px" },
     { "type": "color", "id": "background", "label": "Background color", "default": "#ffffff" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#18222d" }
   ],
-  "presets": [{ "name": "custom Header" }]
+  "presets": [{ "name": "custom - Header" }]
 }
 {% endschema %}
