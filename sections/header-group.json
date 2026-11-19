@@ -110,9 +110,15 @@
     "custom_header": {
       "type": "custom-header",
       "settings": {
+        "setwidth": "full",
         "logo_width": 100,
         "menu": "main-menu",
+        "show_wishlist": false,
+        "svg_cart": "cart-4",
+        "paddingsection": "8px 3vw",
+        "paddingmobile": "8px 16px",
         "background": "rgba(0,0,0,0)",
+        "text_alignment": "left",
         "text_color": "#000000"
       }
     },
