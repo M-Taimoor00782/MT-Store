@@ -1,0 +1,7 @@
+{% if section.settings.subheading != blank or section.settings.heading != blank or section.settings.description != blank %}
+  <div class="custom-section-heading">
+    {% if section.settings.subheading != blank %}<p class="small text-uppercase">{{ section.settings.subheading | escape }}</p>{% endif %}
+    {% if section.settings.heading != blank %}<h2>{{ section.settings.heading | escape }}</h2>{% endif %}
+    {% if section.settings.description != blank %}<div>{{ section.settings.description }}</div>{% endif %}
+  </div>
+{% endif %}

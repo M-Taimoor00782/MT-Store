@@ -25,7 +25,7 @@
     --u: min(100vw / 1440, 100svh / 810);
     --gutter: clamp(16px, 4vw, 64px);
     --hero-height: {{ section.settings.desktop_hero_height }}px;
-    --footer: 40px;
+    --footer: 0px;
     --stage-height: calc(var(--hero-height) - var(--footer));
     --image-height: min(var(--stage-height), 70cqw / var(--plate-ratio));
     --pill-inset: calc((var(--stage-height) - var(--image-height)) / 2 + 12px);
@@ -82,12 +82,12 @@
   {{ scope }} .v-art[data-custom] { background-image: none; --art-ratio: var(--packshot-ratio); }
   {{ scope }} .v-flyer { position: absolute; z-index: 4; margin: 0; transform-origin: center; }
   {{ scope }} .v-controls {
-    position: absolute; z-index: 5; inset: auto var(--gutter) 8px; height: calc(var(--footer) - 8px);
+    position: absolute; z-index: 5; left: .75rem; top: 50%; transform: translateY(-50%); width: clamp(70px, 10%, 140px);
     pointer-events: none;
   }
   {{ scope }} .v-controls > * { pointer-events: auto; }
-  {{ scope }} .v-pill, {{ scope }} .v-pager { position: absolute; left: 50%; transform: translateX(-50%); }
-  {{ scope }} .v-pager { bottom: 0; width: min(48%, 224px); }
+  {{ scope }} .v-pill { position: absolute; left: 50%; transform: translateX(-50%); }
+  {{ scope }} .v-pager { flex-direction: column-reverse; gap: .2rem; --shot: clamp(40px, 5vw, 78px); }
   {{ scope }} .v-pages { width: 100%; gap: 2px; }
   {{ scope }} .v-segment { display: grid; align-items: center; height: 24px; }
   {{ scope }} .v-segment::before { content: ''; height: 3px; background: var(--v-ink); opacity: .24; }
@@ -103,16 +103,15 @@
   {{ scope }} .v-pill-name { text-transform: uppercase; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   {{ scope }} .v-pill-detail { display: flex; flex-wrap: wrap; column-gap: .55em; align-items: baseline; }
   {{ scope }} .v-pill-price { font-weight: 600; font-size: .85em; }
-  {{ scope }} .custom-cart-icon-btn { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #18222d; color: #fff; cursor: pointer; }
-  {{ scope }} .custom-cart-icon-btn:disabled { opacity: .5; cursor: default; }
-  {{ scope }} .custom-cart-icon-btn:focus-visible { outline: 2px solid #18222d; outline-offset: 2px; }
+  {{ scope }} .v-cart-glyph { display: grid; place-items: center; width: 44px; height: 44px; }
   {{ scope }} .v-label { font-size: .85em; }
   {{ scope }} .v-status { position: absolute; z-index: 5; right: var(--gutter); bottom: calc(5vh + 65px); max-width: 80%; background: var(--v-bg); }
   {{ scope }} .v-status:empty { display: none; }
   {{ scope }} .v-veil { position: absolute; inset: 0; z-index: 11; display: grid; pointer-events: none; }
   {{ scope }} .v-veil i { background: var(--v-bg); }
   @media (width > 768px) {
-    {{ scope }}[data-position="right"] .v-rail { right: auto; left: 0; }
+    {{ scope }}[data-position="left"] .v-copy-area { left: calc(11% + 1rem); }
+    {{ scope }}[data-position="right"] .v-copy-area { right: 16%; }
     {{ scope }}[data-position="center"] .v-copy-area { align-items: end; bottom: calc(var(--footer) + var(--pill-inset) + 82px); }
     {{ scope }}[data-position="center"] .v-copy { width: min(60%, 44rem); }
   }
@@ -123,11 +122,14 @@
       --u: calc(100vw / 390); --gutter: clamp(12px, 4vw, 24px); --shot: min(16vw, 8dvh);
       --position: {{ section.settings.mobile_text_position }};
       display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem;
-      grid-template-rows: minmax(0, 1fr) auto auto var(--footer);
+      grid-template-rows: minmax(0, 1fr) auto auto;
     }
     {{ scope }} .v-art:not([data-custom]) { background-image: var(--small-sheet); }
     {{ scope }} .v-stage, {{ scope }} .v-pill-layer { position: relative; inset: auto; grid-area: 1 / 1; container-type: size; }
     {{ scope }} .v-pill { --pill-inset: calc((100cqh - min(100cqw, 100cqh)) / 2 + 10px); }
+    {{ scope }} .v-controls { position: relative; inset: auto; grid-area: 1 / 1; align-self: center; margin-left: .5rem; width: clamp(58px, 15vw, 90px); transform: none; }
+    {{ scope }} .v-pill { padding: 0; }
+    {{ scope }} .v-pill-copy, {{ scope }} .v-thumb { display: none; }
     {{ scope }} .v-plate { inset: 50% auto auto 50%; transform: translate(-50%, -50%); width: min(100cqw, 100cqh); aspect-ratio: 1 / 1; }
     {{ scope }} .v-plate img { width: 100%; height: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
     {{ scope }} .v-copy-area { grid-row: 2; position: relative; inset: auto; margin-inline: var(--gutter); }
@@ -219,6 +221,7 @@
             </button>
           {% endfor %}
         </div>
+        <span class="v-current-preview" aria-hidden="true">{{ first_artwork }}</span>
       </div>
     </div>
     <div class="v-pill-layer">
@@ -228,10 +231,10 @@
           <span class="v-pill-name">{{ first.settings.cart_name | default: first.settings.title | escape }}</span>
           <span class="v-pill-detail"><span class="v-label">{{ first.settings.sub_label | escape }}</span><span class="v-pill-price">{{ first.settings.price | escape }}</span></span>
         </span>
-        <button class="custom-cart-icon-btn" data-add type="button" aria-label="Add {{ first.settings.cart_name | default: first.settings.title | escape }} to cart" disabled>
-          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <button class="btn btn-theme rounded-circle p-0" data-add type="button" aria-label="Add {{ first.settings.cart_name | default: first.settings.title | escape }} to cart" disabled>
+          <span class="v-cart-glyph"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 3h2.5l2.4 12h11.9l2.4-8H5.4"/><circle cx="8.5" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/>
-          </svg>
+          </svg></span>
         </button>
       </div>
     </div>
@@ -321,7 +324,9 @@
           const plate = plates[index].querySelector('img');
           const ratio = Number(plate.getAttribute('width')) / Number(plate.getAttribute('height'));
           root.style.setProperty('--plate-ratio', ratio);
-          find('.v-thumb').replaceChildren(dashes[index].querySelector('template').content.cloneNode(true));
+          for (const preview of root.querySelectorAll('.v-thumb, .v-current-preview')) {
+            preview.replaceChildren(dashes[index].querySelector('template').content.cloneNode(true));
+          }
           find('.v-pill-name').textContent = item.name;
           find('.v-label').textContent = item.label;
           find('.v-pill-price').textContent = item.price;

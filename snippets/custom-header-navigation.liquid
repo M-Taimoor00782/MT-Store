@@ -1,0 +1,43 @@
+<ul class="ch-list">
+  {% for link in menu.links %}
+    {% liquid
+      assign mega = nil
+      assign handle = link.handle | default: link.title | handleize
+      for block in section.blocks
+        assign parent = block.settings.menu_item_title | handleize
+        if parent != blank and parent == handle
+          assign mega = block
+          break
+        endif
+      endfor
+    %}
+    <li{% if link.active or link.child_active or link.current %} class="ch-active"{% endif %}>
+      {% if link.links != blank or mega %}
+        <details{% if mega %} class="ch-mega" data-mega-id="{{ mega.id }}"{% if editor_attrs %} {{ mega.shopify_attributes }}{% endif %}{% endif %}>
+          <summary>{{ link.title | escape }}{% render 'icon-caret' %}</summary>
+          {% if mega %}
+            {% render 'custom-mega-menu', block: mega, link: link %}
+          {% else %}
+          <ul class="ch-list ch-sublist">
+            <li><a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
+            {% for child in link.links %}
+              <li>
+                <a href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
+                {% if child.links != blank %}
+                  <ul class="ch-list">
+                    {% for leaf in child.links %}
+                      <li><a href="{{ leaf.url | escape }}"{% if leaf.current %} aria-current="page"{% endif %}>{{ leaf.title | escape }}</a></li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </details>
+      {% else %}
+        <a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

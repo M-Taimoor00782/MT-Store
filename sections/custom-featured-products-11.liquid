@@ -1,0 +1,64 @@
+{% render 'custom-section-frame', section: section %}
+{% liquid
+  assign source = section.settings.collection
+  assign columns = section.settings.products_per_row
+  assign desktop_size = 100.0 | divided_by: columns | ceil
+  assign sizes = '(max-width: 768px) 50vw, ' | append: desktop_size | append: 'vw'
+%}
+<div class="{{ section.settings.setwidth }}">
+  {% render 'custom-section-heading', section: section %}
+  <div class="custom-products-11" style="--card-columns: {{ columns }};">
+    {% for product in source.products limit: section.settings.limit %}
+      {% render 'custom-product-card-11', product: product, sizes: sizes %}
+    {% else %}
+      {% if request.design_mode %}<p>Select a collection with available products to preview the cards.</p>{% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% stylesheet %}
+  .custom-products-11 { display: grid; grid-template-columns: repeat(var(--card-columns), minmax(0, 1fr)); gap: clamp(.75rem, 2vw, 2rem); }
+  @media (max-width: 768px) { .custom-products-11 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "custom - Products 11",
+  "settings": [
+    {
+      "type": "select",
+      "id": "setwidth",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "container-fluid",
+          "label": "Fluid container"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "container"
+    },
+    { "type": "color", "id": "background", "label": "Background color", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#18222d" },
+    { "type": "text", "id": "paddingsection", "label": "Desktop padding", "default": "64px 0" },
+    { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "36px 0" },
+    { "type": "text_alignment", "id": "text_alignment", "label": "Text alignment", "default": "left" },
+    { "type": "text", "id": "subheading", "label": "Subheading" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured products" },
+    { "type": "richtext", "id": "description", "label": "Description" },
+    { "type": "collection", "id": "collection", "label": "Product collection" },
+    { "type": "range", "id": "products_per_row", "label": "Desktop products per row", "min": 2, "max": 6, "step": 1, "default": 4 },
+    { "type": "range", "id": "limit", "label": "Maximum products", "min": 2, "max": 24, "step": 1, "default": 8 }
+  ],
+  "presets": [
+    {
+      "name": "custom - Featured Products Style 11"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,108 @@
+{% render 'custom-section-frame', section: section %}
+<div class="{{ section.settings.setwidth }}">
+  {% render 'custom-section-heading', section: section %}
+  <div class="custom-editorial-grid">
+    {% for block in section.blocks %}
+      {% assign sizes = '(max-width: 768px) 100vw, 50vw' %}
+      {% render 'custom-collection-tile', block: block, section: section, layout: 'editorial', sizes: sizes, index: forloop.index %}
+    {% endfor %}
+  </div>
+</div>
+{% stylesheet %}
+  .custom-editorial-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.75rem, 1.6vw, 1.75rem); }
+  .custom-editorial-grid .custom-collection-tile { min-height: 14rem; }
+  .custom-editorial-grid .custom-collection-tile::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(0,0,0,.82), transparent 85%); }
+  .custom-editorial-grid .custom-tile-label { inset-inline: clamp(1rem, 4vw, 3.5rem); bottom: clamp(1rem, 3vw, 2.75rem); color: #fff; }
+  .custom-editorial-grid .custom-tile-label h3 { margin-bottom: .65rem; }
+  .custom-tile-excerpt { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .4s ease, opacity .4s ease, transform .4s ease; }
+  .custom-tile-excerpt p { min-height: 0; overflow: hidden; margin: 0; }
+  .custom-tile-excerpt { margin-bottom: .75rem; }
+  @media (hover: hover) {
+    .custom-editorial-grid .custom-collection-tile:is(:hover,:focus-within) .custom-tile-photo { transform: scale(1.05); }
+    .custom-editorial-grid .custom-collection-tile:not(:hover,:focus-within) .custom-tile-excerpt { grid-template-rows: 0fr; opacity: 0; transform: translateY(.5rem); }
+  }
+  @media (max-width: 768px) { .custom-editorial-grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (prefers-reduced-motion: reduce) { .custom-tile-excerpt { transition: none; } }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "custom - Editorial Grid",
+  "settings": [
+    {
+      "type": "select",
+      "id": "setwidth",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "container-fluid",
+          "label": "Fluid container"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "container"
+    },
+    { "type": "color", "id": "background", "label": "Background color", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#18222d" },
+    { "type": "text", "id": "paddingsection", "label": "Desktop padding", "default": "64px 0" },
+    { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "36px 0" },
+    { "type": "text_alignment", "id": "text_alignment", "label": "Text alignment", "default": "left" },
+    { "type": "text", "id": "subheading", "label": "Subheading" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured collections" },
+    { "type": "richtext", "id": "description", "label": "Description" },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "default": "landscape",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        },
+        {
+          "value": "natural",
+          "label": "Natural"
+        }
+      ]
+    },
+    { "type": "text", "id": "cta_label", "label": "Collection link label", "default": "Shop collection" }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "custom - Collection Editorial Grid",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

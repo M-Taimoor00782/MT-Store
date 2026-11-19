@@ -23,12 +23,13 @@
     padding: {{ section.settings.paddingsection | default: '8px 3vw' | escape }};
     gap: .5rem;
   }
-  {{ scope }} a, {{ scope }} button, {{ scope }} summary { color: inherit; }
-  {{ scope }} a:focus-visible, {{ scope }} button:focus-visible, {{ scope }} summary:focus-visible {
+  {{ scope }} a, {{ scope }} summary { color: inherit; }
+  {{ scope }} a:focus-visible, {{ scope }} summary:focus-visible {
     outline: 2px solid currentColor; outline-offset: 2px;
   }
-  {{ scope }} .ch-list { list-style: none; padding: 0; margin: 0; }
-  {{ scope }} .ch-desktop { grid-area: 1 / 2; }
+  {{ scope }} .ch-list { text-align: {{ section.settings.text_alignment }}; list-style: none; padding: 0; margin: 0; }
+  {{ scope }} .ch-desktop { grid-area: 1 / 2; align-self: stretch; display: grid; }
+  {{ scope }} .ch-desktop > .ch-list > li { align-self: stretch; display: flex; align-items: center; }
   {{ scope }} .ch-desktop > .ch-list { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem clamp(.75rem, 2vw, 2rem); }
   {{ scope }} .ch-desktop > .ch-list > li > a, {{ scope }} .ch-desktop summary { padding-block: .35em; border-bottom: 2px solid transparent; }
   {{ scope }} .ch-desktop > .ch-list > li.ch-active > a, {{ scope }} .ch-desktop .ch-active > details > summary { border-bottom-color: currentColor; }
@@ -41,6 +42,13 @@
     position: absolute; top: 100%; left: 0; min-width: 12rem; padding: .75rem 1rem;
     background: var(--ch-surface); box-shadow: 0 6px 18px rgba(0,0,0,.12);
   }
+  {{ scope }} .ch-desktop details.ch-mega { position: static; }
+  {{ scope }} .ch-mega-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(8rem, 100%), 1fr)); gap: 1.5rem; text-align: {{ section.settings.text_alignment }}; }
+  {{ scope }} .ch-desktop .ch-mega-content { position: absolute; top: 100%; inset-inline: 0; padding: 1.5rem max(3vw, 1rem); background: var(--ch-surface); box-shadow: 0 8px 20px rgba(0,0,0,.1); }
+  {{ scope }} .ch-mega-column { display: grid; gap: .45rem; align-content: start; }
+  {{ scope }} .ch-promo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; margin-bottom: .5rem; }
+  {{ scope }} .ch-panel .ch-mega-content { grid-template-columns: 1fr; padding: 1rem; }
+  {{ scope }} .ch-sublist { text-align: {{ section.settings.text_alignment }}; }
   {{ scope }} .ch-sublist a { display: block; padding-block: .35rem; }
   {{ scope }} .ch-sublist ul { padding-inline-start: 1rem; }
   {{ scope }} .ch-brand {
@@ -80,47 +88,16 @@
   }
 {% endstyle %}
 
-{% capture navigation %}
-  <ul class="ch-list">
-    {% for link in menu.links %}
-      <li{% if link.active or link.child_active or link.current %} class="ch-active"{% endif %}>
-        {% if link.links != blank %}
-          <details>
-            <summary>{{ link.title | escape }}{% render 'icon-caret' %}</summary>
-            <ul class="ch-list ch-sublist">
-              <li><a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
-              {% for child in link.links %}
-                <li>
-                  <a href="{{ child.url | escape }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
-                  {% if child.links != blank %}
-                    <ul class="ch-list">
-                      {% for leaf in child.links %}
-                        <li><a href="{{ leaf.url | escape }}"{% if leaf.current %} aria-current="page"{% endif %}>{{ leaf.title | escape }}</a></li>
-                      {% endfor %}
-                    </ul>
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-          </details>
-        {% else %}
-          <a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
-{% endcapture %}
-
 <custom-store-header class="custom-store-header">
   <div class="{{ section.settings.setwidth }}">
   <header class="ch-bar">
       {% if menu.links != blank %}
-        <button class="btn p-0 ch-icon ch-trigger" type="button" data-open
+        <span class="ch-trigger"><button class="btn p-0" type="button" data-open
           aria-controls="MenuDrawer-{{ section.id }}" aria-haspopup="dialog" aria-expanded="false" aria-label="{{ navigation_label | escape }}">
-          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <span class="ch-icon"><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M2 5h20M2 12h20M2 19h20"/>
-          </svg>
-        </button>
+          </svg></span>
+        </button></span>
       {% endif %}
     <a class="ch-brand" href="{{ routes.root_url }}">
       {% if section.settings.logo != blank %}
@@ -130,13 +107,13 @@
       {% endif %}
     </a>
     {% if menu.links != blank %}
-      <nav class="ch-desktop" aria-label="{{ navigation_label | escape }}">{{ navigation }}</nav>
+      <nav class="ch-desktop" aria-label="{{ navigation_label | escape }}">{% render 'custom-header-navigation', menu: menu, section: section, editor_attrs: true %}</nav>
     {% endif %}
     <div class="ch-actions">
       <a class="ch-icon ch-desktop-icon" href="{{ routes.search_url }}" aria-label="{{ 'general.search.search' | t | escape }}">{% render 'icon-search' %}</a>
       <a class="ch-icon ch-desktop-icon" href="{{ routes.account_url }}" aria-label="{{ 'layout.customer.account' | t | escape }}">{% render 'icon-user' %}</a>
-      {% if section.settings.show_wishlist and wishlist_url != blank %}
-        <a class="ch-icon ch-desktop-icon" href="{{ wishlist_url | escape }}" aria-label="{{ 'products.product.wishlist_text' | t | escape }}">{% render 'icon-heart' %}</a>
+      {% if wishlist_url != blank %}
+        <a class="ch-icon ch-desktop-icon js-wishlist-link{% unless section.settings.show_wishlist %} d-none{% endunless %}"{% unless section.settings.show_wishlist %} hidden{% endunless %} href="{{ wishlist_url | escape }}" aria-label="{{ 'products.product.wishlist_text' | t | escape }}">{% render 'icon-heart' %}</a>
       {% endif %}
       <a class="ch-icon" href="{{ routes.cart_url }}">
         <span aria-hidden="true">{% render 'icon-cart', section: section %}</span>
@@ -150,9 +127,9 @@
     <dialog class="ch-drawer" id="MenuDrawer-{{ section.id }}" aria-label="{{ navigation_label | escape }}">
       <div class="ch-panel">
         <div class="d-flex justify-content-end">
-          <button class="btn ch-icon" type="button" data-close aria-label="{{ 'general.accessibility.close' | t | escape }}">{% render 'icon-close' %}</button>
+          <button class="btn p-0" type="button" data-close aria-label="{{ 'general.accessibility.close' | t | escape }}"><span class="ch-icon">{% render 'icon-close' %}</span></button>
         </div>
-        <nav aria-label="{{ navigation_label | escape }}">{{ navigation }}</nav>
+        <nav aria-label="{{ navigation_label | escape }}">{% render 'custom-header-navigation', menu: menu, section: section %}</nav>
       </div>
     </dialog>
   {% endif %}
@@ -235,6 +212,31 @@
         function closeDropdowns(except) {
           desktop.querySelectorAll('details[open]').forEach(details => { if (details !== except) details.open = false; });
         }
+        desktop.querySelectorAll('details').forEach(details => {
+          let hoverOpened = false;
+          details.addEventListener('pointerenter', event => {
+            if (mobile.matches || event.pointerType !== 'mouse' || details.open) return;
+            closeDropdowns(details);
+            details.open = true;
+            hoverOpened = true;
+          }, options);
+          details.querySelector('summary').addEventListener('click', event => {
+            if (hoverOpened && details.open && event.detail) event.preventDefault();
+            hoverOpened = false;
+          }, options);
+          details.closest('li').addEventListener('pointerleave', () => {
+            if (hoverOpened && !details.contains(document.activeElement)) details.open = false;
+            hoverOpened = false;
+          }, options);
+        });
+        this.addEventListener('shopify:block:select', event => {
+          const nav = mobile.matches ? panel : desktop;
+          const selected = Array.from(nav.querySelectorAll('[data-mega-id]')).find(item => item.dataset.megaId === event.detail.blockId);
+          if (!selected) return;
+          if (mobile.matches && !dialog.open) trigger.click();
+          closeDropdowns(selected);
+          selected.open = true;
+        }, options);
         document.addEventListener('click', event => closeDropdowns(desktop.contains(event.target) && event.target.closest('details')), options);
         desktop.addEventListener('focusout', event => { if (!desktop.contains(event.relatedTarget)) closeDropdowns(); }, options);
         desktop.addEventListener('keydown', event => {
@@ -272,7 +274,26 @@
     { "type": "text", "id": "paddingsection", "label": "Desktop padding", "default": "8px 3vw" },
     { "type": "text", "id": "paddingmobile", "label": "Mobile padding", "default": "8px 16px" },
     { "type": "color", "id": "background", "label": "Background color", "default": "#ffffff" },
+    { "type": "text_alignment", "id": "text_alignment", "label": "Menu text alignment", "default": "left" },
     { "type": "color", "id": "text_color", "label": "Text color", "default": "#18222d" }
+  ],
+  "blocks": [
+    {
+      "type": "megamenu",
+      "name": "Mega menu",
+      "settings": [
+        { "type": "text", "id": "menu_item_title", "label": "Parent menu link handle", "info": "For a link named Shop All, enter shop-all." },
+        { "type": "link_list", "id": "column_1", "label": "Link column 1" },
+        { "type": "link_list", "id": "column_2", "label": "Link column 2" },
+        { "type": "link_list", "id": "column_3", "label": "Link column 3" },
+        { "type": "image_picker", "id": "image_1", "label": "Promotion 1 image" },
+        { "type": "text", "id": "heading_1", "label": "Promotion 1 heading" },
+        { "type": "url", "id": "url_1", "label": "Promotion 1 link" },
+        { "type": "image_picker", "id": "image_2", "label": "Promotion 2 image" },
+        { "type": "text", "id": "heading_2", "label": "Promotion 2 heading" },
+        { "type": "url", "id": "url_2", "label": "Promotion 2 link" }
+      ]
+    }
   ],
   "presets": [{ "name": "custom - Header" }]
 }

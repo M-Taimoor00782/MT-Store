@@ -1,0 +1,43 @@
+{% liquid
+  assign group = block.settings.collection
+  assign image = group.featured_image | default: group.products.first.featured_image
+  assign title = group.title | default: 'Collection'
+  assign ratio = image.aspect_ratio | default: 1
+  case section.settings.image_ratio
+    when 'portrait'
+      assign ratio = '4 / 5'
+    when 'landscape'
+      assign ratio = '3 / 2'
+    when 'square'
+      assign ratio = 1
+  endcase
+  assign placeholder = index | minus: 1 | modulo: 6 | plus: 1 | prepend: 'collection-'
+%}
+<article class="custom-collection-tile" style="--tile-ratio: {{ ratio }};" {{ block.shopify_attributes }}>
+  {% if group.url != blank %}<a href="{{ group.url | escape }}" class="custom-tile-link">{% endif %}
+    {% if image != blank %}
+      {{ image | image_url: width: 1800 | image_tag: widths: '320, 480, 720, 960, 1440, 1800', sizes: sizes, loading: 'lazy', class: 'custom-tile-photo', alt: '' }}
+    {% else %}
+      {{ placeholder | placeholder_svg_tag: 'custom-tile-photo placeholder-svg' }}
+    {% endif %}
+    <div class="custom-tile-label">
+      <h3>{{ title | escape }}</h3>
+      {% if layout == 'bento' %}
+        {% if group != blank %}<span>{{ group.all_products_count }} items</span>{% endif %}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M6 5h13v13"/></svg>
+      {% else %}
+        {% if group.description != blank %}<div class="custom-tile-excerpt"><p>{{ group.description | strip_html | truncatewords: 20 | escape }}</p></div>{% endif %}
+        {% if group.url != blank and section.settings.cta_label != blank %}<span class="btn btn-outline">{{ section.settings.cta_label | escape }}</span>{% endif %}
+      {% endif %}
+    </div>
+  {% if group.url != blank %}</a>{% endif %}
+</article>
+{% stylesheet %}
+  .custom-collection-tile { position: relative; isolation: isolate; min-width: 0; overflow: hidden; aspect-ratio: var(--tile-ratio); }
+  .custom-tile-link { display: block; height: 100%; color: inherit; }
+  .custom-tile-link:focus-visible { outline: 3px solid currentColor; outline-offset: -4px; }
+  .custom-tile-photo { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform .65s cubic-bezier(.2,.7,.25,1); }
+  .custom-tile-label { position: absolute; inset-inline: 1rem; bottom: 1rem; }
+  .custom-tile-label h3 { margin: 0; font-size: clamp(1.1rem, 2vw, 2.25rem); line-height: 1.15; overflow-wrap: anywhere; }
+  @media (prefers-reduced-motion: reduce) { .custom-tile-photo { transition: none; } }
+{% endstylesheet %}
